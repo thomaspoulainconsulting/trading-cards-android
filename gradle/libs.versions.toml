@@ -17,6 +17,7 @@ okhttp = "4.9.3"
 timber = "5.0.1"
 shimmer = "1.0.4"
 accompanist = "0.30.1"
+sensors = "0.2.0-SNAPSHOT"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -44,9 +45,9 @@ moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "mo
 moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber"}
-accompanist-shimmer = { group = "com.google.accompanist", name ="accompanist-placeholder-material", version.ref = "accompanist"}
-
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+accompanist-shimmer = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version.ref = "accompanist" }
+sensors = { group = "com.mutualmobile", name = "composesensors", version.ref = "sensors" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

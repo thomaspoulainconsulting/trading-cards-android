@@ -1,11 +1,5 @@
 package com.tpc.pokemontradingcards.ui
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
@@ -14,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,8 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +26,8 @@ import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
+import com.mutualmobile.composesensors.SensorDelay
+import com.mutualmobile.composesensors.rememberGravitySensorState
 import com.tpc.pokemontradingcards.domain.CardSize
 import com.tpc.pokemontradingcards.domain.PokemonCardData
 import com.tpc.pokemontradingcards.domain.PokemonCardDataEmpty
@@ -41,33 +38,34 @@ fun PokemonCard(
     modifier: Modifier = Modifier, data: PokemonCardData
 ) {
     var isShimmerVisible by remember { mutableStateOf(true) }
-    val rotX by rememberInfiniteTransition(label = "test").animateFloat(
-        initialValue = -10f, targetValue = 10f, animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse, animation = tween(
-                durationMillis = 1000,
-                easing = LinearEasing,
-            )
-        ), label = "test"
+
+    // Get a sensor
+    val accelerometerState =
+        rememberGravitySensorState(sensorDelay = SensorDelay.UI)
+
+    // Accelerometer = intéressant ! mais peu fluide
+    // Magnetic field = no
+    // Gyroscope = bof, valeur qui se cap rapidement
+    // Gravity = interessant ! mais ça penche vers la gauche
+    // Linear Acceleration = no
+    // Rotation Vector = no
+    // Uncalibred magnetic field = no
+    // Game Rotation Vector = no
+    // Geometric rotation vector = no
+
+
+    val x = accelerometerState.xForce
+    val y = accelerometerState.yForce
+    val z = accelerometerState.zForce
+
+    Text(
+        text = """
+            x: $x
+            y: $y
+            z: $z
+        """.trimIndent(),
+        color = Color.White
     )
-    val rotY by rememberInfiniteTransition(label = "test").animateFloat(
-        initialValue = -10f, targetValue = 10f, animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse, animation = tween(
-                durationMillis = 1000,
-                easing = LinearEasing,
-            )
-        ), label = "test"
-    )
-    val rotZ by rememberInfiniteTransition(label = "test").animateFloat(
-        initialValue = -10f, targetValue = 10f, animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse, animation = tween(
-                durationMillis = 2000,
-                easing = LinearEasing,
-            )
-        ), label = "test"
-    )
-    var pointerOffset by remember {
-        mutableStateOf(Offset(0f, 0f))
-    }
 
     Card(
         modifier = modifier
@@ -78,8 +76,13 @@ fun PokemonCard(
                 color = Color.DarkGray,
                 visible = isShimmerVisible,
                 highlight = PlaceholderHighlight.fade(),
-            ),
-        shape = RoundedCornerShape(5.dp),
+            )
+            .graphicsLayer {
+                rotationX = x
+                rotationY = y
+                rotationZ = z
+            },
+        shape = RoundedCornerShape(13.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         AsyncImage(
@@ -92,7 +95,7 @@ fun PokemonCard(
     }
 }
 
-@Preview
+@Preview(showBackground = true, backgroundColor = 0x28292a)
 @Composable
 fun PokemonCardPreview() {
     PokemonTradingCardsTheme {
