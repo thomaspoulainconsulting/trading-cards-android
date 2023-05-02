@@ -51,10 +51,9 @@ fun PokemonCard(
     // Uncalibred magnetic field = no
     // Game Rotation Vector = no
     // Geometric rotation vector = no
-    
+
     val x = accelerometerState.xForce
     val y = accelerometerState.yForce
-    val z = accelerometerState.zForce
 
     /*Text(
         text = """
