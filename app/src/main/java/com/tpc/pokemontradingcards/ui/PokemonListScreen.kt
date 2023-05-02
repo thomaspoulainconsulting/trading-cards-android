@@ -11,19 +11,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tpc.pokemontradingcards.domain.PokemonCardDataEmpty
-import com.tpc.pokemontradingcards.domain.PokemonSet
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -93,7 +84,7 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
             }
         }
 
-        ExtendedFloatingActionButton(modifier = Modifier
+        /*ExtendedFloatingActionButton(modifier = Modifier
             .align(Alignment.BottomCenter)
             .padding(32.dp),
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(8.dp),
@@ -110,6 +101,6 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
 
                 Text("Change Set")
             }
-        }
+        }*/
     }
 }
