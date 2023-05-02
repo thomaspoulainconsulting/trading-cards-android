@@ -1,6 +1,7 @@
 package com.tpc.pokemontradingcards.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
@@ -34,56 +36,43 @@ import com.tpc.pokemontradingcards.ui.theme.PokemonTradingCardsTheme
 
 @Composable
 fun PokemonCard(
-    modifier: Modifier = Modifier, data: PokemonCardData
+    modifier: Modifier = Modifier,
+    data: PokemonCardData,
+    canBeRotated: Boolean = false,
+    onClick: () -> Unit
 ) {
+    val accelerometerState = rememberGravitySensorState(sensorDelay = SensorDelay.UI)
     var isShimmerVisible by remember { mutableStateOf(true) }
-
-    // Get a sensor
-    val accelerometerState =
-        rememberGravitySensorState(sensorDelay = SensorDelay.UI)
-
-    // Accelerometer = intéressant ! mais peu fluide
-    // Magnetic field = no
-    // Gyroscope = bof, valeur qui se cap rapidement
-    // Gravity = interessant ! mais ça penche vers la gauche
-    // Linear Acceleration = no
-    // Rotation Vector = no
-    // Uncalibred magnetic field = no
-    // Game Rotation Vector = no
-    // Geometric rotation vector = no
-
-    val x = accelerometerState.xForce
-    val y = accelerometerState.yForce
-
-    /*Text(
-        text = """
-            x: $x
-            y: $y
-            z: $z
-        """.trimIndent(),
-        color = Color.White
-    )*/
 
     Card(
         modifier = modifier
             .defaultMinSize(
-                minWidth = 190.dp, minHeight = 264.dp
-            ) // Default value for showing loading card
+                minWidth = 190.dp, minHeight = 200.dp
+            )
+            .clickable {
+                onClick()
+            }
             .placeholder(
                 color = Color.DarkGray,
                 visible = isShimmerVisible,
                 highlight = PlaceholderHighlight.fade(),
             )
             .graphicsLayer {
-                rotationX = y / 2
-                rotationY = x * 2
+                if (canBeRotated) {
+                    rotationX = accelerometerState.yForce / 2
+                    rotationY = accelerometerState.xForce * 2
+                }
             },
-        shape = RoundedCornerShape(13.dp),
+        shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(data.images.large)
-                .crossfade(durationMillis = 500).listener { request, result ->
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(data.images.large)
+                .crossfade(500)
+                .diskCachePolicy(CachePolicy.ENABLED)
+                .diskCacheKey(data.id)
+                .listener { request, result ->
                     isShimmerVisible = false
                 }.build(),
             contentDescription = data.name,
@@ -107,7 +96,11 @@ fun PokemonCardPreview() {
                         "",
                         "https://images.pokemontcg.io/swsh12pt5/160_hires.png"
                     )
-                )
+                ),
+                canBeRotated = true,
+                onClick = {
+
+                }
             )
         }
     }

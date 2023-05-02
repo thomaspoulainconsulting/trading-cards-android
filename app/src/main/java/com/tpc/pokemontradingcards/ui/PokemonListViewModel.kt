@@ -21,7 +21,7 @@ class PokemonListViewModel @Inject constructor(
     private val pokemonManager: PokemonManager
 ) : ViewModel() {
 
-    private var pokemonSet: PokemonSet by mutableStateOf(PokemonSet.Base)
+    private var pokemonSet: PokemonSet by mutableStateOf(PokemonSet.Pokemon_Go)
     lateinit var pokemonCardsData: StateFlow<List<PokemonCardData>>
 
     init {
@@ -34,7 +34,7 @@ class PokemonListViewModel @Inject constructor(
                 emptyList<List<PokemonCardData>>()
             }
             .stateIn(
-                initialValue = List(6) { PokemonCardDataEmpty.copy(id = it.toString()) },
+                initialValue = List(8) { PokemonCardDataEmpty.copy(id = it.toString()) },
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )

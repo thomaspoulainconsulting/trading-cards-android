@@ -22,6 +22,7 @@ enum class PokemonSet(val id: String) {
     Wizards_Black_Star_Promos("basep"),
     Fossil("base3"),
     Base_Set_2("base4"),
+    Pokemon_Go("pgo")
 }
 
 val PokemonCardDataEmpty: PokemonCardData = PokemonCardData("", "", emptyList(), CardSize("", ""))
