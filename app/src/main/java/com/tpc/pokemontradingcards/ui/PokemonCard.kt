@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,20 +51,19 @@ fun PokemonCard(
     // Uncalibred magnetic field = no
     // Game Rotation Vector = no
     // Geometric rotation vector = no
-
-
+    
     val x = accelerometerState.xForce
     val y = accelerometerState.yForce
     val z = accelerometerState.zForce
 
-    Text(
+    /*Text(
         text = """
             x: $x
             y: $y
             z: $z
         """.trimIndent(),
         color = Color.White
-    )
+    )*/
 
     Card(
         modifier = modifier
@@ -78,9 +76,8 @@ fun PokemonCard(
                 highlight = PlaceholderHighlight.fade(),
             )
             .graphicsLayer {
-                rotationX = x
-                rotationY = y
-                rotationZ = z
+                rotationX = y / 2
+                rotationY = x * 2
             },
         shape = RoundedCornerShape(13.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
