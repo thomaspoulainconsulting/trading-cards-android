@@ -2,7 +2,7 @@ package com.tpc.pokemontradingcards.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.tpc.pokemontradingcards.domain.PokemonTradingCardService
+import com.tpc.pokemontradingcards.data.PokemonTradingCardService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

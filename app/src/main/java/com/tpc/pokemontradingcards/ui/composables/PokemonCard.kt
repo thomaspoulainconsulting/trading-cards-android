@@ -1,9 +1,10 @@
-package com.tpc.pokemontradingcards.ui
+package com.tpc.pokemontradingcards.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,17 +33,16 @@ import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.mutualmobile.composesensors.SensorDelay
 import com.mutualmobile.composesensors.rememberGravitySensorState
-import com.tpc.pokemontradingcards.domain.CardSize
-import com.tpc.pokemontradingcards.domain.PokemonCardData
-import com.tpc.pokemontradingcards.domain.PokemonCardDataEmpty
-import com.tpc.pokemontradingcards.ui.theme.PokemonTradingCardsTheme
+import com.tpc.pokemontradingcards.data.model.ModelCard
+import com.tpc.pokemontradingcards.data.model.ModelCardEmpty
+import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonCard(
     modifier: Modifier = Modifier,
-    data: PokemonCardData,
+    data: ModelCard,
     canBeRotated: Boolean = false,
     onClick: () -> Unit
 ) {
@@ -75,6 +75,10 @@ fun PokemonCard(
             )
         )
 
+    val modifierFillMaxSize =
+        if (canBeRotated) Modifier
+            .padding(128.dp)
+            .background(Color.Red) else Modifier
 
 
     Card(
@@ -89,8 +93,8 @@ fun PokemonCard(
             )
             .graphicsLayer {
                 if (canBeRotated) {
-                    rotationX = accelerometerState.yForce * 2
-                    rotationY = accelerometerState.xForce * 2
+                    rotationX = accelerometerState.yForce
+                    rotationY = accelerometerState.xForce
                 }
             }
             .drawWithContent {
@@ -101,19 +105,19 @@ fun PokemonCard(
                 }
             },
         onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(data.images.large)
+                .data(data.url)
                 .crossfade(500)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .diskCacheKey(data.id)
                 .listener { request, result ->
                     isShimmerVisible = false
                 }.build(),
-            contentDescription = data.name,
+            contentDescription = data.label,
         )
     }
 }
@@ -129,11 +133,8 @@ fun PokemonCardPreview() {
         ) {
             PokemonCard(
                 modifier = Modifier.align(Alignment.Center),
-                data = PokemonCardDataEmpty.copy(
-                    images = CardSize(
-                        "",
-                        "https://images.pokemontcg.io/swsh12pt5/160_hires.png"
-                    )
+                data = ModelCardEmpty.copy(
+                    url = "https://images.pokemontcg.io/swsh12pt5/160_hires.png"
                 ),
                 canBeRotated = true,
                 onClick = {

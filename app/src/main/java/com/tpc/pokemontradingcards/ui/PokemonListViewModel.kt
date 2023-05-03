@@ -5,10 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tpc.pokemontradingcards.domain.PokemonCardData
-import com.tpc.pokemontradingcards.domain.PokemonCardDataEmpty
-import com.tpc.pokemontradingcards.domain.PokemonManager
-import com.tpc.pokemontradingcards.domain.PokemonSet
+import com.tpc.pokemontradingcards.data.PokemonCardData
+import com.tpc.pokemontradingcards.data.PokemonCardRepository
+import com.tpc.pokemontradingcards.data.PokemonSet
+import com.tpc.pokemontradingcards.data.model.ModelCard
+import com.tpc.pokemontradingcards.data.model.ModelCardEmpty
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,23 +19,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
-    private val pokemonManager: PokemonManager
+    private val pokemonCardRepository: PokemonCardRepository
 ) : ViewModel() {
 
     private var pokemonSet: PokemonSet by mutableStateOf(PokemonSet.Pokemon_Go)
-    lateinit var pokemonCardsData: StateFlow<List<PokemonCardData>>
+    lateinit var pokemonCardsData: StateFlow<List<ModelCard>>
 
     init {
         loadPokemonCardsDate(pokemonSet)
     }
 
     private fun loadPokemonCardsDate(pokemonSet: PokemonSet) {
-        pokemonCardsData = pokemonManager.getPokemonCards(pokemonSet)
+        pokemonCardsData = pokemonCardRepository.getPokemonCards(pokemonSet)
             .catch {
                 emptyList<List<PokemonCardData>>()
             }
             .stateIn(
-                initialValue = List(8) { PokemonCardDataEmpty.copy(id = it.toString()) },
+                initialValue = List(8) { ModelCardEmpty.copy(id = it.toString()) },
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )

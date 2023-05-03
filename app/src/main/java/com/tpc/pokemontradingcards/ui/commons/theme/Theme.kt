@@ -1,4 +1,4 @@
-package com.tpc.pokemontradingcards.ui.theme
+package com.tpc.pokemontradingcards.ui.commons.theme
 
 import android.app.Activity
 import android.os.Build
@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     background = Dark80,
     onBackground = Dark60,
 
-)
+    )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,

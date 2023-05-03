@@ -27,7 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tpc.pokemontradingcards.domain.PokemonCardDataEmpty
+import com.tpc.pokemontradingcards.data.model.ModelCardEmpty
+import com.tpc.pokemontradingcards.ui.composables.PokemonCard
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -35,7 +36,7 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
 
     val pokemonCards by pokemonViewModel.pokemonCardsData.collectAsStateWithLifecycle()
     var isCardVisible by remember { mutableStateOf(false) }
-    var pokemonData by remember { mutableStateOf(PokemonCardDataEmpty) }
+    var pokemonData by remember { mutableStateOf(ModelCardEmpty) }
 
     Box(Modifier.fillMaxSize()) {
 
@@ -57,8 +58,8 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
 
         AnimatedVisibility(
             visible = isCardVisible,
-            enter = scaleIn(),
-            exit = scaleOut()
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
             Box(
                 Modifier

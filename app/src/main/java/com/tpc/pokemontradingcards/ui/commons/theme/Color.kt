@@ -1,4 +1,4 @@
-package com.tpc.pokemontradingcards.ui.theme
+package com.tpc.pokemontradingcards.ui.commons.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.tpc.pokemontradingcards.domain
+package com.tpc.pokemontradingcards.data
 
 import retrofit2.http.GET
 import retrofit2.http.Query

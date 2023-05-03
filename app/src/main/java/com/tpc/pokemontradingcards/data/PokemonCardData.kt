@@ -1,4 +1,4 @@
-package com.tpc.pokemontradingcards.domain
+package com.tpc.pokemontradingcards.data
 
 import com.squareup.moshi.Json
 
