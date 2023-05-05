@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import com.tpc.pokemontradingcards.data.model.ModelCard
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ModelCardDao {
@@ -15,6 +16,9 @@ interface ModelCardDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertAll(cards: List<ModelCard>)
 
+    @Query("SELECT * FROM ModelCard WHERE idSet = :idSet")
+    suspend fun getAll(idSet: String): List<ModelCard>
+
     @Query("SELECT * FROM ModelCard")
-    suspend fun getAll(): List<ModelCard>
+    fun getAll(): Flow<List<ModelCard>>
 }

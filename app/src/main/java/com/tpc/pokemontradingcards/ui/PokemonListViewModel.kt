@@ -5,47 +5,48 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tpc.pokemontradingcards.data.PokemonCardData
 import com.tpc.pokemontradingcards.data.PokemonCardRepository
-import com.tpc.pokemontradingcards.data.PokemonSet
 import com.tpc.pokemontradingcards.data.model.ModelCard
-import com.tpc.pokemontradingcards.data.model.ModelCardEmpty
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * only load from local source
+ * trigger a network call that update the database
+ * with a flow that watch the database, the ui data will automatically reflects
+ */
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
     private val pokemonCardRepository: PokemonCardRepository
 ) : ViewModel() {
 
-    private var pokemonSet: PokemonSet by mutableStateOf(PokemonSet.Pokemon_Go)
     lateinit var pokemonCardsData: StateFlow<List<ModelCard>>
+    var currentPokemonSet by mutableStateOf(PokemonSet.JUNGLE)
 
     init {
-        loadPokemonCardsDate(pokemonSet)
+        viewModelScope.launch {
+            pokemonCardsData = pokemonCardRepository.loadPokemonCards()
+                .stateIn(
+                    initialValue = emptyList(),
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000)
+                )
+        }
     }
 
-    private fun loadPokemonCardsDate(pokemonSet: PokemonSet) {
-        pokemonCardsData = pokemonCardRepository.getPokemonCards(pokemonSet)
-            .catch {
-                emptyList<List<PokemonCardData>>()
-            }
-            .stateIn(
-                initialValue = List(8) { ModelCardEmpty.copy(id = it.toString()) },
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
+    fun updatePokemonSet(pokemonSet: PokemonSet) = viewModelScope.launch {
+        pokemonCardRepository.downloadPokemonSet(pokemonSet.id)
+        currentPokemonSet = pokemonSet
     }
+}
 
-    /**
-     * Updates the pokemon set displayed
-     */
-    fun updatePokemonSet(pokemonSet: PokemonSet) {
-        this.pokemonSet = pokemonSet
-        loadPokemonCardsDate(pokemonSet)
-    }
+enum class PokemonSet(val id: String) {
+    BASE("base1"),
+    JUNGLE("base2"),
+    FOSSIL("base3"),
+    POKEMON_GO("pgo")
 }

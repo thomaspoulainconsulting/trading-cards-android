@@ -9,6 +9,7 @@ data class ModelCard(
     val label: String,
     val url: String,
     val number: Int,
+    val idSet: String,
 )
 
-val ModelCardEmpty = ModelCard(id = "", label = "", url = "", number = 0)
+val ModelCardEmpty = ModelCard(id = "", label = "", url = "", number = 0, idSet = "")

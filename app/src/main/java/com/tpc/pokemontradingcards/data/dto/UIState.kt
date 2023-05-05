@@ -1,4 +1,4 @@
-package com.tpc.pokemontradingcards.ui.commons
+package com.tpc.pokemontradingcards.data.dto
 
 sealed class UIState<T> {
     class Loading<T>(val preloadedData: T? = null) : UIState<T>()

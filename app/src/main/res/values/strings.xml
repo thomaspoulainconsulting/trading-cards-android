@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PokemonTradingCards</string>
+    <string name="an_error_occurred_when_retrieving_pokemon">An error occurred when retrieving Pokémon</string>
+    <string name="change_pokemon_set">Change Set</string>
 </resources>

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -17,10 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,38 +45,6 @@ fun PokemonCard(
     val accelerometerState = rememberGravitySensorState(sensorDelay = SensorDelay.UI)
     var isShimmerVisible by remember { mutableStateOf(true) }
 
-    val colors1 = listOf(
-        Color(255, 119, 115),
-        Color(255, 237, 95),
-        Color(168, 255, 95),
-        Color(131, 255, 247),
-        Color(120, 148, 255),
-        Color(216, 117, 255),
-        Color(255, 119, 115)
-    )
-
-    val brushs =
-        listOf(
-            Brush.verticalGradient(
-                colors = colors1,
-                tileMode = TileMode.Repeated,
-            ),
-            Brush.linearGradient(
-                0f to Color(14, 21, 46),
-                0.38f to Color(143, 163, 163),
-                0.45f to Color(143, 193, 193),
-                0.52f to Color(143, 163, 163),
-                0.1f to Color(14, 21, 46),
-                tileMode = TileMode.Repeated,
-            )
-        )
-
-    val modifierFillMaxSize =
-        if (canBeRotated) Modifier
-            .padding(128.dp)
-            .background(Color.Red) else Modifier
-
-
     Card(
         modifier = modifier
             .defaultMinSize(
@@ -96,16 +60,9 @@ fun PokemonCard(
                     rotationX = accelerometerState.yForce
                     rotationY = accelerometerState.xForce
                 }
-            }
-            .drawWithContent {
-                drawContent()
-                if (canBeRotated) {
-                    //drawRect(brush = brushs.last(), blendMode = BlendMode.Multiply)
-                    //drawRect(brush = brushs.first(), blendMode = BlendMode.Multiply)
-                }
             },
         onClick = onClick,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         AsyncImage(

@@ -1,5 +1,6 @@
 package com.tpc.pokemontradingcards.data
 
+import com.tpc.pokemontradingcards.data.dto.HoldingPokemonData
 import retrofit2.http.GET
 import retrofit2.http.Query
 
