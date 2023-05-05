@@ -22,7 +22,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -135,24 +135,18 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
             }
         }
 
-        ExtendedFloatingActionButton(
+        FloatingActionButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(32.dp),
+                .padding(16.dp),
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(8.dp),
             onClick = {
                 pokemonViewModel.updatePokemonSet(PokemonSet.FOSSIL)
             }) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.TwoTone.Edit, contentDescription = null
-                )
-
-                Text(stringResource(R.string.change_pokemon_set))
-            }
+            Icon(
+                imageVector = Icons.TwoTone.Edit,
+                contentDescription = null
+            )
         }
     }
 }
