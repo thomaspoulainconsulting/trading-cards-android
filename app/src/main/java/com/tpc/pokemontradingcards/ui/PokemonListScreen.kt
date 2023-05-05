@@ -10,15 +10,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Edit
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -37,48 +40,76 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tpc.pokemontradingcards.R
-import com.tpc.pokemontradingcards.data.model.ModelCardEmpty
+import com.tpc.pokemontradingcards.data.dto.UIState
 import com.tpc.pokemontradingcards.ui.composables.PokemonCard
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) {
 
-    val pokemonCards by pokemonViewModel.pokemonCardsData.collectAsStateWithLifecycle()
+    val pokemonCardsState by pokemonViewModel.pokemonCardsData.collectAsStateWithLifecycle()
     var isCardVisible by remember { mutableStateOf(false) }
-    var pokemonData by remember { mutableStateOf(ModelCardEmpty) }
+    var pokemonDataSelectedIndex by remember { mutableStateOf(-1) }
 
     Box(Modifier.fillMaxSize()) {
-        LazyVerticalGrid(modifier = Modifier.background(MaterialTheme.colorScheme.background),
-            columns = GridCells.Adaptive(166.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            content = {
-                val contentToShow =
-                    pokemonCards.filter { it.idSet == pokemonViewModel.currentPokemonSet.id }
+        Column {
+            Text(
+                text = "Pokémon Cards",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .padding(top = 20.dp)
+            )
 
-                if (contentToShow.isEmpty()) {
-                    item {
-                        Text("no content :'(")
-                    }
-                }
+            LazyVerticalGrid(modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                columns = GridCells.Adaptive(166.dp),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                content = {
 
-                items(
-                    contentToShow,
-                    key = { it.id }) { pokemonCard ->
-                    PokemonCard(data = pokemonCard) {
-                        if (!isCardVisible) {
-                            isCardVisible = true
-                            pokemonData = pokemonCard
+                    when (val pokemonCards = pokemonCardsState) {
+                        is UIState.Loading -> {
+                            item {
+                                Row(Modifier.fillMaxWidth()) { CircularProgressIndicator() }
+                            }
+                        }
+
+                        is UIState.Error -> {
+                            item {
+                                Text(stringResource(R.string.error_fetching_cards_from_database))
+                            }
+                        }
+
+                        is UIState.Success -> {
+                            val contentToShow =
+                                pokemonCards.data.filter { it.idSet == pokemonViewModel.currentPokemonSet.id }
+
+                            if (contentToShow.isEmpty()) {
+                                item {
+                                    Text(stringResource(R.string.no_pokemon_cards))
+                                }
+                            }
+
+                            items(
+                                contentToShow,
+                                key = { it.id }) { pokemonCard ->
+                                PokemonCard(data = pokemonCard) {
+                                    if (!isCardVisible) {
+                                        isCardVisible = true
+                                        pokemonDataSelectedIndex =
+                                            contentToShow.indexOf(pokemonCard)
+                                    }
+                                }
+                            }
                         }
                     }
-                }
-            })
 
-        AnimatedVisibility(
-            visible = isCardVisible, enter = fadeIn(), exit = fadeOut()
-        ) {
+
+                })
+        }
+
+        if (isCardVisible) {
             Box(
                 Modifier
                     .fillMaxSize()
@@ -96,7 +127,10 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()
         ) {
-            PokemonCard(data = pokemonData, canBeRotated = true) {
+            PokemonCard(
+                data = (pokemonCardsState as UIState.Success).data[pokemonDataSelectedIndex],
+                canBeRotated = true
+            ) {
                 isCardVisible = false
             }
         }

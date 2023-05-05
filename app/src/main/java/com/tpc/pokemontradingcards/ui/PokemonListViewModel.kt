@@ -6,10 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.pokemontradingcards.data.PokemonCardRepository
+import com.tpc.pokemontradingcards.data.dto.UIState
 import com.tpc.pokemontradingcards.data.model.ModelCard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,14 +27,16 @@ class PokemonListViewModel @Inject constructor(
     private val pokemonCardRepository: PokemonCardRepository
 ) : ViewModel() {
 
-    lateinit var pokemonCardsData: StateFlow<List<ModelCard>>
+    lateinit var pokemonCardsData: StateFlow<UIState<List<ModelCard>>>
     var currentPokemonSet by mutableStateOf(PokemonSet.JUNGLE)
 
     init {
         viewModelScope.launch {
             pokemonCardsData = pokemonCardRepository.loadPokemonCards()
+                .map { UIState.Success(it) }
+                .catch { UIState.Error<List<ModelCard>>() }
                 .stateIn(
-                    initialValue = emptyList(),
+                    initialValue = UIState.Loading(),
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5000)
                 )

@@ -2,4 +2,6 @@
     <string name="app_name">PokemonTradingCards</string>
     <string name="an_error_occurred_when_retrieving_pokemon">An error occurred when retrieving Pokémon</string>
     <string name="change_pokemon_set">Change Set</string>
+    <string name="error_fetching_cards_from_database">Error fetching cards from database</string>
+    <string name="no_pokemon_cards">No Pokémon cards</string>
 </resources>
