@@ -12,6 +12,15 @@ data class Card(
     val description: String = "",
     val urlSmall: String,
     val urlLarge: String,
+    val cardType: CardType
 )
 
-val CardEmpty = Card(id = "", name = "", urlSmall = "", urlLarge = "", number = 0, idSet = "")
+val CardEmpty = Card(
+    id = "",
+    name = "",
+    urlSmall = "",
+    urlLarge = "",
+    number = 0,
+    idSet = "",
+    cardType = CardType.POKEMON
+)

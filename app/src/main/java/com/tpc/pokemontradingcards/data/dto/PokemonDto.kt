@@ -1,11 +1,9 @@
 package com.tpc.pokemontradingcards.data.dto
 
-import com.squareup.moshi.Json
-
 data class PokemonCardData(
     val id: String,
     val name: String,
-    @Json(name = "nationalPokedexNumbers") val number: List<Int>,
+    val nationalPokedexNumbers: List<Int>,
     val images: CardSize,
 )
 
@@ -14,4 +12,19 @@ data class CardSize(
     val large: String
 )
 
-data class HoldingPokemonData(@Json(name = "data") val cards: List<PokemonCardData>)
+data class HoldingPokemonCardsData(val data: List<PokemonCardData>)
+
+data class PokemonCardSetData(
+    val id: String,
+    val name: String,
+    val total: Int,
+    val releaseDate: String,
+    val images: SetImages
+)
+
+data class SetImages(
+    val symbol: String,
+    val logo: String
+)
+
+data class HoldingPokemonCardSetsData(val data: List<PokemonCardSetData>)

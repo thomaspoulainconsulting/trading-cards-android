@@ -16,13 +16,18 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * The ViewModel exposes:
+ * - a StateFlow of List<Card> that reflects what is in the database
+ * - a method that will fetch a new Set from remote database
+ */
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
     private val pokemonCardRepository: CardRepository
 ) : ViewModel() {
 
-    var currentPokemonSet by mutableStateOf(PokemonSet.FOSSIL)
-    val pokemonCardsData: StateFlow<UIState<List<Card>>> by lazy {
+    var currentCardSet by mutableStateOf("")
+    val cardsData: StateFlow<UIState<List<Card>>> by lazy {
         pokemonCardRepository.loadCards()
             .map { UIState.Success(it) }
             .stateIn(
@@ -32,15 +37,8 @@ class PokemonListViewModel @Inject constructor(
             )
     }
 
-    fun updatePokemonSet(pokemonSet: PokemonSet) = viewModelScope.launch {
-        pokemonCardRepository.fetchCards(pokemonSet.id)
-        currentPokemonSet = pokemonSet
+    fun updatePokemonSet(idSet: String) = viewModelScope.launch {
+        pokemonCardRepository.fetchCards(idSet)
+        currentCardSet = idSet
     }
-}
-
-enum class PokemonSet(val id: String) {
-    BASE("base1"),
-    JUNGLE("base2"),
-    FOSSIL("base3"),
-    POKEMON_GO("pgo")
 }

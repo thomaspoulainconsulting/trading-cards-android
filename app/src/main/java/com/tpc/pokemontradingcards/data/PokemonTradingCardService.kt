@@ -1,6 +1,7 @@
 package com.tpc.pokemontradingcards.data
 
-import com.tpc.pokemontradingcards.data.dto.HoldingPokemonData
+import com.tpc.pokemontradingcards.data.dto.HoldingPokemonCardSetsData
+import com.tpc.pokemontradingcards.data.dto.HoldingPokemonCardsData
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,5 +12,8 @@ interface PokemonTradingCardService {
         @Query("q") query: String,
         @Query("orderBy") orderBy: String,
         @Query("select") select: String
-    ): HoldingPokemonData
+    ): HoldingPokemonCardsData
+
+    @GET("sets")
+    suspend fun getPokemonCardSets(): HoldingPokemonCardSetsData
 }

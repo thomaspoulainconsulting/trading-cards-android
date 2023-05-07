@@ -49,7 +49,7 @@ import com.tpc.pokemontradingcards.ui.composables.PokemonCardFull
 @Composable
 fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) {
 
-    val pokemonCardsState by pokemonViewModel.pokemonCardsData.collectAsStateWithLifecycle()
+    val pokemonCardsState by pokemonViewModel.cardsData.collectAsStateWithLifecycle()
     var isCardVisible by remember { mutableStateOf(false) }
     var pokemonDataSelectedIndex by remember { mutableStateOf(-1) }
 
@@ -85,7 +85,7 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
 
                         is UIState.Success -> {
                             val contentToShow =
-                                pokemonCards.data.filter { it.idSet == pokemonViewModel.currentPokemonSet.id }
+                                pokemonCards.data.filter { it.idSet == pokemonViewModel.currentCardSet }
 
                             if (contentToShow.isEmpty()) {
                                 item {
@@ -147,7 +147,7 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
                 .padding(16.dp),
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(8.dp),
             onClick = {
-                pokemonViewModel.updatePokemonSet(PokemonSet.FOSSIL)
+                pokemonViewModel.updatePokemonSet("base5")
             }) {
             Icon(
                 imageVector = Icons.TwoTone.Edit,

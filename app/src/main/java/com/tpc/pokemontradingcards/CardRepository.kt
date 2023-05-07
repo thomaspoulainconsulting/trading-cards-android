@@ -2,6 +2,7 @@ package com.tpc.pokemontradingcards
 
 import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.data.model.CardSet
+import com.tpc.pokemontradingcards.data.model.CardType
 import kotlinx.coroutines.flow.Flow
 
 interface CardRepository {
@@ -24,5 +25,5 @@ interface CardRepository {
     /**
      * Fetch the card sets from a remote database
      */
-    suspend fun fetchCardSets()
+    suspend fun fetchCardSets(cardType: CardType)
 }
