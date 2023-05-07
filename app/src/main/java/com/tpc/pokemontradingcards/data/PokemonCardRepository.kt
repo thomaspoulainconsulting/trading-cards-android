@@ -17,7 +17,8 @@ class PokemonCardRepository @Inject constructor(
 
     override fun loadCards(): Flow<List<Card>> = localCardSource.getAllCards(CardType.POKEMON)
 
-    override fun loadSets(): Flow<List<CardSet>> = localCardSetSource.getAllCardSets()
+    override fun loadSets(): Flow<List<CardSet>> =
+        localCardSetSource.getCardSetsWithType(CardType.POKEMON)
 
     override suspend fun fetchCards(idSet: String) {
         // First we check if there is some cards with the idSet in database
@@ -47,12 +48,7 @@ class PokemonCardRepository @Inject constructor(
         localCardSource.insertAll(cards)
     }
 
-    override suspend fun fetchCardSets(cardType: CardType) {
-        // First we check if there is already sets in database
-        val setsInDatabase = localCardSetSource.getCardSetsWithType(cardType)
-        if (setsInDatabase.isNotEmpty()) return
-
-        //Otherwise we download the card sets and insert them in database
+    override suspend fun fetchCardSets() {
         val sets = remoteSource
             .getPokemonCardSets()
             .data
@@ -63,21 +59,8 @@ class PokemonCardRepository @Inject constructor(
                     cardType = CardType.POKEMON,
                     totalCardsInSet = it.total,
                     symbol = it.images.symbol,
-                    logo = it.images.logo
                 )
             }
         localCardSetSource.insertAll(sets)
     }
-
-
-    /*
-    enum class PokemonSet(val id: String) {
-    BASE("base1"),
-    JUNGLE("base2"),
-    FOSSIL("base3"),
-    POKEMON_GO("pgo")
-}
-     */
-
-
 }

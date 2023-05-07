@@ -6,12 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.pokemontradingcards.CardRepository
-import com.tpc.pokemontradingcards.data.dto.UIState
 import com.tpc.pokemontradingcards.data.model.Card
+import com.tpc.pokemontradingcards.data.model.CardSet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,19 +27,36 @@ class PokemonListViewModel @Inject constructor(
     private val pokemonCardRepository: CardRepository
 ) : ViewModel() {
 
-    var currentCardSet by mutableStateOf("")
-    val cardsData: StateFlow<UIState<List<Card>>> by lazy {
+    var currentCardSet: String? by mutableStateOf(null)
+        private set
+    val cards: StateFlow<List<Card>> by lazy {
         pokemonCardRepository.loadCards()
-            .map { UIState.Success(it) }
             .stateIn(
-                initialValue = UIState.Loading(),
+                initialValue = emptyList(),
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )
     }
 
-    fun updatePokemonSet(idSet: String) = viewModelScope.launch {
-        pokemonCardRepository.fetchCards(idSet)
+    val sets: StateFlow<List<CardSet>> by lazy {
+        pokemonCardRepository.loadSets()
+            .flatMapLatest { data ->
+                if (data.isEmpty()) {
+                    pokemonCardRepository.fetchCardSets()
+                }
+                flowOf(data)
+            }
+            .stateIn(
+                initialValue = emptyList(),
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+    }
+
+    fun updatePokemonSet(idSet: String?) = viewModelScope.launch {
         currentCardSet = idSet
+        idSet?.let {
+            pokemonCardRepository.fetchCards(idSet)
+        }
     }
 }

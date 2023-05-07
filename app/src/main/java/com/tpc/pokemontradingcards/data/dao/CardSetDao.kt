@@ -18,5 +18,5 @@ interface CardSetDao {
     fun getAllCardSets(): Flow<List<CardSet>>
 
     @Query("SELECT * FROM CardSet WHERE cardType=:cardType")
-    fun getCardSetsWithType(cardType: CardType): List<CardSet>
+    fun getCardSetsWithType(cardType: CardType): Flow<List<CardSet>>
 }
