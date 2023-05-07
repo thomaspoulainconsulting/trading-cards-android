@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,9 +42,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tpc.pokemontradingcards.R
 import com.tpc.pokemontradingcards.data.dto.UIState
-import com.tpc.pokemontradingcards.ui.composables.PokemonCard
+import com.tpc.pokemontradingcards.ui.composables.PokemonCardCompact
+import com.tpc.pokemontradingcards.ui.composables.PokemonCardFull
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) {
 
@@ -54,15 +56,15 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
     Box(Modifier.fillMaxSize()) {
         Column {
             Text(
-                text = "Pokémon Cards",
+                text = stringResource(R.string.home_screen_name),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
                     .padding(16.dp)
                     .padding(top = 20.dp)
             )
 
-            LazyVerticalGrid(modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                columns = GridCells.Adaptive(166.dp),
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(90.dp),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -94,7 +96,10 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
                             items(
                                 contentToShow,
                                 key = { it.id }) { pokemonCard ->
-                                PokemonCard(data = pokemonCard) {
+                                PokemonCardCompact(
+                                    modifier = Modifier.animateItemPlacement(),
+                                    data = pokemonCard
+                                ) {
                                     if (!isCardVisible) {
                                         isCardVisible = true
                                         pokemonDataSelectedIndex =
@@ -127,7 +132,8 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()
         ) {
-            PokemonCard(
+            PokemonCardFull(
+                modifier = Modifier.align(Alignment.Center),
                 data = (pokemonCardsState as UIState.Success).data[pokemonDataSelectedIndex],
                 canBeRotated = true
             ) {

@@ -1,26 +1,26 @@
 package com.tpc.pokemontradingcards.data
 
-import com.tpc.pokemontradingcards.data.dao.ModelCardDao
-import com.tpc.pokemontradingcards.data.model.ModelCard
+import com.tpc.pokemontradingcards.CardRepository
+import com.tpc.pokemontradingcards.data.dao.CardDao
+import com.tpc.pokemontradingcards.data.dao.CardSetDao
+import com.tpc.pokemontradingcards.data.model.Card
+import com.tpc.pokemontradingcards.data.model.CardSet
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PokemonCardRepository @Inject constructor(
-    private val localSource: ModelCardDao,
+    private val localCardSource: CardDao,
+    private val localCardSetSource: CardSetDao,
     private val remoteSource: PokemonTradingCardService,
-) {
+) : CardRepository {
 
-    /**
-     * Returns a flow of the pokemon cards in local database
-     */
-    fun loadPokemonCards(): Flow<List<ModelCard>> = localSource.getAll()
+    override fun loadCards(): Flow<List<Card>> = localCardSource.getAllCards()
 
-    /**
-     * Download a pokemon set if it isn't in database
-     */
-    suspend fun downloadPokemonSet(idSet: String) {
+    override fun loadSets(): Flow<List<CardSet>> = localCardSetSource.getAllCardSets()
+
+    override suspend fun fetchCards(idSet: String) {
         // First we check if there is some cards with the idSet in database
-        val cardsWithCurrentSet = localSource.getAll(idSet)
+        val cardsWithCurrentSet = localCardSource.getAllCards(idSet)
 
         // If cards with the idSet is already there, we do not download it again
         if (cardsWithCurrentSet.isNotEmpty()) return
@@ -34,14 +34,21 @@ class PokemonCardRepository @Inject constructor(
             )
             .cards
             .map {
-                ModelCard(
+                Card(
                     id = it.id,
-                    label = it.name,
-                    url = it.images.large,
+                    name = it.name,
+                    urlSmall = it.images.small,
+                    urlLarge = it.images.large,
                     number = it.number.first(),
                     idSet = idSet,
                 )
             }
-        localSource.insertAll(cards)
+        localCardSource.insertAll(cards)
     }
+
+    override suspend fun fetchCardSets() {
+        TODO("Not yet implemented")
+    }
+
+
 }

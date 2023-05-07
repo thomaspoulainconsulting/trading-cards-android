@@ -14,9 +14,9 @@ internal object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(app: Application): PokemonCardDatabase =
+    fun provideDatabase(app: Application): CardsDatabase =
         Room.databaseBuilder(
             app.applicationContext,
-            PokemonCardDatabase::class.java, "pokemon-cards-database"
+            CardsDatabase::class.java, "cards-database"
         ).build()
 }
