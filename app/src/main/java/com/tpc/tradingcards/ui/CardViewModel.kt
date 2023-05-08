@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
-import com.tpc.tradingcards.data.repository.CardRepository
+ import com.tpc.tradingcards.data.repository.PokemonCardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,18 +19,19 @@ import javax.inject.Inject
 
 /**
  * The ViewModel exposes:
- * - a StateFlow of List<Card> that reflects what is in the database
+ * - a StateFlow of List<Card> that reflects the cards in database which can be filtered by setId
+ * - a StateFlow of List<CardSet> that reflects the sets in database
  * - a method that will fetch a new Set from remote database
  */
 @HiltViewModel
-class PokemonListViewModel @Inject constructor(
-    private val pokemonCardRepository: CardRepository
+class CardViewModel @Inject constructor(
+    private val cardRepository: PokemonCardRepository
 ) : ViewModel() {
 
     private val cardSetIdSelected = MutableStateFlow("")
 
     val cards: StateFlow<List<Card>> by lazy {
-        pokemonCardRepository.loadCards()
+        cardRepository.loadCards()
             .combine(cardSetIdSelected) { list, filter ->
                 list.filter { it.idSet == filter }
             }
@@ -42,10 +43,10 @@ class PokemonListViewModel @Inject constructor(
     }
 
     val sets: StateFlow<List<CardSet>> by lazy {
-        pokemonCardRepository.loadSets()
+        cardRepository.loadSets()
             .flatMapLatest { data ->
                 if (data.isEmpty()) {
-                    pokemonCardRepository.fetchCardSets()
+                    cardRepository.fetchCardSets()
                 }
                 flowOf(data)
             }
@@ -62,7 +63,7 @@ class PokemonListViewModel @Inject constructor(
 
         // Fetch remote cards if necessary
         try {
-            pokemonCardRepository.fetchCards(idSet)
+            cardRepository.fetchCards(idSet)
         } catch (e: Exception) {
             Timber.e(e)
         }

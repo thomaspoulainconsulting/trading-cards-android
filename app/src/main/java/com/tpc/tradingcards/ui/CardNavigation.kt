@@ -17,7 +17,7 @@ fun NavGraphBuilder.cardsGraph(
     navController: NavController,
 ) {
     composable(cardListRoute) {
-        val pokemonViewModel: PokemonListViewModel = hiltViewModel()
+        val pokemonViewModel: CardViewModel = hiltViewModel()
         val sets by pokemonViewModel.sets.collectAsStateWithLifecycle()
 
         CardListScreen(sets) { idSet ->
@@ -29,7 +29,7 @@ fun NavGraphBuilder.cardsGraph(
     composable(cardDetailsRoute) { backStackEntry ->
         val parentEntry =
             remember(backStackEntry) { navController.getBackStackEntry(cardListRoute) }
-        val pokemonViewModel: PokemonListViewModel = hiltViewModel(parentEntry)
+        val pokemonViewModel: CardViewModel = hiltViewModel(parentEntry)
         val cards by pokemonViewModel.cards.collectAsStateWithLifecycle()
 
         CardDetailsScreen(cards) {
