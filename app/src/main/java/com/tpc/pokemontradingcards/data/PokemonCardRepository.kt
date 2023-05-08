@@ -29,7 +29,7 @@ class PokemonCardRepository @Inject constructor(
         // Otherwise, we download the cards and insert them in database
         val cards = remoteSource
             .getPokemonCards(
-                query = "!set.id:$idSet supertype:Pokémon",
+                query = "!set.id:$idSet",
                 orderBy = "nationalPokedexNumbers",
                 select = "id,images,name,number,nationalPokedexNumbers,supertype"
             )
@@ -40,7 +40,7 @@ class PokemonCardRepository @Inject constructor(
                     name = it.name,
                     urlSmall = it.images.small,
                     urlLarge = it.images.large,
-                    number = it.nationalPokedexNumbers.first(),
+                    number = it.number.toInt(),
                     idSet = idSet,
                     cardType = CardType.POKEMON
                 )

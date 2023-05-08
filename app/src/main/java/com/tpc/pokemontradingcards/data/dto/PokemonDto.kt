@@ -3,7 +3,7 @@ package com.tpc.pokemontradingcards.data.dto
 data class PokemonCardData(
     val id: String,
     val name: String,
-    val nationalPokedexNumbers: List<Int>,
+    val number: String,
     val images: CardSize,
 )
 
