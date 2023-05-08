@@ -1,5 +1,6 @@
 package com.tpc.pokemontradingcards.ui.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,7 +22,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpc.pokemontradingcards.data.model.CardSet
 import com.tpc.pokemontradingcards.data.model.CardSetEmpty
+import com.tpc.pokemontradingcards.ui.commons.theme.Dark80
 import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
+import com.tpc.pokemontradingcards.ui.commons.theme.Purple40
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +44,16 @@ fun CardSetComposable(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(Dark80, Purple40),
+                        start = Offset(100f, 0f),
+                        end = Offset(
+                            Float.POSITIVE_INFINITY,
+                            Float.POSITIVE_INFINITY
+                        )
+                    )
+                )
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween

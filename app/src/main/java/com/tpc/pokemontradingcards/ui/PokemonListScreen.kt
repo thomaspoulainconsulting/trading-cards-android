@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +48,6 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
 
     val cards by pokemonViewModel.cards.collectAsStateWithLifecycle()
     val sets by pokemonViewModel.sets.collectAsStateWithLifecycle()
-    var showCard by remember { mutableStateOf(false) }
     var selectedCardIndex by remember { mutableStateOf(-1) }
 
     Box(Modifier.fillMaxSize()) {
@@ -78,8 +78,9 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
 
         pokemonViewModel.currentCardSet?.let {
             ModalBottomSheet(
+                scrimColor = Color.White.copy(alpha = 0f),
                 onDismissRequest = {
-                    showCard = false
+                    selectedCardIndex = -1
                     pokemonViewModel.updatePokemonSet(null)
                 }
             ) {
@@ -103,11 +104,8 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
                                 modifier = Modifier.animateItemPlacement(),
                                 data = pokemonCard
                             ) {
-                                if (!showCard) {
-                                    showCard = true
-                                    selectedCardIndex =
-                                        contentToShow.indexOf(pokemonCard)
-                                }
+                                selectedCardIndex =
+                                    contentToShow.indexOf(pokemonCard)
                             }
                         }
                     })
@@ -117,8 +115,8 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
         AnimatedVisibility(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = 16.dp),
-            visible = showCard && pokemonViewModel.currentCardSet != null,
+                .padding(top = 64.dp),
+            visible = pokemonViewModel.currentCardSet != null && selectedCardIndex != -1,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()
         ) {
@@ -131,7 +129,7 @@ fun PokemonListScreen(pokemonViewModel: PokemonListViewModel = hiltViewModel()) 
                         data = card,
                         canBeRotated = true
                     ) {
-                        showCard = false
+                        selectedCardIndex = -1
                     }
                 }
         }
