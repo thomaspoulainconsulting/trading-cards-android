@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
- import com.tpc.tradingcards.data.repository.PokemonCardRepository
+import com.tpc.tradingcards.data.repository.PokemonCardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
