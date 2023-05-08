@@ -32,22 +32,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.tpc.pokemontradingcards.R
+import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.ui.composables.PokemonCardCompact
 import com.tpc.pokemontradingcards.ui.composables.PokemonCardFull
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun CardDetailsScreen(
-    navController: NavController,
-    cardSetId: String,
-    pokemonViewModel: PokemonListViewModel = hiltViewModel()
+    cards: List<Card>,
+    onBack: () -> Unit
 ) {
-
-    val cards by pokemonViewModel.cards.collectAsStateWithLifecycle()
     var selectedCardIndex by remember { mutableStateOf(-1) }
 
     Box(Modifier.fillMaxSize()) {
@@ -58,9 +53,7 @@ fun CardDetailsScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .padding(bottom = 32.dp, top = 16.dp)
-                    .clickable {
-                        navController.popBackStack()
-                    }
+                    .clickable { onBack() }
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -75,21 +68,18 @@ fun CardDetailsScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 content = {
-                    val contentToShow =
-                        cards.filter { it.idSet == cardSetId }
-
-                    if (contentToShow.isEmpty()) {
+                    if (cards.isEmpty()) {
                         item {
                             Text(stringResource(R.string.no_pokemon_cards))
                         }
                     }
 
-                    items(contentToShow, key = { it.id }) { pokemonCard ->
+                    items(cards, key = { it.id }) { pokemonCard ->
                         PokemonCardCompact(
                             modifier = Modifier.animateItemPlacement(),
                             data = pokemonCard
                         ) {
-                            selectedCardIndex = contentToShow.indexOf(pokemonCard)
+                            selectedCardIndex = cards.indexOf(pokemonCard)
                         }
                     }
                 })
@@ -103,7 +93,6 @@ fun CardDetailsScreen(
             exit = fadeOut() + scaleOut()
         ) {
             cards
-                .filter { it.idSet == cardSetId }
                 .getOrNull(selectedCardIndex)
                 ?.let { card ->
                     PokemonCardFull(
