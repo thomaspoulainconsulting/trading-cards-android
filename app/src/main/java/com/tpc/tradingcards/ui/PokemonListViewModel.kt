@@ -6,8 +6,10 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.repository.CardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
@@ -25,8 +27,13 @@ class PokemonListViewModel @Inject constructor(
     private val pokemonCardRepository: CardRepository
 ) : ViewModel() {
 
+    private val cardSetIdSelected = MutableStateFlow("")
+
     val cards: StateFlow<List<Card>> by lazy {
         pokemonCardRepository.loadCards()
+            .combine(cardSetIdSelected) { list, filter ->
+                list.filter { it.idSet == filter }
+            }
             .stateIn(
                 initialValue = emptyList(),
                 scope = viewModelScope,
@@ -49,11 +56,17 @@ class PokemonListViewModel @Inject constructor(
             )
     }
 
-    fun fetchCards(idSet: String) = viewModelScope.launch {
-        try {
-            pokemonCardRepository.fetchCards(idSet)
-        } catch (e: Exception) {
-            Timber.e(e)
+    fun fetchCards(idSet: String) {
+        // Update the selected idSet
+        cardSetIdSelected.value = idSet
+
+        // Fetch remote cards if necessary
+        viewModelScope.launch {
+            try {
+                pokemonCardRepository.fetchCards(idSet)
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
         }
     }
 }
