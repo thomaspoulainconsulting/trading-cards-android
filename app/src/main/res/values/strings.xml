@@ -5,4 +5,5 @@
     <string name="error_fetching_cards_from_database">Error fetching cards from database</string>
     <string name="no_pokemon_cards">No Pokémon cards</string>
     <string name="home_screen_name">Pokémon Cards</string>
+    <string name="back">Back</string>
 </resources>

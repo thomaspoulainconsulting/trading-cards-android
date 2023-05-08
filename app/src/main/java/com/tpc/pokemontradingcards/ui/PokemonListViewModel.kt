@@ -1,8 +1,5 @@
 package com.tpc.pokemontradingcards.ui
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.pokemontradingcards.CardRepository
@@ -15,6 +12,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -27,8 +25,6 @@ class PokemonListViewModel @Inject constructor(
     private val pokemonCardRepository: CardRepository
 ) : ViewModel() {
 
-    var currentCardSet: String? by mutableStateOf(null)
-        private set
     val cards: StateFlow<List<Card>> by lazy {
         pokemonCardRepository.loadCards()
             .stateIn(
@@ -53,10 +49,11 @@ class PokemonListViewModel @Inject constructor(
             )
     }
 
-    fun updatePokemonSet(idSet: String?) = viewModelScope.launch {
-        currentCardSet = idSet
-        idSet?.let {
+    fun fetchCards(idSet: String) = viewModelScope.launch {
+        try {
             pokemonCardRepository.fetchCards(idSet)
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 }

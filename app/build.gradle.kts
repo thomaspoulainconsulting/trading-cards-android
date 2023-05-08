@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.room)
     implementation(libs.room.ktx)
     kapt(libs.room.compiler)
+    implementation(libs.navigation.compose)
 
     testImplementation(libs.junit)
 
