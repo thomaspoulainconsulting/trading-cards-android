@@ -17,9 +17,9 @@ data class Card(
 
 val CardEmpty = Card(
     id = "1",
-    name = "charizard",
-    urlSmall = "https://images.pokemontcg.io/base1/4.png",
-    urlLarge = "https://images.pokemontcg.io/base1/4_hires.png",
+    name = "",
+    urlSmall = "",
+    urlLarge = "",
     number = 0,
     idSet = "1",
     cardType = CardType.POKEMON
