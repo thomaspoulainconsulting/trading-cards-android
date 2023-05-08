@@ -34,12 +34,9 @@ fun CardSetComposable(
     onClick: (idCardSet: String) -> Unit
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        onClick = {
-            onClick(cardSet.id)
-        }
+        onClick = { onClick(cardSet.id) }
     ) {
         Row(
             modifier = Modifier
@@ -61,8 +58,7 @@ fun CardSetComposable(
             Text(text = cardSet.name)
             AsyncImage(
                 modifier = Modifier.size(32.dp),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(cardSet.symbol).build(),
+                model = ImageRequest.Builder(LocalContext.current).data(cardSet.symbol).build(),
                 contentDescription = null,
             )
         }

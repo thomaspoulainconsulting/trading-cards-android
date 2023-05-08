@@ -86,8 +86,7 @@ fun CardDetailsScreen(
         }
 
         AnimatedVisibility(
-            modifier = Modifier
-                .align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center),
             visible = selectedCardIndex != -1,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()

@@ -17,7 +17,6 @@ data class HoldingPokemonCardsData(val data: List<PokemonCardData>)
 data class PokemonCardSetData(
     val id: String,
     val name: String,
-    val total: Int,
     val releaseDate: String,
     val images: SetImages
 )

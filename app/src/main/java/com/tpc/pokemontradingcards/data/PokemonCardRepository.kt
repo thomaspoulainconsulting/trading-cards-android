@@ -57,7 +57,6 @@ class PokemonCardRepository @Inject constructor(
                     id = it.id,
                     name = it.name,
                     cardType = CardType.POKEMON,
-                    totalCardsInSet = it.total,
                     symbol = it.images.symbol,
                 )
             }

@@ -12,9 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpc.pokemontradingcards.R
 import com.tpc.pokemontradingcards.data.model.CardSet
+import com.tpc.pokemontradingcards.data.model.CardType
+import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
 import com.tpc.pokemontradingcards.ui.composables.CardSetComposable
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -45,5 +48,17 @@ fun CardListScreen(
                 }
             }
         )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 500, heightDp = 1000)
+@Composable
+fun CardListScreenPreview() {
+    PokemonTradingCardsTheme {
+        val sets = listOf(
+            CardSet(id = "1", name = "Base", cardType = CardType.POKEMON, symbol = ""),
+            CardSet(id = "2", name = "Fossil", cardType = CardType.POKEMON, symbol = ""),
+        )
+        CardListScreen(sets = sets) {}
     }
 }

@@ -9,7 +9,6 @@ data class CardSet(
     val name: String,
     val cardType: CardType,
     val symbol: String,
-    val totalCardsInSet: Int
 )
 
-val CardSetEmpty = CardSet("", "", CardType.POKEMON, "", 1)
+val CardSetEmpty = CardSet("1", "Base", CardType.POKEMON, "")

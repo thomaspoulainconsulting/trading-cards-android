@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "432236001b0b0539b181420b817de4e4",
+    "identityHash": "ad8b06eb7ac9765cb7b9ad0312e9a001",
     "entities": [
       {
         "tableName": "Card",
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "CardSet",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `cardType` TEXT NOT NULL, `symbol` TEXT NOT NULL, `totalCardsInSet` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `cardType` TEXT NOT NULL, `symbol` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -93,12 +93,6 @@
             "columnName": "symbol",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "totalCardsInSet",
-            "columnName": "totalCardsInSet",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -114,7 +108,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '432236001b0b0539b181420b817de4e4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ad8b06eb7ac9765cb7b9ad0312e9a001')"
     ]
   }
 }
