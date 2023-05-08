@@ -56,17 +56,15 @@ class PokemonListViewModel @Inject constructor(
             )
     }
 
-    fun fetchCards(idSet: String) {
+    fun fetchCards(idSet: String) = viewModelScope.launch {
         // Update the selected idSet
-        cardSetIdSelected.value = idSet
+        cardSetIdSelected.emit(idSet)
 
         // Fetch remote cards if necessary
-        viewModelScope.launch {
-            try {
-                pokemonCardRepository.fetchCards(idSet)
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
+        try {
+            pokemonCardRepository.fetchCards(idSet)
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 }

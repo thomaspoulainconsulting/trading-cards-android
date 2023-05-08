@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -77,17 +79,20 @@ fun CardDetailsScreen(
                 Text(stringResource(R.string.back), fontWeight = FontWeight.Medium)
             }
 
+            if (cards.isEmpty()) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(120.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 content = {
-                    if (cards.isEmpty()) {
-                        item {
-                            Text(stringResource(R.string.no_cards))
-                        }
-                    }
-
                     items(cards, key = { it.id }) { pokemonCard ->
                         PokemonCardCompact(
                             modifier = Modifier.animateItemPlacement(),
@@ -127,9 +132,16 @@ fun CardDetailsScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun CardDetailsScreenPreview() {
+fun CardDetailsScreenWithoutDataPreview() {
     TradingCardsTheme {
-        val cards = listOf(CardEmpty)
-        CardDetailsScreen(cards) {}
+        CardDetailsScreen(emptyList()) {}
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CardDetailsScreenWithDataPreview() {
+    TradingCardsTheme {
+        CardDetailsScreen(listOf(CardEmpty)) {}
     }
 }
