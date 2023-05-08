@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.tpc.pokemontradingcards"
+    namespace = "com.tpc.tradingcards"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.tpc.pokemontradingcards"
+        applicationId = "com.tpc.tradingcards"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -84,6 +84,7 @@ dependencies {
     kapt(libs.dagger.compiler)
     implementation(libs.timber)
     implementation(libs.accompanist.shimmer)
+    implementation(libs.accompanist.animation)
     implementation(libs.sensors)
     implementation(libs.room)
     implementation(libs.room.ktx)

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ad8b06eb7ac9765cb7b9ad0312e9a001",
+    "identityHash": "9c4abe172ed8376a28c5b3515f8df0d2",
     "entities": [
       {
         "tableName": "Card",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `idSet` TEXT NOT NULL, `number` INTEGER NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `urlSmall` TEXT NOT NULL, `urlLarge` TEXT NOT NULL, `cardType` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `idSet` TEXT NOT NULL, `number` INTEGER NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `urlSmall` TEXT NOT NULL, `urlLarge` TEXT NOT NULL, `cardType` TEXT NOT NULL, `isFavorite` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -54,6 +54,12 @@
             "fieldPath": "cardType",
             "columnName": "cardType",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "isFavorite",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -108,7 +114,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ad8b06eb7ac9765cb7b9ad0312e9a001')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9c4abe172ed8376a28c5b3515f8df0d2')"
     ]
   }
 }

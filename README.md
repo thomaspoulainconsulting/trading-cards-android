@@ -1,3 +1,2 @@
-# Pokémon Cards App with holographic effect
+# Trading Cards App
 
-inspired by https://github.com/simeydotme/pokemon-cards-css
