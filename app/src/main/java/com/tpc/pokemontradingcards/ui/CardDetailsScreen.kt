@@ -1,5 +1,6 @@
 package com.tpc.pokemontradingcards.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
@@ -7,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.tpc.pokemontradingcards.R
 import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.data.model.CardEmpty
+import com.tpc.pokemontradingcards.ui.commons.theme.Dark80
 import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
 import com.tpc.pokemontradingcards.ui.composables.PokemonCardCompact
 import com.tpc.pokemontradingcards.ui.composables.PokemonCardFull
@@ -47,8 +50,12 @@ fun CardDetailsScreen(
 ) {
     var selectedCardIndex by remember { mutableStateOf(-1) }
 
-    Box(Modifier.fillMaxSize()) {
+    BackHandler {
+        if (selectedCardIndex == -1) onBack()
+        else selectedCardIndex = -1
+    }
 
+    Box(Modifier.fillMaxSize()) {
         Column(Modifier.padding(16.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -71,7 +78,7 @@ fun CardDetailsScreen(
                 content = {
                     if (cards.isEmpty()) {
                         item {
-                            Text(stringResource(R.string.no_pokemon_cards))
+                            Text(stringResource(R.string.no_cards))
                         }
                     }
 
@@ -95,12 +102,17 @@ fun CardDetailsScreen(
             cards
                 .getOrNull(selectedCardIndex)
                 ?.let { card ->
-                    PokemonCardFull(
-                        modifier = Modifier.align(Alignment.Center),
-                        data = card,
-                        canBeRotated = true
-                    ) {
-                        selectedCardIndex = -1
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                selectedCardIndex = -1
+                            }
+                            .background(Dark80.copy(alpha = 0.8f))) {
+                        PokemonCardFull(
+                            modifier = Modifier.align(Alignment.Center),
+                            data = card,
+                        )
                     }
                 }
         }

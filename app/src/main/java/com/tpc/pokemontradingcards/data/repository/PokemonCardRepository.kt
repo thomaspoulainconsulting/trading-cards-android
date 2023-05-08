@@ -1,11 +1,11 @@
-package com.tpc.pokemontradingcards.data
+package com.tpc.pokemontradingcards.data.repository
 
-import com.tpc.pokemontradingcards.CardRepository
 import com.tpc.pokemontradingcards.data.dao.CardDao
 import com.tpc.pokemontradingcards.data.dao.CardSetDao
 import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.data.model.CardSet
 import com.tpc.pokemontradingcards.data.model.CardType
+import com.tpc.pokemontradingcards.data.service.PokemonTradingCardService
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

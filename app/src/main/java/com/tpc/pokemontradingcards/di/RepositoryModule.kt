@@ -1,10 +1,10 @@
 package com.tpc.pokemontradingcards.di
 
-import com.tpc.pokemontradingcards.CardRepository
-import com.tpc.pokemontradingcards.data.PokemonCardRepository
-import com.tpc.pokemontradingcards.data.PokemonTradingCardService
 import com.tpc.pokemontradingcards.data.dao.CardDao
 import com.tpc.pokemontradingcards.data.dao.CardSetDao
+import com.tpc.pokemontradingcards.data.repository.CardRepository
+import com.tpc.pokemontradingcards.data.repository.PokemonCardRepository
+import com.tpc.pokemontradingcards.data.service.PokemonTradingCardService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

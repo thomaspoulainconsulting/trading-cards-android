@@ -21,22 +21,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.tpc.pokemontradingcards.R
 import com.tpc.pokemontradingcards.data.model.CardSet
 import com.tpc.pokemontradingcards.data.model.CardSetEmpty
 import com.tpc.pokemontradingcards.ui.commons.theme.Dark80
 import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
 import com.tpc.pokemontradingcards.ui.commons.theme.Purple40
+import com.tpc.pokemontradingcards.ui.debugPlaceholder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardSetComposable(
     modifier: Modifier = Modifier,
     cardSet: CardSet,
-    onClick: (idCardSet: String) -> Unit
+    onClick: (String) -> Unit
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         onClick = { onClick(cardSet.id) }
     ) {
         Row(
@@ -59,7 +61,8 @@ fun CardSetComposable(
             Text(text = cardSet.name, color = Color.White)
             AsyncImage(
                 modifier = Modifier.size(32.dp),
-                model = ImageRequest.Builder(LocalContext.current).data(cardSet.symbol).build(),
+                model = ImageRequest.Builder(LocalContext.current).data(cardSet.symbol).crossfade(true).build(),
+                placeholder = debugPlaceholder(debugPreview = R.drawable.debug_set_placehold),
                 contentDescription = null,
             )
         }

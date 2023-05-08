@@ -2,9 +2,9 @@ package com.tpc.pokemontradingcards.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tpc.pokemontradingcards.CardRepository
 import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.data.model.CardSet
+import com.tpc.pokemontradingcards.data.repository.CardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

@@ -1,4 +1,4 @@
-package com.tpc.pokemontradingcards.data
+package com.tpc.pokemontradingcards.data.service
 
 import com.tpc.pokemontradingcards.data.dto.HoldingPokemonCardSetsData
 import com.tpc.pokemontradingcards.data.dto.HoldingPokemonCardsData

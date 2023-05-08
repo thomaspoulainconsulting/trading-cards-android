@@ -3,7 +3,6 @@ package com.tpc.pokemontradingcards.ui.composables
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,15 +16,20 @@ import coil.request.ImageRequest
 import com.tpc.pokemontradingcards.R
 import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.data.model.CardEmpty
+import com.tpc.pokemontradingcards.ui.commons.theme.DefaultCardShape
 import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
 import com.tpc.pokemontradingcards.ui.debugPlaceholder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonCardCompact(modifier: Modifier = Modifier, data: Card, onClick: () -> Unit) {
+fun PokemonCardCompact(
+    modifier: Modifier = Modifier,
+    data: Card,
+    onClick: () -> Unit
+) {
     Card(
         modifier = modifier.wrapContentSize(),
-        shape = RoundedCornerShape(8.dp),
+        shape = DefaultCardShape,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         onClick = onClick
     ) {

@@ -2,7 +2,6 @@ package com.tpc.pokemontradingcards.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.tpc.pokemontradingcards.data.PokemonTradingCardService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,9 +53,4 @@ internal object NetworkModule {
             .baseUrl("https://api.pokemontcg.io/v2/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-
-    @Provides
-    @Singleton
-    fun providePokemonTradingCardService(retrofit: Retrofit): PokemonTradingCardService =
-        retrofit.create(PokemonTradingCardService::class.java)
 }

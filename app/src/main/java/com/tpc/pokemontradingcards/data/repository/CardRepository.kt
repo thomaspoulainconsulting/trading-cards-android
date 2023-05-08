@@ -1,4 +1,4 @@
-package com.tpc.pokemontradingcards
+package com.tpc.pokemontradingcards.data.repository
 
 import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.data.model.CardSet

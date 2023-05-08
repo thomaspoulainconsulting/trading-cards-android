@@ -14,14 +14,10 @@ internal object DaoModule {
 
     @Provides
     @Singleton
-    fun provideCardDao(database: CardsDatabase): CardDao {
-        return database.provideCardDao()
-    }
+    fun provideCardDao(database: CardsDatabase): CardDao = database.provideCardDao()
 
     @Provides
     @Singleton
-    fun provideCardSetDao(database: CardsDatabase): CardSetDao {
-        return database.provideCardSetDao()
-    }
+    fun provideCardSetDao(database: CardsDatabase): CardSetDao = database.provideCardSetDao()
 
 }
