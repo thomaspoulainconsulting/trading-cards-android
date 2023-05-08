@@ -14,9 +14,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.tpc.pokemontradingcards.R
 import com.tpc.pokemontradingcards.data.model.Card
 import com.tpc.pokemontradingcards.data.model.CardEmpty
 import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
+import com.tpc.pokemontradingcards.ui.debugPlaceholder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,12 +34,9 @@ fun PokemonCardCompact(modifier: Modifier = Modifier, data: Card, onClick: () ->
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(data.urlSmall)
                     .crossfade(500).build(),
+                placeholder = debugPlaceholder(R.drawable.debug_card_placeholder),
                 contentDescription = null,
             )
-            /*Text(
-                text = data.label,
-                color = Color.White
-            )*/
         }
     }
 }

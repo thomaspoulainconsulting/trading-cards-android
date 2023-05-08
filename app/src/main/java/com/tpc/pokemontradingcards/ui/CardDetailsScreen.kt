@@ -28,12 +28,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpc.pokemontradingcards.R
 import com.tpc.pokemontradingcards.data.model.Card
+import com.tpc.pokemontradingcards.data.model.CardEmpty
+import com.tpc.pokemontradingcards.ui.commons.theme.PokemonTradingCardsTheme
 import com.tpc.pokemontradingcards.ui.composables.PokemonCardCompact
 import com.tpc.pokemontradingcards.ui.composables.PokemonCardFull
 
@@ -58,7 +60,6 @@ fun CardDetailsScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
-                    tint = Color.White,
                 )
                 Text(stringResource(R.string.back), fontWeight = FontWeight.Medium)
             }
@@ -104,5 +105,13 @@ fun CardDetailsScreen(
                 }
         }
     }
+}
 
+@Preview(showBackground = true)
+@Composable
+fun CardDetailsScreenPreview() {
+    PokemonTradingCardsTheme {
+        val cards = listOf(CardEmpty)
+        CardDetailsScreen(cards) {}
+    }
 }
