@@ -13,7 +13,6 @@ data class Card(
     val urlSmall: String,
     val urlLarge: String,
     val cardType: CardType,
-    val isFavorite: Boolean
 )
 
 val CardEmpty = Card(
@@ -24,5 +23,4 @@ val CardEmpty = Card(
     number = 0,
     idSet = "1",
     cardType = CardType.POKEMON,
-    isFavorite = false
 )

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -35,18 +34,11 @@ class CardViewModel @Inject constructor(
             .combine(cardSetIdSelected) { list, filter ->
                 list.filter { it.idSet == filter }
             }
-            .stateIn(
-                initialValue = emptyList(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
-    }
-
-    val sets: StateFlow<List<CardSet>> by lazy {
-        cardRepository.loadSets()
             .flatMapLatest { data ->
                 if (data.isEmpty()) {
-                    cardRepository.fetchCardSets()
+                    viewModelScope.launch { // We don't want that the flow suspend on the network call
+                        cardRepository.fetchCards(cardSetIdSelected.value)
+                    }
                 }
                 flowOf(data)
             }
@@ -57,15 +49,16 @@ class CardViewModel @Inject constructor(
             )
     }
 
-    fun fetchCards(idSet: String) = viewModelScope.launch {
-        // Update the selected idSet
-        cardSetIdSelected.emit(idSet)
+    val sets: StateFlow<List<CardSet>> by lazy {
+        cardRepository.loadSets()
+            .stateIn(
+                initialValue = emptyList(),
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+    }
 
-        // Fetch remote cards if necessary
-        try {
-            cardRepository.fetchCards(idSet)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
+    fun fetchCards(idSet: String) = viewModelScope.launch {
+        cardSetIdSelected.emit(idSet)
     }
 }

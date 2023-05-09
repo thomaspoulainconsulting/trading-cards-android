@@ -16,13 +16,4 @@ interface CardRepository {
      */
     fun loadSets(): Flow<List<CardSet>>
 
-    /**
-     * Fetch cards from a remote database
-     */
-    suspend fun fetchCards(idSet: String)
-
-    /**
-     * Fetch the card sets from a remote database
-     */
-    suspend fun fetchCardSets()
 }

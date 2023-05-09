@@ -14,9 +14,6 @@ interface CardDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertAll(cards: List<Card>)
 
-    @Query("SELECT * FROM Card WHERE idSet = :idSet")
-    suspend fun getAllCards(idSet: String): List<Card>
-
     @Query("SELECT * FROM Card WHERE cardType=:cardType ORDER BY number")
     fun getAllCards(cardType: CardType): Flow<List<Card>>
 }

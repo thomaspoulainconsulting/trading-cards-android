@@ -7,6 +7,8 @@ import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.data.service.PokemonTradingCardService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class PokemonCardRepository @Inject constructor(
@@ -15,18 +17,17 @@ class PokemonCardRepository @Inject constructor(
     private val remoteSource: PokemonTradingCardService,
 ) : CardRepository {
 
-    override fun loadCards(): Flow<List<Card>> = localCardSource.getAllCards(CardType.POKEMON)
+    override fun loadCards(): Flow<List<Card>> =
+        localCardSource.getAllCards(CardType.POKEMON)
 
     override fun loadSets(): Flow<List<CardSet>> =
         localCardSetSource.getCardSetsWithType(CardType.POKEMON)
+            .flatMapLatest { data ->
+                if (data.isEmpty()) fetchCardSets()
+                flowOf(data)
+            }
 
-    override suspend fun fetchCards(idSet: String) {
-        // First we check if there is some cards with the idSet in database
-        // If cards with the idSet is already there, we do not download it again
-        val cardsWithCurrentSet = localCardSource.getAllCards(idSet)
-        if (cardsWithCurrentSet.isNotEmpty()) return
-
-        // Otherwise, we download the cards and insert them in database
+    suspend fun fetchCards(idSet: String) {
         val cards = remoteSource
             .getPokemonCards(
                 query = "!set.id:$idSet",
@@ -40,16 +41,15 @@ class PokemonCardRepository @Inject constructor(
                     name = it.name,
                     urlSmall = it.images.small,
                     urlLarge = it.images.large,
-                    number = it.number.toInt(),
+                    number = it.number.toIntOrNull() ?: -1,
                     idSet = idSet,
-                    cardType = CardType.POKEMON,
-                    isFavorite = false
+                    cardType = CardType.POKEMON
                 )
             }
         localCardSource.insertAll(cards)
     }
 
-    override suspend fun fetchCardSets() {
+    private suspend fun fetchCardSets() {
         val sets = remoteSource
             .getPokemonCardSets()
             .data
