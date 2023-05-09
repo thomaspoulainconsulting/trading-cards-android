@@ -10,12 +10,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 
 @Composable
-fun Loading(modifier: Modifier = Modifier) {
-    Row(
-        modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        CircularProgressIndicator()
+fun Loading(isVisible: Boolean) {
+    if (isVisible) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }
 
@@ -23,6 +25,6 @@ fun Loading(modifier: Modifier = Modifier) {
 @Composable
 fun LoadingPreview() {
     TradingCardsTheme {
-        Loading()
+        Loading(true)
     }
 }

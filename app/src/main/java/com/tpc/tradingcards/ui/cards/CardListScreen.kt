@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ fun CardListScreen(
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineMedium,
+            color = Color.White,
             modifier = Modifier
                 .padding(16.dp)
                 .padding(top = 20.dp)
@@ -41,10 +43,8 @@ fun CardListScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             content = {
 
-                if (sets.isEmpty()) {
-                    item {
-                        Loading()
-                    }
+                item {
+                    Loading(sets.isEmpty())
                 }
 
                 items(sets, key = { it.id }) {

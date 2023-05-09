@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -46,6 +47,7 @@ fun PokemonCardFull(
             repeatMode = RepeatMode.Reverse, animation = tween(
                 durationMillis = 4000,
                 easing = LinearEasing,
+                delayMillis = 500
             )
         )
     )
@@ -55,12 +57,14 @@ fun PokemonCardFull(
             repeatMode = RepeatMode.Reverse, animation = tween(
                 durationMillis = 2000,
                 easing = LinearEasing,
+                delayMillis = 500
             )
         )
     )
 
     Card(
         modifier = modifier
+            .padding(16.dp)
             .graphicsLayer {
                 rotationX = rotX
                 rotationY = rotY
