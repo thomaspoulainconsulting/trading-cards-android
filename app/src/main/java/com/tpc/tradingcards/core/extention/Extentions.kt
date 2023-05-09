@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui
+package com.tpc.tradingcards.core.extention
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable

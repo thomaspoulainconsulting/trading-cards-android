@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.di
+package com.tpc.tradingcards.core.di
 
 import com.tpc.tradingcards.data.dao.CardDao
 import com.tpc.tradingcards.data.dao.CardSetDao

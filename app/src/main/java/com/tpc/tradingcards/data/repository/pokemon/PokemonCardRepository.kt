@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.data.repository
+package com.tpc.tradingcards.data.repository.pokemon
 
 import com.tpc.tradingcards.data.dao.CardDao
 import com.tpc.tradingcards.data.dao.CardSetDao
@@ -6,26 +6,17 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.data.service.PokemonTradingCardService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class PokemonCardRepository @Inject constructor(
     private val localCardSource: CardDao,
     private val localCardSetSource: CardSetDao,
     private val remoteSource: PokemonTradingCardService,
-) : CardRepository {
+) {
 
-    override fun loadCards(): Flow<List<Card>> =
-        localCardSource.getAllCards(CardType.POKEMON)
+    val cards = localCardSource.getAllCards(CardType.POKEMON)
 
-    override fun loadSets(): Flow<List<CardSet>> =
-        localCardSetSource.getCardSetsWithType(CardType.POKEMON)
-            .flatMapLatest { data ->
-                if (data.isEmpty()) fetchCardSets()
-                flowOf(data)
-            }
+    val sets = localCardSetSource.getCardSetsWithType(CardType.POKEMON)
 
     suspend fun fetchCards(idSet: String) {
         val cards = remoteSource
@@ -49,7 +40,7 @@ class PokemonCardRepository @Inject constructor(
         localCardSource.insertAll(cards)
     }
 
-    private suspend fun fetchCardSets() {
+    suspend fun fetchCardSets() {
         val sets = remoteSource
             .getPokemonCardSets()
             .data

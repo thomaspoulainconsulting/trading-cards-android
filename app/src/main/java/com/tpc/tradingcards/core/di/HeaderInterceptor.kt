@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.di
+package com.tpc.tradingcards.core.di
 
 import okhttp3.Interceptor
 import okhttp3.Response

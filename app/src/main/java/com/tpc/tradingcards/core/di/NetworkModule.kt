@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.di
+package com.tpc.tradingcards.core.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.composables
+package com.tpc.tradingcards.ui.cards.composables
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpc.tradingcards.R
+import com.tpc.tradingcards.core.extention.debugPlaceholder
+import com.tpc.tradingcards.core.ui.theme.DefaultCardShape
+import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
-import com.tpc.tradingcards.ui.commons.theme.DefaultCardShape
-import com.tpc.tradingcards.ui.commons.theme.TradingCardsTheme
-import com.tpc.tradingcards.ui.debugPlaceholder
 
 @Composable
 fun PokemonCardFull(

@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.composables
+package com.tpc.tradingcards.ui.cards.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpc.tradingcards.R
+import com.tpc.tradingcards.core.extention.debugPlaceholder
+import com.tpc.tradingcards.core.ui.theme.Dark60
+import com.tpc.tradingcards.core.ui.theme.Purple40
+import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
-import com.tpc.tradingcards.ui.commons.theme.Dark80
-import com.tpc.tradingcards.ui.commons.theme.Purple40
-import com.tpc.tradingcards.ui.commons.theme.TradingCardsTheme
-import com.tpc.tradingcards.ui.debugPlaceholder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +46,7 @@ fun CardSetComposable(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(Dark80, Purple40),
+                        colors = listOf(Dark60, Purple40),
                         start = Offset(100f, 0f),
                         end = Offset(
                             Float.POSITIVE_INFINITY,

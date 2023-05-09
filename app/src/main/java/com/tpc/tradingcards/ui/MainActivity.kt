@@ -1,4 +1,4 @@
-package com.tpc.tradingcards
+package com.tpc.tradingcards.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,9 +12,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.tpc.tradingcards.ui.cardListRoute
-import com.tpc.tradingcards.ui.cardsGraph
-import com.tpc.tradingcards.ui.commons.theme.TradingCardsTheme
+import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
+import com.tpc.tradingcards.ui.cards.cardListRoute
+import com.tpc.tradingcards.ui.cards.cardsGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

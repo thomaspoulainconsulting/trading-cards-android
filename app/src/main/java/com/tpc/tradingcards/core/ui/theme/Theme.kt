@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.commons.theme
+package com.tpc.tradingcards.core.ui.theme
 
 import android.app.Activity
 import android.os.Build

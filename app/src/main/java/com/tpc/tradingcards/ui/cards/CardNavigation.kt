@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui
+package com.tpc.tradingcards.ui.cards
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.getValue

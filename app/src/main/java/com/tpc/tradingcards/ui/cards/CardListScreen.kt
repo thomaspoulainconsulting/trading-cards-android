@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui
+package com.tpc.tradingcards.ui.cards
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +15,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpc.tradingcards.R
+import com.tpc.tradingcards.core.ui.composable.Loading
+import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
-import com.tpc.tradingcards.ui.commons.theme.TradingCardsTheme
-import com.tpc.tradingcards.ui.composables.CardSetComposable
+import com.tpc.tradingcards.ui.cards.composables.CardSetComposable
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -39,6 +40,13 @@ fun CardListScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             content = {
+
+                if (sets.isEmpty()) {
+                    item {
+                        Loading()
+                    }
+                }
+
                 items(sets, key = { it.id }) {
                     CardSetComposable(
                         modifier = Modifier.animateItemPlacement(),

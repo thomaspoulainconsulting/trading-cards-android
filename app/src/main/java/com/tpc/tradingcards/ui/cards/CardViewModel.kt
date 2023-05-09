@@ -1,11 +1,12 @@
-package com.tpc.tradingcards.ui
+package com.tpc.tradingcards.ui.cards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
-import com.tpc.tradingcards.data.repository.PokemonCardRepository
+import com.tpc.tradingcards.data.repository.pokemon.PokemonCardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +24,7 @@ import javax.inject.Inject
  * - a method that will fetch a new Set from remote database
  */
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class CardViewModel @Inject constructor(
     private val cardRepository: PokemonCardRepository
 ) : ViewModel() {
@@ -30,7 +32,7 @@ class CardViewModel @Inject constructor(
     private val cardSetIdSelected = MutableStateFlow("")
 
     val cards: StateFlow<List<Card>> by lazy {
-        cardRepository.loadCards()
+        cardRepository.cards
             .combine(cardSetIdSelected) { list, filter ->
                 list.filter { it.idSet == filter }
             }
@@ -50,7 +52,11 @@ class CardViewModel @Inject constructor(
     }
 
     val sets: StateFlow<List<CardSet>> by lazy {
-        cardRepository.loadSets()
+        cardRepository.sets
+            .flatMapLatest { data ->
+                if (data.isEmpty()) cardRepository.fetchCardSets()
+                flowOf(data)
+            }
             .stateIn(
                 initialValue = emptyList(),
                 scope = viewModelScope,
@@ -58,7 +64,7 @@ class CardViewModel @Inject constructor(
             )
     }
 
-    fun fetchCards(idSet: String) = viewModelScope.launch {
-        cardSetIdSelected.emit(idSet)
+    fun fetchCards(idSet: String) {
+        cardSetIdSelected.value = idSet
     }
 }

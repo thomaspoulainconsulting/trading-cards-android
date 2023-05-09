@@ -1,4 +1,4 @@
-package com.tpc.tradingcards
+package com.tpc.tradingcards.ui
 
 import android.app.Application
 import com.mutualmobile.composesensors.BuildConfig

@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.di
+package com.tpc.tradingcards.core.di
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
