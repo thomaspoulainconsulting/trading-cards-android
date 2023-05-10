@@ -31,7 +31,7 @@ fun CardListScreen(
     Column {
         Text(
             text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             color = Color.White,
             modifier = Modifier
                 .padding(16.dp)

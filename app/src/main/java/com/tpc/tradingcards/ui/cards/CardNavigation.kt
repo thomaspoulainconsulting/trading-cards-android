@@ -1,6 +1,8 @@
 package com.tpc.tradingcards.ui.cards
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,7 +18,15 @@ private const val cardDetailsRoute = "cards-details"
 fun NavGraphBuilder.cardsGraph(
     navController: NavController,
 ) {
-    composable(cardListRoute) {
+    composable(
+        route = cardListRoute,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Right, tween(700))
+        }
+    ) {
         val pokemonViewModel: CardViewModel = hiltViewModel()
         val sets by pokemonViewModel.sets.collectAsStateWithLifecycle()
 
@@ -26,7 +36,15 @@ fun NavGraphBuilder.cardsGraph(
         }
     }
 
-    composable(cardDetailsRoute) { backStackEntry ->
+    composable(
+        route = cardDetailsRoute,
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, tween(700))
+        },
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, tween(700))
+        }
+    ) { backStackEntry ->
         val parentEntry =
             remember(backStackEntry) { navController.getBackStackEntry(cardListRoute) }
         val pokemonViewModel: CardViewModel = hiltViewModel(parentEntry)
