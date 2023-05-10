@@ -6,7 +6,6 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.data.service.PokemonTradingCardService
-import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
 class PokemonCardRepository @Inject constructor(
@@ -15,13 +14,9 @@ class PokemonCardRepository @Inject constructor(
     private val remoteSource: PokemonTradingCardService,
 ) {
 
-    val cards = localCardSource.getAllCards(CardType.POKEMON)
+    fun getCards(idSet: String) = localCardSource.getAllCards(CardType.POKEMON, idSet)
 
-    val sets = localCardSetSource.getCardSetsWithType(CardType.POKEMON)
-        .mapLatest { data ->
-            if (data.isEmpty()) fetchCardSets()
-            data
-        }
+    fun getSets() = localCardSetSource.getCardSetsWithType(CardType.POKEMON)
 
     suspend fun fetchCards(idSet: String) {
         val cards = remoteSource.getPokemonCards(
@@ -42,7 +37,7 @@ class PokemonCardRepository @Inject constructor(
         localCardSource.insertAll(cards)
     }
 
-    private suspend fun fetchCardSets() {
+    suspend fun fetchCardSets() {
         val sets = remoteSource.getPokemonCardSets().data.map {
             CardSet(
                 id = it.id,

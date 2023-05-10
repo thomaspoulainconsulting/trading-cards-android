@@ -2,17 +2,16 @@ package com.tpc.tradingcards.ui.cards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tpc.tradingcards.core.extention.defaultStateIn
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.repository.pokemon.PokemonCardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,38 +27,30 @@ class CardViewModel @Inject constructor(
     private val cardRepository: PokemonCardRepository
 ) : ViewModel() {
 
-    private val cardSetIdSelected = MutableStateFlow("")
+    private val cardSetSelected = MutableStateFlow("")
 
-    val cards: StateFlow<List<Card>> by lazy {
-        cardRepository.cards
-            .combine(cardSetIdSelected) { list, filter ->
-                list.filter { it.idSet == filter }
-            }
-            .mapLatest {
-                if (it.isEmpty()) {
+    val cards: StateFlow<List<Card>> =
+        cardSetSelected
+            .flatMapLatest { cardRepository.getCards(it) }
+            .mapLatest { data ->
+                if (data.isEmpty()) {
                     viewModelScope.launch { // We don't want that the flow suspend on the network call
-                        cardRepository.fetchCards(cardSetIdSelected.value)
+                        cardRepository.fetchCards(cardSetSelected.value)
                     }
                 }
-                it
+                data
             }
-            .stateIn(
-                initialValue = emptyList(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
-    }
+            .defaultStateIn(viewModelScope, emptyList())
 
-    val sets: StateFlow<List<CardSet>> by lazy {
-        cardRepository.sets
-            .stateIn(
-                initialValue = emptyList(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
-    }
+    val sets: StateFlow<List<CardSet>> =
+        cardRepository.getSets()
+            .mapLatest { data ->
+                if (data.isEmpty()) cardRepository.fetchCardSets()
+                data
+            }
+            .defaultStateIn(viewModelScope, emptyList())
 
-    fun fetchCards(idSet: String) {
-        cardSetIdSelected.value = idSet
+    fun fetchCards(idSet: String) = viewModelScope.launch {
+        cardSetSelected.emit(idSet)
     }
 }
