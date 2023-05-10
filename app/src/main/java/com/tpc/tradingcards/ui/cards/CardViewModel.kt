@@ -11,7 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,21 +32,19 @@ class CardViewModel @Inject constructor(
     val cards: StateFlow<List<Card>> =
         cardSetSelected
             .flatMapLatest { cardRepository.getCards(it) }
-            .mapLatest { data ->
+            .onEach { data ->
                 if (data.isEmpty()) {
                     viewModelScope.launch { // We don't want that the flow suspend on the network call
                         cardRepository.fetchCards(cardSetSelected.value)
                     }
                 }
-                data
             }
             .defaultStateIn(viewModelScope, emptyList())
 
     val sets: StateFlow<List<CardSet>> =
         cardRepository.getSets()
-            .mapLatest { data ->
+            .onEach { data ->
                 if (data.isEmpty()) cardRepository.fetchCardSets()
-                data
             }
             .defaultStateIn(viewModelScope, emptyList())
 
