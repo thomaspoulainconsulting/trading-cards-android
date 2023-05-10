@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,13 +35,13 @@ class CardViewModel @Inject constructor(
             .combine(cardSetIdSelected) { list, filter ->
                 list.filter { it.idSet == filter }
             }
-            .flatMapLatest { data ->
-                if (data.isEmpty()) {
+            .mapLatest {
+                if (it.isEmpty()) {
                     viewModelScope.launch { // We don't want that the flow suspend on the network call
                         cardRepository.fetchCards(cardSetIdSelected.value)
                     }
                 }
-                flowOf(data)
+                it
             }
             .stateIn(
                 initialValue = emptyList(),
@@ -53,10 +52,6 @@ class CardViewModel @Inject constructor(
 
     val sets: StateFlow<List<CardSet>> by lazy {
         cardRepository.sets
-            .flatMapLatest { data ->
-                if (data.isEmpty()) cardRepository.fetchCardSets()
-                flowOf(data)
-            }
             .stateIn(
                 initialValue = emptyList(),
                 scope = viewModelScope,

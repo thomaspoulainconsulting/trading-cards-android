@@ -49,11 +49,11 @@ fun CardDetailsScreen(
     cards: List<Card>,
     onBack: () -> Unit
 ) {
-    var selectedCardIndex by remember { mutableStateOf(-1) }
+    var selectedCardIndex: Int? by remember { mutableStateOf(null) }
 
     BackHandler {
-        if (selectedCardIndex == -1) onBack()
-        else selectedCardIndex = -1
+        if (selectedCardIndex == null) onBack()
+        else selectedCardIndex = null
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -90,7 +90,7 @@ fun CardDetailsScreen(
         }
 
         AnimatedVisibility(
-            visible = cards.getOrNull(selectedCardIndex) != null,
+            visible = selectedCardIndex != null,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -98,25 +98,27 @@ fun CardDetailsScreen(
                 Modifier
                     .fillMaxSize()
                     .clickable {
-                        selectedCardIndex = -1
+                        selectedCardIndex = null
                     }
                     .background(Dark80.copy(alpha = 0.8f))) {}
         }
 
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.Center),
-            visible = selectedCardIndex != -1,
+            visible = selectedCardIndex != null,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()
         ) {
-            cards
-                .getOrNull(selectedCardIndex)
-                ?.let { card ->
-                    PokemonCardFull(
-                        modifier = Modifier.align(Alignment.Center),
-                        data = card,
-                    )
-                }
+            selectedCardIndex?.let {
+                cards
+                    .getOrNull(it)
+                    ?.let { card ->
+                        PokemonCardFull(
+                            modifier = Modifier.align(Alignment.Center),
+                            data = card,
+                        )
+                    }
+            }
         }
     }
 }
