@@ -34,12 +34,12 @@ import com.tpc.tradingcards.data.model.CardSetEmpty
 fun CardSetComposable(
     modifier: Modifier = Modifier,
     cardSet: CardSet,
-    onClick: (String) -> Unit
+    onClick: (CardSet) -> Unit
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        onClick = { onClick(cardSet.id) }
+        onClick = { onClick(cardSet) }
     ) {
         Row(
             modifier = Modifier

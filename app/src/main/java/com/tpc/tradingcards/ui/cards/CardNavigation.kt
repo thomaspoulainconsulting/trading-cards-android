@@ -48,9 +48,11 @@ fun NavGraphBuilder.cardsGraph(
         val parentEntry =
             remember(backStackEntry) { navController.getBackStackEntry(cardListRoute) }
         val pokemonViewModel: CardViewModel = hiltViewModel(parentEntry)
-        val cards by pokemonViewModel.cards.collectAsStateWithLifecycle()
 
-        CardDetailsScreen(cards) {
+        val cards by pokemonViewModel.cards.collectAsStateWithLifecycle()
+        val set by pokemonViewModel.cardSetSelected.collectAsStateWithLifecycle()
+
+        CardDetailsScreen(set, cards) {
             navController.popBackStack()
         }
     }

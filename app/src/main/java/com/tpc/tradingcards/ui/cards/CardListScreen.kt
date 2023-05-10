@@ -26,7 +26,7 @@ import com.tpc.tradingcards.ui.cards.composables.CardSetComposable
 @Composable
 fun CardListScreen(
     sets: List<CardSet>,
-    onNavigateToCardSetDetails: (String) -> Unit
+    onNavigateToCardSetDetails: (CardSet) -> Unit
 ) {
     Column {
         Text(

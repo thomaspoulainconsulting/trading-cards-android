@@ -40,12 +40,15 @@ import com.tpc.tradingcards.core.ui.theme.Dark80
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
+import com.tpc.tradingcards.data.model.CardSet
+import com.tpc.tradingcards.data.model.CardSetEmpty
 import com.tpc.tradingcards.ui.cards.composables.PokemonCardCompact
 import com.tpc.tradingcards.ui.cards.composables.PokemonCardFull
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun CardDetailsScreen(
+    set: CardSet,
     cards: List<Card>,
     onBack: () -> Unit
 ) {
@@ -127,7 +130,7 @@ fun CardDetailsScreen(
 @Composable
 fun CardDetailsScreenWithoutDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(emptyList()) {}
+        CardDetailsScreen(CardSetEmpty, emptyList()) {}
     }
 }
 
@@ -135,6 +138,6 @@ fun CardDetailsScreenWithoutDataPreview() {
 @Composable
 fun CardDetailsScreenWithDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(listOf(CardEmpty)) {}
+        CardDetailsScreen(CardSetEmpty, listOf(CardEmpty)) {}
     }
 }

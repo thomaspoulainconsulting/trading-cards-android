@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.core.extention.defaultStateIn
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
+import com.tpc.tradingcards.data.model.CardSetEmpty
 import com.tpc.tradingcards.data.repository.pokemon.PokemonCardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -27,15 +29,16 @@ class CardViewModel @Inject constructor(
     private val cardRepository: PokemonCardRepository
 ) : ViewModel() {
 
-    private val cardSetSelected = MutableStateFlow("")
+    private val _cardSetSelected = MutableStateFlow(CardSetEmpty)
+    val cardSetSelected = _cardSetSelected.asStateFlow()
 
     val cards: StateFlow<List<Card>> =
         cardSetSelected
-            .flatMapLatest { cardRepository.getCards(it) }
+            .flatMapLatest { cardRepository.getCards(it.id) }
             .onEach { data ->
                 if (data.isEmpty()) {
-                    viewModelScope.launch { // We don't want that the flow suspend on the network call
-                        cardRepository.fetchCards(cardSetSelected.value)
+                    viewModelScope.launch { // We don't want that the flow suspends on the network call
+                        cardRepository.fetchCards(cardSetSelected.value.id)
                     }
                 }
             }
@@ -48,7 +51,7 @@ class CardViewModel @Inject constructor(
             }
             .defaultStateIn(viewModelScope, emptyList())
 
-    fun fetchCards(idSet: String) = viewModelScope.launch {
-        cardSetSelected.emit(idSet)
+    fun fetchCards(cardSet: CardSet) = viewModelScope.launch {
+        _cardSetSelected.emit(cardSet)
     }
 }
