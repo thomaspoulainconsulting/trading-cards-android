@@ -14,6 +14,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -42,13 +44,14 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
+import com.tpc.tradingcards.ui.cards.composables.CardSetComposable
 import com.tpc.tradingcards.ui.cards.composables.PokemonCardCompact
 import com.tpc.tradingcards.ui.cards.composables.PokemonCardFull
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun CardDetailsScreen(
-    set: CardSet,
+    cardSet: CardSet,
     cards: List<Card>,
     onBack: () -> Unit
 ) {
@@ -60,24 +63,37 @@ fun CardDetailsScreen(
     }
 
     Box(Modifier.fillMaxSize()) {
-        Column(Modifier.padding(16.dp)) {
-            Icon(
-                modifier = Modifier
-                    .padding(bottom = 32.dp, top = 16.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false),
-                        onClick = onBack
-                    ),
-                tint = Color.White,
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = stringResource(R.string.back),
-            )
+        Column(
+            Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp,
+                bottom = 0.dp,
+            ),
+        ) {
+            Row {
+                Icon(
+                    modifier = Modifier
+                        .padding(bottom = 32.dp, top = 16.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false),
+                            onClick = onBack
+                        ),
+                    tint = Color.White,
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.back),
+                )
+            }
+
 
             Loading(cards.isEmpty())
 
+            CardSetComposable(cardSet = cardSet) {}
+
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(100.dp),
+                contentPadding = PaddingValues(top = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 content = {
