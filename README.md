@@ -1,2 +1,19 @@
-# Trading Cards App
+# Trading Cards App ![example workflow](https://github.com/molpoo/trading-cards-android/actions/workflows/android.yml/badge.svg)
 
+This is an Android app that display cards from the Pokemon trading card game.
+
+## Technology
+
+The app has been implemented with this tech:
+
+- Jetpack Compose
+- Material 3
+- MVVM
+- Coroutine & Flow
+- Dagger Hilt
+- Room, Retrofit, Moshi
+- Version Catalog
+
+## Future
+
+Implement automated UI tests and add more types of cards.
