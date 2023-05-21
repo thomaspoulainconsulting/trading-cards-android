@@ -10,15 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpc.tradingcards.R
-import com.tpc.tradingcards.data.model.Card
-import com.tpc.tradingcards.data.model.CardEmpty
+import com.tpc.tradingcards.core.extention.debugPlaceholder
 import com.tpc.tradingcards.core.ui.theme.DefaultCardShape
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
-import com.tpc.tradingcards.core.extention.debugPlaceholder
+import com.tpc.tradingcards.core.ui.theme.mediumElevation
+import com.tpc.tradingcards.core.ui.theme.mediumSize
+import com.tpc.tradingcards.data.model.Card
+import com.tpc.tradingcards.data.model.CardEmpty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,10 +31,10 @@ fun PokemonCardCompact(
     Card(
         modifier = modifier.wrapContentSize(),
         shape = DefaultCardShape,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation),
         onClick = onClick
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(mediumSize)) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(data.urlSmall)

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.ui.composable.Loading
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
+import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.ui.cards.composables.CardSetComposable
@@ -34,13 +35,13 @@ fun CardListScreen(
             style = MaterialTheme.typography.headlineSmall,
             color = Color.White,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(largeSize)
                 .padding(top = 20.dp)
         )
 
         LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(largeSize),
+            verticalArrangement = Arrangement.spacedBy(largeSize),
             content = {
 
                 item {

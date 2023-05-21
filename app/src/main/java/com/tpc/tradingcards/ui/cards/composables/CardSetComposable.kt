@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpc.tradingcards.R
@@ -26,6 +25,9 @@ import com.tpc.tradingcards.core.extention.debugPlaceholder
 import com.tpc.tradingcards.core.ui.theme.Dark60
 import com.tpc.tradingcards.core.ui.theme.Purple40
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
+import com.tpc.tradingcards.core.ui.theme.largeSize
+import com.tpc.tradingcards.core.ui.theme.largerSize
+import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
 
@@ -38,7 +40,7 @@ fun CardSetComposable(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation),
         onClick = { onClick(cardSet) }
     ) {
         Row(
@@ -54,13 +56,13 @@ fun CardSetComposable(
                         )
                     )
                 )
-                .padding(16.dp),
+                .padding(largeSize),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = cardSet.name, color = Color.White)
             AsyncImage(
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(largerSize),
                 model = ImageRequest.Builder(LocalContext.current).data(cardSet.symbol)
                     .crossfade(true).build(),
                 placeholder = debugPlaceholder(debugPreview = R.drawable.debug_set_placehold),

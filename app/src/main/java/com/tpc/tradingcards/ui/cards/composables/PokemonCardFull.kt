@@ -33,6 +33,8 @@ import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.extention.debugPlaceholder
 import com.tpc.tradingcards.core.ui.theme.DefaultCardShape
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
+import com.tpc.tradingcards.core.ui.theme.largeSize
+import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 
@@ -70,13 +72,13 @@ fun PokemonCardFull(
 
     Card(
         modifier = modifier
-            .padding(16.dp)
+            .padding(largeSize)
             .graphicsLayer {
                 rotationX = rotX
                 rotationY = rotY
             },
         shape = DefaultCardShape,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation)
     ) {
         Image(
             modifier = Modifier

@@ -40,6 +40,9 @@ import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.ui.composable.Loading
 import com.tpc.tradingcards.core.ui.theme.Dark80
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
+import com.tpc.tradingcards.core.ui.theme.largeSize
+import com.tpc.tradingcards.core.ui.theme.largerSize
+import com.tpc.tradingcards.core.ui.theme.mediumSize
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 import com.tpc.tradingcards.data.model.CardSet
@@ -65,16 +68,16 @@ fun CardDetailsScreen(
     Box(Modifier.fillMaxSize()) {
         Column(
             Modifier.padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 16.dp,
+                start = largeSize,
+                end = largeSize,
+                top = largeSize,
                 bottom = 0.dp,
             ),
         ) {
             Row {
                 Icon(
                     modifier = Modifier
-                        .padding(bottom = 32.dp, top = 16.dp)
+                        .padding(bottom = largerSize, top = largeSize)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(bounded = false),
@@ -89,15 +92,15 @@ fun CardDetailsScreen(
             CardSetComposable(cardSet = cardSet) {}
 
             Loading(
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = mediumSize),
                 isVisible = cards.isEmpty()
             )
 
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(100.dp),
-                contentPadding = PaddingValues(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(top = largeSize),
+                horizontalArrangement = Arrangement.spacedBy(largeSize),
+                verticalArrangement = Arrangement.spacedBy(largeSize),
                 content = {
                     items(cards, key = { it.id }) { pokemonCard ->
                         PokemonCardCompact(
