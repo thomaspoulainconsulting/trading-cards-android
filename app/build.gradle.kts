@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -76,7 +77,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)
     implementation(libs.moshi)
-    kapt(libs.moshi.codegen)
+    ksp(libs.moshi.codegen)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.coil)
     implementation(libs.dagger.hilt)
@@ -88,7 +89,7 @@ dependencies {
     implementation(libs.sensors)
     implementation(libs.room)
     implementation(libs.room.ktx)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
     implementation(libs.navigation.compose)
 
     testImplementation(libs.junit)
