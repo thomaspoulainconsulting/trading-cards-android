@@ -1,5 +1,6 @@
 package com.tpc.tradingcards.core.di
 
+import com.tpc.tradingcards.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -8,7 +9,7 @@ class HeaderInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originRequest = chain.request()
         val requestBuilder = originRequest.newBuilder().apply {
-            addHeader("X-Api-Key", "1229e20b-13b7-43de-9c13-ee0f87c7f87c")
+            addHeader("X-Api-Key", BuildConfig.API_POKEMON)
         }
 
         return chain.proceed(requestBuilder.build())

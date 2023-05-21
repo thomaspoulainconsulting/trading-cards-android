@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
@@ -33,6 +36,14 @@ android {
     }
 
     buildTypes {
+        all {
+            val properties = Properties()
+            FileInputStream("keys.properties").use { fileInputStream ->
+                properties.load(fileInputStream)
+            }
+
+            buildConfigField("String", "API_POKEMON", properties.getProperty("pokemon-api-key"))
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -51,6 +62,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.7"
