@@ -86,10 +86,12 @@ fun CardDetailsScreen(
                 )
             }
 
-
-            Loading(cards.isEmpty())
-
             CardSetComposable(cardSet = cardSet) {}
+
+            Loading(
+                modifier = Modifier.padding(top = 8.dp),
+                isVisible = cards.isEmpty()
+            )
 
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(100.dp),

@@ -44,7 +44,7 @@ fun CardListScreen(
             content = {
 
                 item {
-                    Loading(sets.isEmpty())
+                    Loading(isVisible = sets.isEmpty())
                 }
 
                 items(sets, key = { it.id }) {
