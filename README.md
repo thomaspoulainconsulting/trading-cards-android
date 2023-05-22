@@ -7,11 +7,11 @@ This is an Android app that display cards from the Pokemon trading card game.
 The app has been implemented with this tech:
 
 - Jetpack Compose
-- Material 3
 - MVVM
 - Coroutine & Flow
 - Dagger Hilt
 - Room, Retrofit, Moshi
+- Material 3
 - Version Catalog
 
 ## Future

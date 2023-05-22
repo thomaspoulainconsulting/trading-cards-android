@@ -23,7 +23,7 @@ import com.tpc.tradingcards.data.model.CardEmpty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonCardCompact(
+fun TradingCardCompact(
     modifier: Modifier = Modifier,
     data: Card,
     onClick: () -> Unit
@@ -50,7 +50,7 @@ fun PokemonCardCompact(
 @Composable
 fun PokemonCardCompactPreview() {
     TradingCardsTheme {
-        PokemonCardCompact(
+        TradingCardCompact(
             data = CardEmpty.copy(
                 urlSmall = "https://images.pokemontcg.io/swsh12pt5/160_hires.png",
                 number = 1,

@@ -1,5 +1,7 @@
 package com.tpc.tradingcards.ui.cards.composables
 
+import android.graphics.RenderEffect
+import android.graphics.RuntimeShader
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -23,7 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +36,7 @@ import coil.request.ImageRequest
 import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.extention.debugPlaceholder
 import com.tpc.tradingcards.core.ui.theme.DefaultCardShape
+import com.tpc.tradingcards.core.ui.theme.ShaderChromaticAberration
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.mediumElevation
@@ -39,9 +44,10 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 
 @Composable
-fun PokemonCardFull(
+fun TradingCardFull(
     modifier: Modifier = Modifier, data: Card
 ) {
+    val shader by remember { mutableStateOf(RuntimeShader(ShaderChromaticAberration)) }
     var urlToLoad by remember { mutableStateOf(data.urlSmall) }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(urlToLoad).build(),
@@ -80,10 +86,21 @@ fun PokemonCardFull(
         shape = DefaultCardShape,
         elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation)
     ) {
+        val amount by remember { mutableStateOf(50.0f) }
         Image(
             modifier = Modifier
                 .widthIn(max = 200.dp)
-                .heightIn(max = 300.dp),
+                .heightIn(max = 300.dp)
+                .onSizeChanged { size ->
+                    shader.setFloatUniform("size", size.width.toFloat(), size.height.toFloat())
+                }
+                .graphicsLayer {
+                    //clip = true
+                    shader.setFloatUniform("amount", amount)
+                    renderEffect = RenderEffect
+                        .createRuntimeShaderEffect(shader, "composable")
+                        .asComposeRenderEffect()
+                },
             painter = painter,
             contentDescription = null,
         )
@@ -100,7 +117,7 @@ fun PokemonCardPreview() {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            PokemonCardFull(
+            TradingCardFull(
                 modifier = Modifier.align(Alignment.Center), data = CardEmpty
             )
         }

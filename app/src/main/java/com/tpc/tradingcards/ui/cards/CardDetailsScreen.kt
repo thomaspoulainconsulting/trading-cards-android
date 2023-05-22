@@ -47,9 +47,9 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
-import com.tpc.tradingcards.ui.cards.composables.CardSetComposable
-import com.tpc.tradingcards.ui.cards.composables.PokemonCardCompact
-import com.tpc.tradingcards.ui.cards.composables.PokemonCardFull
+import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
+import com.tpc.tradingcards.ui.cards.composables.TradingCardCompact
+import com.tpc.tradingcards.ui.cards.composables.TradingCardFull
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -89,7 +89,7 @@ fun CardDetailsScreen(
                 )
             }
 
-            CardSetComposable(cardSet = cardSet) {}
+            TradingCardSet(cardSet = cardSet) {}
 
             Loading(
                 modifier = Modifier.padding(top = mediumSize),
@@ -103,7 +103,7 @@ fun CardDetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(largeSize),
                 content = {
                     items(cards, key = { it.id }) { pokemonCard ->
-                        PokemonCardCompact(
+                        TradingCardCompact(
                             modifier = Modifier.animateItemPlacement(),
                             data = pokemonCard
                         ) {
@@ -137,7 +137,7 @@ fun CardDetailsScreen(
                 cards
                     .getOrNull(it)
                     ?.let { card ->
-                        PokemonCardFull(
+                        TradingCardFull(
                             modifier = Modifier.align(Alignment.Center),
                             data = card,
                         )

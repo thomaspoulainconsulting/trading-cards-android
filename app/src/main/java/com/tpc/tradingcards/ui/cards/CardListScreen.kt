@@ -21,7 +21,7 @@ import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
-import com.tpc.tradingcards.ui.cards.composables.CardSetComposable
+import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -49,7 +49,7 @@ fun CardListScreen(
                 }
 
                 items(sets, key = { it.id }) {
-                    CardSetComposable(
+                    TradingCardSet(
                         modifier = Modifier.animateItemPlacement(),
                         cardSet = it,
                         onClick = onNavigateToCardSetDetails

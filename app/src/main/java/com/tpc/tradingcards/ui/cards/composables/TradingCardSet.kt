@@ -33,7 +33,7 @@ import com.tpc.tradingcards.data.model.CardSetEmpty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardSetComposable(
+fun TradingCardSet(
     modifier: Modifier = Modifier,
     cardSet: CardSet,
     onClick: (CardSet) -> Unit
@@ -76,6 +76,6 @@ fun CardSetComposable(
 @Composable
 fun CardSetPreview() {
     TradingCardsTheme {
-        CardSetComposable(cardSet = CardSetEmpty) {}
+        TradingCardSet(cardSet = CardSetEmpty) {}
     }
 }
