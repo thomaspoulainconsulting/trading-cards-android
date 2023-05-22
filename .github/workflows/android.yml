@@ -22,6 +22,9 @@ jobs:
       uses: sliteteam/github-action-git-crypt-unlock@1.1.0
       env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+          
+    - name: Run UI Tests
+      uses: vgaidarji/android-github-actions-emulator@v1.0.1
     
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
