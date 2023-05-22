@@ -12,14 +12,12 @@ import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 @Composable
 fun Loading(
     modifier: Modifier = Modifier,
-    isVisible: Boolean
 ) {
-    if (isVisible) {
-        Row(
-            modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
-        ) {
-            CircularProgressIndicator()
-        }
+    Row(
+        modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator()
     }
 }
 
@@ -27,6 +25,6 @@ fun Loading(
 @Composable
 fun LoadingPreview() {
     TradingCardsTheme {
-        Loading(isVisible = true)
+        Loading()
     }
 }

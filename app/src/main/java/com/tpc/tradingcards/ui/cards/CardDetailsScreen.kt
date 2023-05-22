@@ -47,9 +47,9 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
-import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
 import com.tpc.tradingcards.ui.cards.composables.TradingCardCompact
 import com.tpc.tradingcards.ui.cards.composables.TradingCardFull
+import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -91,10 +91,9 @@ fun CardDetailsScreen(
 
             TradingCardSet(cardSet = cardSet) {}
 
-            Loading(
-                modifier = Modifier.padding(top = mediumSize),
-                isVisible = cards.isEmpty()
-            )
+            if (cards.isEmpty()) {
+                Loading(Modifier.padding(top = mediumSize))
+            }
 
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(100.dp),

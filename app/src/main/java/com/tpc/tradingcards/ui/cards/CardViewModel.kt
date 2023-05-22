@@ -3,6 +3,7 @@ package com.tpc.tradingcards.ui.cards
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.core.extention.defaultStateIn
+import com.tpc.tradingcards.core.ui.UIState
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,12 +46,13 @@ class CardViewModel @Inject constructor(
             }
             .defaultStateIn(viewModelScope, emptyList())
 
-    val sets: StateFlow<List<CardSet>> =
+    val sets: StateFlow<UIState<List<CardSet>>> =
         cardRepository.getSets()
             .onEach { data ->
                 if (data.isEmpty()) cardRepository.fetchCardSets()
             }
-            .defaultStateIn(viewModelScope, emptyList())
+            .mapLatest { UIState.Success(it) }
+            .defaultStateIn(viewModelScope, UIState.Loading())
 
     fun fetchCards(cardSet: CardSet) = viewModelScope.launch {
         _cardSetSelected.emit(cardSet)
