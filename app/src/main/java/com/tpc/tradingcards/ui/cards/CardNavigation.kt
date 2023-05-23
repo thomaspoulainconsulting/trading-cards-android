@@ -10,6 +10,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
+import com.tpc.tradingcards.ui.cards.screen.CardDetailsScreen
+import com.tpc.tradingcards.ui.cards.screen.CardSetsListScreen
 
 const val cardListRoute = "cards"
 private const val cardDetailsRoute = "cards-details"
@@ -30,7 +32,7 @@ fun NavGraphBuilder.cardsGraph(
         val pokemonViewModel: CardViewModel = hiltViewModel()
         val sets by pokemonViewModel.sets.collectAsStateWithLifecycle()
 
-        CardListScreen(sets) { idSet ->
+        CardSetsListScreen(sets) { idSet ->
             pokemonViewModel.fetchCards(idSet)
             navController.navigateToCardSetDetails()
         }

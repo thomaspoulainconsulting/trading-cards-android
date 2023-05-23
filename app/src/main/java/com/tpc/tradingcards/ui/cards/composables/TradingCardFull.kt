@@ -10,7 +10,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,7 +35,6 @@ import com.tpc.tradingcards.core.extention.debugPlaceholder
 import com.tpc.tradingcards.core.ui.theme.DefaultTradingCardShape
 import com.tpc.tradingcards.core.ui.theme.ShaderChromaticAberration
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
-import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
@@ -46,11 +44,6 @@ import kotlinx.coroutines.delay
 fun TradingCardFull(
     modifier: Modifier = Modifier, data: Card
 ) {
-    val shader by remember {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            mutableStateOf(RuntimeShader(ShaderChromaticAberration))
-        } else mutableStateOf(null)
-    }
     var urlToLoad by remember { mutableStateOf(data.urlSmall) }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(urlToLoad).build(),
@@ -61,31 +54,36 @@ fun TradingCardFull(
             }
         })
 
+    // Shader and animation
+    val shader by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(RuntimeShader(ShaderChromaticAberration))
+        } else mutableStateOf(null)
+    }
     var isAnimationPlayed by remember { mutableStateOf(false) }
     var isAnimationFinished by remember { mutableStateOf(false) }
     val springAnimation by animateFloatAsState(
         targetValue = if (isAnimationFinished) 0f else if (isAnimationPlayed) 20f else -20f,
         label = "chromatic spring animation",
-        animationSpec = tween(
-            durationMillis = 100,
-            easing = LinearEasing
-        ),
+        animationSpec = tween(durationMillis = 100, easing = LinearEasing),
         finishedListener = {
             isAnimationFinished = true
         }
     )
 
+    // Trigger the start of the animation
     LaunchedEffect(Unit) {
         delay(150)
         isAnimationPlayed = true
     }
 
     Card(
-        modifier = modifier.padding(largeSize),
         shape = DefaultTradingCardShape,
         elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation)
     ) {
         Image(
+            painter = painter,
+            contentDescription = null,
             modifier = Modifier
                 .size(250.dp, 344.dp) // Magic Number, but why not
                 .also { currentModifier ->
@@ -108,14 +106,12 @@ fun TradingCardFull(
                                 }
                         }
                     }
-                },
-            painter = painter,
-            contentDescription = "${data.name} card in full screen",
+                }
         )
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0x28292a)
+@Preview(showBackground = true)
 @Composable
 fun PokemonCardPreview() {
     TradingCardsTheme {

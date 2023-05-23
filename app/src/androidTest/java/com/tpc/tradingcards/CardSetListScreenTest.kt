@@ -5,69 +5,47 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.tpc.tradingcards.core.ui.UIState
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
-import com.tpc.tradingcards.ui.cards.CardListScreen
-import com.tpc.tradingcards.ui.cards.CardListTestTag
+import com.tpc.tradingcards.ui.cards.screen.CardSetsListScreen
+import com.tpc.tradingcards.ui.cards.testtag.CardListTestTag
 import org.junit.Rule
 import org.junit.Test
 
-class CardListScreenTest {
+class CardSetListScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `loading state`() {
+    fun loadingState() {
         // Given
-        val cardSets: UIState<List<CardSet>> = UIState.Loading()
+        val cardSets: List<CardSet> = emptyList()
 
         // When
         composeTestRule.setContent {
             TradingCardsTheme {
-                CardListScreen(cardSets) {}
+                CardSetsListScreen(cardSets) {}
             }
         }
 
         // Then
         composeTestRule.onNodeWithTag(CardListTestTag.Loading.tag).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(CardListTestTag.Error.tag).assertDoesNotExist()
         composeTestRule.onNodeWithTag(CardListTestTag.Data.tag).assertDoesNotExist()
     }
 
     @Test
-    fun `error state`() {
-        // Given
-        val cardSets: UIState<List<CardSet>> = UIState.Error()
-
-        // When
-        composeTestRule.setContent {
-            TradingCardsTheme {
-                CardListScreen(cardSets) {}
-            }
-        }
-
-        // Then
-        composeTestRule.onNodeWithTag(CardListTestTag.Error.tag).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(CardListTestTag.Loading.tag).assertDoesNotExist()
-        composeTestRule.onNodeWithTag(CardListTestTag.Data.tag).assertDoesNotExist()
-    }
-
-    @Test
-    fun `success state`() {
+    fun dataLoadedState() {
         // Given
         lateinit var selectedCard: CardSet
         val cardName = "test"
-        val cardSets: UIState<List<CardSet>> = UIState.Success(
-            listOf(CardSetEmpty.copy(name = cardName))
-        )
+        val cardSets: List<CardSet> = listOf(CardSetEmpty.copy(name = cardName))
 
         // When
         composeTestRule.setContent {
             TradingCardsTheme {
-                CardListScreen(cardSets) {
+                CardSetsListScreen(cardSets) {
                     selectedCard = it
                 }
             }
@@ -76,8 +54,7 @@ class CardListScreenTest {
         // Then
         composeTestRule.onNodeWithTag(CardListTestTag.Data.tag).assertIsDisplayed()
         composeTestRule.onNodeWithTag(CardListTestTag.Loading.tag).assertDoesNotExist()
-        composeTestRule.onNodeWithTag(CardListTestTag.Error.tag).assertDoesNotExist()
-        composeTestRule.onNodeWithText(cardName).performClick()
+        composeTestRule.onNodeWithText(cardName, useUnmergedTree = true).performClick()
         assert(selectedCard.name == cardName)
     }
 

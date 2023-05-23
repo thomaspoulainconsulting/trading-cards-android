@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.cards
+package com.tpc.tradingcards.ui.cards.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,12 +33,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpc.tradingcards.R
-import com.tpc.tradingcards.core.ui.UIState
-import com.tpc.tradingcards.core.ui.composable.ErrorFetchingData
 import com.tpc.tradingcards.core.ui.composable.Loading
 import com.tpc.tradingcards.core.ui.theme.Dark80
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
@@ -51,13 +50,13 @@ import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
 import com.tpc.tradingcards.ui.cards.composables.TradingCardCompact
 import com.tpc.tradingcards.ui.cards.composables.TradingCardFull
-import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
+import com.tpc.tradingcards.ui.cards.testtag.CardDetailsTestTag
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CardDetailsScreen(
     cardSet: CardSet,
-    cards: UIState<List<Card>>,
+    cards: List<Card>,
     onBack: () -> Unit
 ) {
     var selectedCard: Card? by remember { mutableStateOf(null) }
@@ -72,11 +71,13 @@ fun CardDetailsScreen(
             Modifier.padding(
                 start = largeSize,
                 end = largeSize,
-                top = largeSize,
+                top = mediumSize,
                 bottom = 0.dp,
             ),
         ) {
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(largeSize)
+            ) {
                 Icon(
                     modifier = Modifier
                         .padding(bottom = largerSize, top = largeSize)
@@ -88,39 +89,42 @@ fun CardDetailsScreen(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = stringResource(R.string.back),
                 )
+                Column(Modifier.padding(top = mediumSize)) {
+                    Text(cardSet.name)
+                    if (cards.isNotEmpty()) {
+                        Text(
+                            pluralStringResource(
+                                R.plurals.number_or_cards,
+                                count = cards.size,
+                                cards.size
+                            )
+                        )
+                    }
+                }
             }
 
-            TradingCardSet(cardSet = cardSet) {}
 
-            when (cards) {
-                is UIState.Error -> {
-                    ErrorFetchingData(Modifier.testTag(CardDetailsTestTag.Error.tag))
-                }
-
-                is UIState.Loading -> {
-                    Loading(
-                        Modifier
-                            .padding(top = mediumSize)
-                            .testTag(CardDetailsTestTag.Loading.tag)
-                    )
-                }
-
-                is UIState.Success -> {
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(100.dp),
-                        contentPadding = PaddingValues(top = largeSize, bottom = largeSize),
-                        horizontalArrangement = Arrangement.spacedBy(largeSize),
-                        verticalArrangement = Arrangement.spacedBy(largeSize),
-                        content = {
-                            items(cards.data, key = { it.id }) { pokemonCard ->
-                                TradingCardCompact(
-                                    data = pokemonCard
-                                ) {
-                                    selectedCard = pokemonCard
-                                }
+            if (cards.isEmpty()) {
+                Loading(
+                    Modifier
+                        .padding(top = mediumSize)
+                        .testTag(CardDetailsTestTag.Loading.tag)
+                )
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(100.dp),
+                    contentPadding = PaddingValues(top = largeSize, bottom = largeSize),
+                    horizontalArrangement = Arrangement.spacedBy(largeSize),
+                    verticalArrangement = Arrangement.spacedBy(largeSize),
+                    content = {
+                        items(cards, key = { it.id }) { pokemonCard ->
+                            TradingCardCompact(
+                                data = pokemonCard
+                            ) {
+                                selectedCard = pokemonCard
                             }
-                        })
-                }
+                        }
+                    })
             }
         }
 
@@ -158,7 +162,7 @@ fun CardDetailsScreen(
 @Composable
 fun CardDetailsScreenWithoutDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(CardSetEmpty, UIState.Loading()) {}
+        CardDetailsScreen(CardSetEmpty, emptyList()) {}
     }
 }
 
@@ -166,6 +170,6 @@ fun CardDetailsScreenWithoutDataPreview() {
 @Composable
 fun CardDetailsScreenWithDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(CardSetEmpty, UIState.Success(listOf(CardEmpty))) {}
+        CardDetailsScreen(CardSetEmpty, listOf(CardEmpty)) {}
     }
 }

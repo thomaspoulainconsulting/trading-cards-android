@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.cards
+package com.tpc.tradingcards.ui.cards.testtag
 
 enum class CardDetailsTestTag(val tag: String) {
     Loading("cardDetailsLoading"),

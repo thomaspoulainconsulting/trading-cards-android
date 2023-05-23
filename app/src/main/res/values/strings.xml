@@ -4,4 +4,10 @@
     <string name="no_cards">No cards</string>
     <string name="back">Back</string>
     <string name="error_fetching_data">Error fetching data</string>
+    <plurals name="number_or_cards">
+        <item quantity="one">%d card</item>
+        <item quantity="other">%d cards</item>
+    </plurals>
+    <string name="see_cards_from_card_set">See cards from set named %s</string>
+    <string name="card_name">Card of %s</string>
 </resources>
