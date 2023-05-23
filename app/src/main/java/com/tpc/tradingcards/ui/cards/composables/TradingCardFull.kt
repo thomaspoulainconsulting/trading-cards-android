@@ -2,6 +2,7 @@ package com.tpc.tradingcards.ui.cards.composables
 
 import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
+import android.os.Build
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -45,7 +46,11 @@ import kotlinx.coroutines.delay
 fun TradingCardFull(
     modifier: Modifier = Modifier, data: Card
 ) {
-    val shader by remember { mutableStateOf(RuntimeShader(ShaderChromaticAberration)) }
+    val shader by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(RuntimeShader(ShaderChromaticAberration))
+        } else mutableStateOf(null)
+    }
     var urlToLoad by remember { mutableStateOf(data.urlSmall) }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(urlToLoad).build(),
@@ -83,15 +88,26 @@ fun TradingCardFull(
         Image(
             modifier = Modifier
                 .size(250.dp, 344.dp) // Magic Number, but why not
-                .onSizeChanged { size ->
-                    shader.setFloatUniform("size", size.width.toFloat(), size.height.toFloat())
-                }
-                .graphicsLayer {
-                    shader.setFloatUniform("amount", springAnimation)
-                    clip = true
-                    renderEffect = RenderEffect
-                        .createRuntimeShaderEffect(shader, "composable")
-                        .asComposeRenderEffect()
+                .also { currentModifier ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        shader?.let { currentShader ->
+                            currentModifier
+                                .onSizeChanged { size ->
+                                    currentShader.setFloatUniform(
+                                        "size",
+                                        size.width.toFloat(),
+                                        size.height.toFloat()
+                                    )
+                                }
+                                .graphicsLayer {
+                                    currentShader.setFloatUniform("amount", springAnimation)
+                                    clip = true
+                                    renderEffect = RenderEffect
+                                        .createRuntimeShaderEffect(currentShader, "composable")
+                                        .asComposeRenderEffect()
+                                }
+                        }
+                    }
                 },
             painter = painter,
             contentDescription = "${data.name} card in full screen",
