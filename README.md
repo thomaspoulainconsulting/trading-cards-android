@@ -18,4 +18,5 @@ The app has been implemented with this tech:
 
 ## Future
 
-Add more types of cards.
+- Add more types of cards (Digimon, Dragon Ball, Yu-Gi-Oh!, ...)
+- Add favorite feature
