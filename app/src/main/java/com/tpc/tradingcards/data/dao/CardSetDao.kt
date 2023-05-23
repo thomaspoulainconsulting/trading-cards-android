@@ -14,6 +14,6 @@ interface CardSetDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(sets: List<CardSet>)
 
-    @Query("SELECT * FROM CardSet WHERE cardType=:cardType")
+    @Query("SELECT * FROM CardSet WHERE cardType=:cardType ORDER BY releaseDate")
     fun getCardSetsWithType(cardType: CardType): Flow<List<CardSet>>
 }

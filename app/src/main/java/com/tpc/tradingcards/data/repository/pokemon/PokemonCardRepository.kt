@@ -45,6 +45,7 @@ class PokemonCardRepository @Inject constructor(
                 name = it.name,
                 cardType = CardType.POKEMON,
                 symbol = it.images.symbol,
+                releaseDate = it.releaseDate
             )
         }
         localCardSetSource.insertAll(sets)

@@ -71,8 +71,8 @@ fun CardSetsListScreen(
 fun CardListScreenPreview() {
     TradingCardsTheme {
         val sets = listOf(
-            CardSet(id = "1", name = "Base", cardType = CardType.POKEMON, symbol = ""),
-            CardSet(id = "2", name = "Fossil", cardType = CardType.POKEMON, symbol = ""),
+            CardSet(id = "1", name = "Base", cardType = CardType.POKEMON, symbol = "", ""),
+            CardSet(id = "2", name = "Fossil", cardType = CardType.POKEMON, symbol = "", ""),
         )
         CardSetsListScreen(cardSets = sets) {}
     }
