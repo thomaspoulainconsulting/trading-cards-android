@@ -22,8 +22,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.twotone.FilterAlt
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,12 +41,15 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.fade
+import com.google.accompanist.placeholder.material.placeholder
 import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.ui.composable.Loading
 import com.tpc.tradingcards.core.ui.theme.Dark80
+import com.tpc.tradingcards.core.ui.theme.PurpleGrey40
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
-import com.tpc.tradingcards.core.ui.theme.largerSize
 import com.tpc.tradingcards.core.ui.theme.mediumSize
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
@@ -52,7 +59,7 @@ import com.tpc.tradingcards.ui.cards.composables.TradingCardCompact
 import com.tpc.tradingcards.ui.cards.composables.TradingCardFull
 import com.tpc.tradingcards.ui.cards.testtag.CardDetailsTestTag
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CardDetailsScreen(
     cardSet: CardSet,
@@ -60,6 +67,7 @@ fun CardDetailsScreen(
     onBack: () -> Unit
 ) {
     var selectedCard: Card? by remember { mutableStateOf(null) }
+    var isFilterByTypeVisible by remember { mutableStateOf(false) }
 
     BackHandler {
         if (selectedCard == null) onBack()
@@ -76,11 +84,13 @@ fun CardDetailsScreen(
             ),
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(largeSize)
+                modifier = Modifier.padding(top = mediumSize, bottom = mediumSize),
+                horizontalArrangement = Arrangement.spacedBy(largeSize),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     modifier = Modifier
-                        .padding(bottom = largerSize, top = largeSize)
+                        .align(Alignment.CenterVertically)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(bounded = false),
@@ -89,17 +99,19 @@ fun CardDetailsScreen(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = stringResource(R.string.back),
                 )
-                Column(Modifier.padding(top = mediumSize)) {
+                Column(Modifier.align(Alignment.CenterVertically)) {
                     Text(cardSet.name)
-                    if (cards.isNotEmpty()) {
-                        Text(
-                            pluralStringResource(
-                                R.plurals.number_or_cards,
-                                count = cards.size,
-                                cards.size
-                            )
+                    Text(
+                        modifier = Modifier.placeholder(
+                            visible = cards.isEmpty(),
+                            highlight = PlaceholderHighlight.fade(highlightColor = PurpleGrey40)
+                        ),
+                        text = pluralStringResource(
+                            R.plurals.number_or_cards,
+                            count = cards.size,
+                            cards.size
                         )
-                    }
+                    )
                 }
             }
 
@@ -153,6 +165,33 @@ fun CardDetailsScreen(
                     modifier = Modifier.align(Alignment.Center),
                     data = card,
                 )
+            }
+        }
+
+        FloatingActionButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(largeSize),
+            onClick = {
+                isFilterByTypeVisible = true
+            }
+        ) {
+            Row(
+                modifier = Modifier.padding(start = mediumSize, end = largeSize),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(mediumSize)
+            ) {
+                Icon(
+                    imageVector = Icons.TwoTone.FilterAlt,
+                    contentDescription = stringResource(R.string.filter_card_types_content_description)
+                )
+                Text(stringResource(R.string.filter))
+            }
+        }
+
+        AnimatedVisibility(visible = isFilterByTypeVisible) {
+            ModalBottomSheet(onDismissRequest = { isFilterByTypeVisible = false }) {
+                Text("SALUT")
             }
         }
     }

@@ -31,6 +31,7 @@ class PokemonCardRepository @Inject constructor(
                 urlLarge = it.images.large,
                 number = it.number.toIntOrNull() ?: -1,
                 idSet = idSet,
+                supertype = it.supertype,
                 cardType = CardType.POKEMON
             )
         }

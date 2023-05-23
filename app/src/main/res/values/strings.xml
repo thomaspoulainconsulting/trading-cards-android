@@ -10,4 +10,6 @@
     </plurals>
     <string name="see_cards_from_card_set">See cards from set named %s</string>
     <string name="card_name">Card of %s</string>
+    <string name="filter_card_types_content_description">Filter by card types</string>
+    <string name="filter">Filter</string>
 </resources>

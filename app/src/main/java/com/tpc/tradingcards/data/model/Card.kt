@@ -9,9 +9,9 @@ data class Card(
     val idSet: String,
     val number: Int,
     val name: String,
-    val description: String = "",
     val urlSmall: String,
     val urlLarge: String,
+    val supertype: String,
     val cardType: CardType,
 )
 
@@ -22,5 +22,6 @@ val CardEmpty = Card(
     urlLarge = "",
     number = 0,
     idSet = "1",
+    supertype = "",
     cardType = CardType.POKEMON,
 )

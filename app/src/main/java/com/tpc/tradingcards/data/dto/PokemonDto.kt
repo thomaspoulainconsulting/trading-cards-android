@@ -4,6 +4,7 @@ data class PokemonCardData(
     val id: String,
     val name: String,
     val number: String,
+    val supertype: String,
     val images: CardSize,
 )
 
