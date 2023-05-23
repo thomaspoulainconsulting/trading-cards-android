@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,6 +77,7 @@ fun TradingCardFull(
     }
 
     Card(
+        modifier = modifier,
         shape = DefaultTradingCardShape,
         elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation)
     ) {
@@ -86,24 +86,14 @@ fun TradingCardFull(
             contentDescription = null,
             modifier = Modifier
                 .size(250.dp, 344.dp) // Magic Number, but why not
-                .also { currentModifier ->
+                .graphicsLayer {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         shader?.let { currentShader ->
-                            currentModifier
-                                .onSizeChanged { size ->
-                                    currentShader.setFloatUniform(
-                                        "size",
-                                        size.width.toFloat(),
-                                        size.height.toFloat()
-                                    )
-                                }
-                                .graphicsLayer {
-                                    currentShader.setFloatUniform("amount", springAnimation)
-                                    clip = true
-                                    renderEffect = RenderEffect
-                                        .createRuntimeShaderEffect(currentShader, "composable")
-                                        .asComposeRenderEffect()
-                                }
+                            currentShader.setFloatUniform("amount", springAnimation)
+                            clip = true
+                            renderEffect = RenderEffect
+                                .createRuntimeShaderEffect(currentShader, "composable")
+                                .asComposeRenderEffect()
                         }
                     }
                 }

@@ -5,7 +5,6 @@ import org.intellij.lang.annotations.Language
 @Language("AGSL")
 const val ShaderChromaticAberration = """
 uniform shader composable;
-uniform float2 size;
 uniform float amount;
 
 half4 main(float2 fragCoord) {
