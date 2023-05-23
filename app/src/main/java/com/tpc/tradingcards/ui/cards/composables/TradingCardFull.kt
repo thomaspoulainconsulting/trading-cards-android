@@ -62,7 +62,7 @@ fun TradingCardFull(
         targetValue = if (isAnimationFinished) 0f else if (isAnimationPlayed) 20f else -20f,
         label = "chromatic spring animation",
         animationSpec = tween(
-            durationMillis = 150,
+            durationMillis = 100,
             easing = LinearEasing
         ),
         finishedListener = {

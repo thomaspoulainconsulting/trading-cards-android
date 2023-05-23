@@ -1,6 +1,6 @@
 # Trading Cards App ![example workflow](https://github.com/molpoo/trading-cards-android/actions/workflows/android.yml/badge.svg)
 
-This is an Android app that display cards from the Pokemon trading card game.
+This is an Android app that displays cards from the Pokemon trading card game.
 
 ## Technology
 
