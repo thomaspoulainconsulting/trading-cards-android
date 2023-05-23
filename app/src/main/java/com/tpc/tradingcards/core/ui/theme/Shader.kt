@@ -1,5 +1,8 @@
 package com.tpc.tradingcards.core.ui.theme
 
+import org.intellij.lang.annotations.Language
+
+@Language("AGSL")
 const val ShaderChromaticAberration = """
 uniform shader composable;
 uniform float2 size;
@@ -16,7 +19,6 @@ half4 main(float2 fragCoord) {
         color.g,
         composable.eval(fragCoord + displacement).b
     );
-    color.rgb *= color.a;
     return color;
 }
 """

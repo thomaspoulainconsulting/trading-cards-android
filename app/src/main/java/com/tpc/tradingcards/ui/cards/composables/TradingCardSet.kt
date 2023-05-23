@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
@@ -60,7 +59,7 @@ fun TradingCardSet(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = cardSet.name, color = Color.White)
+            Text(text = cardSet.name)
             AsyncImage(
                 modifier = Modifier.size(largerSize),
                 model = ImageRequest.Builder(LocalContext.current).data(cardSet.symbol)

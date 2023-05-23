@@ -32,11 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpc.tradingcards.R
+import com.tpc.tradingcards.core.ui.UIState
+import com.tpc.tradingcards.core.ui.composable.ErrorFetchingData
 import com.tpc.tradingcards.core.ui.composable.Loading
 import com.tpc.tradingcards.core.ui.theme.Dark80
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
@@ -55,14 +57,14 @@ import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
 @Composable
 fun CardDetailsScreen(
     cardSet: CardSet,
-    cards: List<Card>,
+    cards: UIState<List<Card>>,
     onBack: () -> Unit
 ) {
-    var selectedCardIndex: Int? by remember { mutableStateOf(null) }
+    var selectedCard: Card? by remember { mutableStateOf(null) }
 
     BackHandler {
-        if (selectedCardIndex == null) onBack()
-        else selectedCardIndex = null
+        if (selectedCard == null) onBack()
+        else selectedCard = null
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -83,7 +85,6 @@ fun CardDetailsScreen(
                             indication = rememberRipple(bounded = false),
                             onClick = onBack
                         ),
-                    tint = Color.White,
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = stringResource(R.string.back),
                 )
@@ -91,29 +92,41 @@ fun CardDetailsScreen(
 
             TradingCardSet(cardSet = cardSet) {}
 
-            if (cards.isEmpty()) {
-                Loading(Modifier.padding(top = mediumSize))
-            }
+            when (cards) {
+                is UIState.Error -> {
+                    ErrorFetchingData(Modifier.testTag(CardDetailsTestTag.Error.tag))
+                }
 
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(100.dp),
-                contentPadding = PaddingValues(top = largeSize),
-                horizontalArrangement = Arrangement.spacedBy(largeSize),
-                verticalArrangement = Arrangement.spacedBy(largeSize),
-                content = {
-                    items(cards, key = { it.id }) { pokemonCard ->
-                        TradingCardCompact(
-                            modifier = Modifier.animateItemPlacement(),
-                            data = pokemonCard
-                        ) {
-                            selectedCardIndex = cards.indexOf(pokemonCard)
-                        }
-                    }
-                })
+                is UIState.Loading -> {
+                    Loading(
+                        Modifier
+                            .padding(top = mediumSize)
+                            .testTag(CardDetailsTestTag.Loading.tag)
+                    )
+                }
+
+                is UIState.Success -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(100.dp),
+                        contentPadding = PaddingValues(top = largeSize),
+                        horizontalArrangement = Arrangement.spacedBy(largeSize),
+                        verticalArrangement = Arrangement.spacedBy(largeSize),
+                        content = {
+                            items(cards.data, key = { it.id }) { pokemonCard ->
+                                TradingCardCompact(
+                                    modifier = Modifier.animateItemPlacement(),
+                                    data = pokemonCard
+                                ) {
+                                    selectedCard = pokemonCard
+                                }
+                            }
+                        })
+                }
+            }
         }
 
         AnimatedVisibility(
-            visible = selectedCardIndex != null,
+            visible = selectedCard != null,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -121,26 +134,22 @@ fun CardDetailsScreen(
                 Modifier
                     .fillMaxSize()
                     .clickable {
-                        selectedCardIndex = null
+                        selectedCard = null
                     }
                     .background(Dark80.copy(alpha = 0.8f))) {}
         }
 
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.Center),
-            visible = selectedCardIndex != null,
+            visible = selectedCard != null,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()
         ) {
-            selectedCardIndex?.let {
-                cards
-                    .getOrNull(it)
-                    ?.let { card ->
-                        TradingCardFull(
-                            modifier = Modifier.align(Alignment.Center),
-                            data = card,
-                        )
-                    }
+            selectedCard?.let { card ->
+                TradingCardFull(
+                    modifier = Modifier.align(Alignment.Center),
+                    data = card,
+                )
             }
         }
     }
@@ -150,7 +159,7 @@ fun CardDetailsScreen(
 @Composable
 fun CardDetailsScreenWithoutDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(CardSetEmpty, emptyList()) {}
+        CardDetailsScreen(CardSetEmpty, UIState.Loading()) {}
     }
 }
 
@@ -158,6 +167,6 @@ fun CardDetailsScreenWithoutDataPreview() {
 @Composable
 fun CardDetailsScreenWithDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(CardSetEmpty, listOf(CardEmpty)) {}
+        CardDetailsScreen(CardSetEmpty, UIState.Success(listOf(CardEmpty))) {}
     }
 }

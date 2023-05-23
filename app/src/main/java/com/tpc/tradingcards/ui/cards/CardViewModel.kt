@@ -34,7 +34,7 @@ class CardViewModel @Inject constructor(
     private val _cardSetSelected = MutableStateFlow(CardSetEmpty)
     val cardSetSelected = _cardSetSelected.asStateFlow()
 
-    val cards: StateFlow<List<Card>> =
+    val cards: StateFlow<UIState<List<Card>>> =
         cardSetSelected
             .flatMapLatest { cardRepository.getCards(it.id) }
             .onEach { data ->
@@ -44,7 +44,8 @@ class CardViewModel @Inject constructor(
                     }
                 }
             }
-            .defaultStateIn(viewModelScope, emptyList())
+            .mapLatest { UIState.Success(it) }
+            .defaultStateIn(viewModelScope, UIState.Loading())
 
     val sets: StateFlow<UIState<List<CardSet>>> =
         cardRepository.getSets()

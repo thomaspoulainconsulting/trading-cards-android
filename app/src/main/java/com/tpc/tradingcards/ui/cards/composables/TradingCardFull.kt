@@ -95,7 +95,7 @@ fun TradingCardFull(
                     shader.setFloatUniform("size", size.width.toFloat(), size.height.toFloat())
                 }
                 .graphicsLayer {
-                    //clip = true
+                    clip = true
                     shader.setFloatUniform("amount", amount)
                     renderEffect = RenderEffect
                         .createRuntimeShaderEffect(shader, "composable")
