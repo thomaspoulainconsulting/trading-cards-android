@@ -1,11 +1,11 @@
 package com.tpc.tradingcards.ui.cards.composables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,14 +14,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.extention.debugPlaceholder
-import com.tpc.tradingcards.core.ui.theme.DefaultCardShape
+import com.tpc.tradingcards.core.ui.theme.DefaultTradingCardShape
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.core.ui.theme.mediumSize
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TradingCardCompact(
     modifier: Modifier = Modifier,
@@ -29,10 +28,11 @@ fun TradingCardCompact(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.wrapContentSize(),
-        shape = DefaultCardShape,
+        modifier = modifier
+            .wrapContentSize()
+            .clickable { onClick() },
+        shape = DefaultTradingCardShape,
         elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation),
-        onClick = onClick
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(mediumSize)) {
             AsyncImage(

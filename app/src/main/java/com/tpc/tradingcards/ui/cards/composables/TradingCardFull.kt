@@ -3,22 +3,19 @@ package com.tpc.tradingcards.ui.cards.composables
 import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +32,14 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.extention.debugPlaceholder
-import com.tpc.tradingcards.core.ui.theme.DefaultCardShape
+import com.tpc.tradingcards.core.ui.theme.DefaultTradingCardShape
 import com.tpc.tradingcards.core.ui.theme.ShaderChromaticAberration
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
+import kotlinx.coroutines.delay
 
 @Composable
 fun TradingCardFull(
@@ -58,54 +56,47 @@ fun TradingCardFull(
             }
         })
 
-    val rotX by rememberInfiniteTransition(label = "x rotation").animateFloat(
-        initialValue = -10f,
-        targetValue = 10f,
-        animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse,
-            animation = tween(durationMillis = 4000, easing = LinearEasing, delayMillis = 500)
-        )
+    var isAnimationPlayed by remember { mutableStateOf(false) }
+    var isAnimationFinished by remember { mutableStateOf(false) }
+    val springAnimation by animateFloatAsState(
+        targetValue = if (isAnimationFinished) 0f else if (isAnimationPlayed) 20f else -20f,
+        label = "chromatic spring animation",
+        animationSpec = tween(
+            durationMillis = 150,
+            easing = LinearEasing
+        ),
+        finishedListener = {
+            isAnimationFinished = true
+        }
     )
 
-    val rotY by rememberInfiniteTransition(label = "y rotation").animateFloat(
-        initialValue = 0f,
-        targetValue = 10f,
-        animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse,
-            animation = tween(durationMillis = 2000, easing = LinearEasing, delayMillis = 500)
-        )
-    )
+    LaunchedEffect(Unit) {
+        delay(150)
+        isAnimationPlayed = true
+    }
 
     Card(
-        modifier = modifier
-            .padding(largeSize)
-            .graphicsLayer {
-                rotationX = rotX
-                rotationY = rotY
-            },
-        shape = DefaultCardShape,
+        modifier = modifier.padding(largeSize),
+        shape = DefaultTradingCardShape,
         elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation)
     ) {
-        val amount by remember { mutableStateOf(50.0f) }
         Image(
             modifier = Modifier
-                .widthIn(max = 200.dp)
-                .heightIn(max = 300.dp)
+                .size(250.dp, 344.dp) // Magic Number, but why not
                 .onSizeChanged { size ->
                     shader.setFloatUniform("size", size.width.toFloat(), size.height.toFloat())
                 }
                 .graphicsLayer {
+                    shader.setFloatUniform("amount", springAnimation)
                     clip = true
-                    shader.setFloatUniform("amount", amount)
                     renderEffect = RenderEffect
                         .createRuntimeShaderEffect(shader, "composable")
                         .asComposeRenderEffect()
                 },
             painter = painter,
-            contentDescription = null,
+            contentDescription = "${data.name} card in full screen",
         )
     }
-
 }
 
 @Preview(showBackground = true, backgroundColor = 0x28292a)

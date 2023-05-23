@@ -12,8 +12,10 @@ The app has been implemented with this tech:
 - Dagger Hilt
 - Room, Retrofit, Moshi
 - Material 3
+- Shaders
 - Version Catalog
+- UI Tests
 
 ## Future
 
-Implement automated UI tests and add more types of cards.
+Add more types of cards.

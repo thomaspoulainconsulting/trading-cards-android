@@ -9,15 +9,12 @@ uniform float2 size;
 uniform float amount;
 
 half4 main(float2 fragCoord) {
-    float distance = length(fragCoord - size * 0.5);
-    //float displacement = distance / max(size.x, size.y) * amount;
-    float displacement = pow(distance / max(size.x, size.y), 3.0) * amount;
     
     half4 color = composable.eval(fragCoord);
     color.rgb = half3(
-        composable.eval(fragCoord - displacement).r,
+        composable.eval(float2(fragCoord.x - amount, fragCoord.y)).r,
         color.g,
-        composable.eval(fragCoord + displacement).b
+        composable.eval(float2(fragCoord.x + amount, fragCoord.y)).b
     );
     return color;
 }

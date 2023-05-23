@@ -108,13 +108,12 @@ fun CardDetailsScreen(
                 is UIState.Success -> {
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(100.dp),
-                        contentPadding = PaddingValues(top = largeSize),
+                        contentPadding = PaddingValues(top = largeSize, bottom = largeSize),
                         horizontalArrangement = Arrangement.spacedBy(largeSize),
                         verticalArrangement = Arrangement.spacedBy(largeSize),
                         content = {
                             items(cards.data, key = { it.id }) { pokemonCard ->
                                 TradingCardCompact(
-                                    modifier = Modifier.animateItemPlacement(),
                                     data = pokemonCard
                                 ) {
                                     selectedCard = pokemonCard
