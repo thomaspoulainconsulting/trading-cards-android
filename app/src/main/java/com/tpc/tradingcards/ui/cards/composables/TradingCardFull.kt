@@ -3,7 +3,7 @@ package com.tpc.tradingcards.ui.cards.composables
 import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import android.os.Build
-import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -62,15 +62,14 @@ fun TradingCardFull(
     var isAnimationPlayed by remember { mutableStateOf(false) }
     var isAnimationFinished by remember { mutableStateOf(false) }
     val shaderAnimation by animateFloatAsState(
-        targetValue = if (isAnimationFinished) 0f else if (isAnimationPlayed) -30f else 30f,
+        targetValue = if (isAnimationFinished) 0f else if (isAnimationPlayed) 10f else -20f,
         label = "chromatic aberration animation",
-        animationSpec = tween(durationMillis = 200, easing = LinearEasing),
+        animationSpec = tween(durationMillis = 200, easing = FastOutLinearInEasing),
         finishedListener = {
             isAnimationFinished = true
         }
     )
 
-    // Trigger the start of the animation
     LaunchedEffect(Unit) {
         delay(150)
         isAnimationPlayed = true
