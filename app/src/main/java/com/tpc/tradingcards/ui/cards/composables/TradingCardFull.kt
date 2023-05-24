@@ -61,10 +61,10 @@ fun TradingCardFull(
     }
     var isAnimationPlayed by remember { mutableStateOf(false) }
     var isAnimationFinished by remember { mutableStateOf(false) }
-    val springAnimation by animateFloatAsState(
-        targetValue = if (isAnimationFinished) 0f else if (isAnimationPlayed) 20f else -20f,
-        label = "chromatic spring animation",
-        animationSpec = tween(durationMillis = 100, easing = LinearEasing),
+    val shaderAnimation by animateFloatAsState(
+        targetValue = if (isAnimationFinished) 0f else if (isAnimationPlayed) -30f else 30f,
+        label = "chromatic aberration animation",
+        animationSpec = tween(durationMillis = 200, easing = LinearEasing),
         finishedListener = {
             isAnimationFinished = true
         }
@@ -89,7 +89,7 @@ fun TradingCardFull(
                 .graphicsLayer {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         shader?.let { currentShader ->
-                            currentShader.setFloatUniform("amount", springAnimation)
+                            currentShader.setFloatUniform("amount", shaderAnimation)
                             clip = true
                             renderEffect = RenderEffect
                                 .createRuntimeShaderEffect(currentShader, "composable")
