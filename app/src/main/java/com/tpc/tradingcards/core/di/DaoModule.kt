@@ -2,6 +2,7 @@ package com.tpc.tradingcards.core.di
 
 import com.tpc.tradingcards.data.dao.CardDao
 import com.tpc.tradingcards.data.dao.CardSetDao
+import com.tpc.tradingcards.data.dao.CardTypeDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,5 +17,8 @@ internal object DaoModule {
 
     @Provides
     fun provideCardSetDao(database: CardsDatabase): CardSetDao = database.provideCardSetDao()
+
+    @Provides
+    fun provideCardTypeDao(database: CardsDatabase): CardTypeDao = database.provideCardTypeDao()
 
 }

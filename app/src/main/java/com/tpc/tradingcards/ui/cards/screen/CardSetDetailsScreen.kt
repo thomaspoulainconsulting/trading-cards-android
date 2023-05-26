@@ -17,14 +17,18 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.twotone.CheckCircle
 import androidx.compose.material.icons.twotone.FilterAlt
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -55,15 +59,20 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
+import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.ui.cards.composables.TradingCardCompact
 import com.tpc.tradingcards.ui.cards.composables.TradingCardFull
 import com.tpc.tradingcards.ui.cards.testtag.CardDetailsTestTag
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class,
+)
 @Composable
 fun CardDetailsScreen(
     cardSet: CardSet,
     cards: List<Card>,
+    types: List<CardType>,
+    onTypeChanged: (CardType) -> Unit,
     onBack: () -> Unit
 ) {
     var selectedCard: Card? by remember { mutableStateOf(null) }
@@ -189,9 +198,46 @@ fun CardDetailsScreen(
             }
         }
 
-        AnimatedVisibility(visible = isFilterByTypeVisible) {
-            ModalBottomSheet(onDismissRequest = { isFilterByTypeVisible = false }) {
-                Text("SALUT")
+        FilterContent(types, isFilterByTypeVisible, onTypeChanged) {
+            isFilterByTypeVisible = false
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FilterContent(
+    types: List<CardType>,
+    isFilterByTypeVisible: Boolean,
+    onTypeChanged: (CardType) -> Unit,
+    onFilterVisibilityChanged: () -> Unit
+) {
+    AnimatedVisibility(visible = isFilterByTypeVisible) {
+        ModalBottomSheet(
+            onDismissRequest = onFilterVisibilityChanged,
+        ) {
+            Column(Modifier.padding(largeSize)) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(mediumSize)
+                ) {
+                    items(types) { cardType ->
+                        FilterChip(
+                            selected = cardType.isSelected,
+                            onClick = {
+                                onTypeChanged(cardType)
+                            },
+                            label = {
+                                Text(text = cardType.name)
+                            },
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.TwoTone.CheckCircle,
+                                    contentDescription = null
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -201,7 +247,7 @@ fun CardDetailsScreen(
 @Composable
 fun CardDetailsScreenWithoutDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(CardSetEmpty, emptyList()) {}
+        CardDetailsScreen(CardSetEmpty, emptyList(), emptyList(), {}) {}
     }
 }
 
@@ -209,6 +255,10 @@ fun CardDetailsScreenWithoutDataPreview() {
 @Composable
 fun CardDetailsScreenWithDataPreview() {
     TradingCardsTheme {
-        CardDetailsScreen(CardSetEmpty, listOf(CardEmpty)) {}
+        CardDetailsScreen(
+            CardSetEmpty,
+            listOf(CardEmpty),
+            emptyList(),
+            {}) {}
     }
 }

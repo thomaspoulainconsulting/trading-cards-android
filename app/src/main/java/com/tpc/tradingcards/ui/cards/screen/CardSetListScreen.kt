@@ -22,7 +22,7 @@ import com.tpc.tradingcards.core.ui.composable.Loading
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.data.model.CardSet
-import com.tpc.tradingcards.data.model.CardType
+import com.tpc.tradingcards.data.model.TradingCardGame
 import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
 import com.tpc.tradingcards.ui.cards.testtag.CardListTestTag
 
@@ -71,8 +71,20 @@ fun CardSetsListScreen(
 fun CardListScreenPreview() {
     TradingCardsTheme {
         val sets = listOf(
-            CardSet(id = "1", name = "Base", cardType = CardType.POKEMON, symbol = "", ""),
-            CardSet(id = "2", name = "Fossil", cardType = CardType.POKEMON, symbol = "", ""),
+            CardSet(
+                id = "1",
+                name = "Base",
+                tradingCardGame = TradingCardGame.POKEMON,
+                symbol = "",
+                ""
+            ),
+            CardSet(
+                id = "2",
+                name = "Fossil",
+                tradingCardGame = TradingCardGame.POKEMON,
+                symbol = "",
+                ""
+            ),
         )
         CardSetsListScreen(cardSets = sets) {}
     }

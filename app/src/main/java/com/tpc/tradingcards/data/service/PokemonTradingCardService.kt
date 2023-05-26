@@ -1,6 +1,7 @@
 package com.tpc.tradingcards.data.service
 
 import com.tpc.tradingcards.data.dto.HoldingPokemonCardSetsData
+import com.tpc.tradingcards.data.dto.HoldingPokemonCardTypesData
 import com.tpc.tradingcards.data.dto.HoldingPokemonCardsData
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,4 +17,7 @@ interface PokemonTradingCardService {
 
     @GET("sets")
     suspend fun getPokemonCardSets(): HoldingPokemonCardSetsData
+
+    @GET("supertypes")
+    suspend fun getPokemonCardTypes(): HoldingPokemonCardTypesData
 }

@@ -2,21 +2,35 @@ package com.tpc.tradingcards.data.repository.pokemon
 
 import com.tpc.tradingcards.data.dao.CardDao
 import com.tpc.tradingcards.data.dao.CardSetDao
+import com.tpc.tradingcards.data.dao.CardTypeDao
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
+import com.tpc.tradingcards.data.model.TradingCardGame
 import com.tpc.tradingcards.data.service.PokemonTradingCardService
 import javax.inject.Inject
 
 class PokemonCardRepository @Inject constructor(
     private val localCardSource: CardDao,
     private val localCardSetSource: CardSetDao,
+    private val localCardTypeSource: CardTypeDao,
     private val remoteSource: PokemonTradingCardService,
 ) {
+    /**
+     * LOCAL
+     */
 
-    fun getCards(idSet: String) = localCardSource.getAllCards(CardType.POKEMON, idSet)
+    fun getCards(idSet: String) = localCardSource.get(TradingCardGame.POKEMON, idSet)
 
-    fun getSets() = localCardSetSource.getCardSetsWithType(CardType.POKEMON)
+    fun getSets() = localCardSetSource.get(TradingCardGame.POKEMON)
+
+    fun getCardTypes() = localCardTypeSource.get(TradingCardGame.POKEMON)
+
+    suspend fun updateCardType(cardType: CardType) = localCardTypeSource.update(cardType)
+    
+    /**
+     * REMOTE
+     */
 
     suspend fun fetchCards(idSet: String) {
         val cards = remoteSource.getPokemonCards(
@@ -32,10 +46,10 @@ class PokemonCardRepository @Inject constructor(
                 number = it.number.toIntOrNull() ?: -1,
                 idSet = idSet,
                 supertype = it.supertype,
-                cardType = CardType.POKEMON
+                tradingCardGame = TradingCardGame.POKEMON
             )
         }
-        localCardSource.insertAll(cards)
+        localCardSource.insert(cards)
     }
 
     suspend fun fetchCardSets() {
@@ -43,11 +57,23 @@ class PokemonCardRepository @Inject constructor(
             CardSet(
                 id = it.id,
                 name = it.name,
-                cardType = CardType.POKEMON,
+                tradingCardGame = TradingCardGame.POKEMON,
                 symbol = it.images.symbol,
                 releaseDate = it.releaseDate
             )
         }
-        localCardSetSource.insertAll(sets)
+        localCardSetSource.insert(sets)
     }
+
+    suspend fun fetchCardTypes() {
+        val types = remoteSource.getPokemonCardTypes().data.map { supertype ->
+            CardType(
+                name = supertype,
+                tradingCardGame = TradingCardGame.POKEMON
+            )
+        }
+        localCardTypeSource.insert(types)
+    }
+
+
 }

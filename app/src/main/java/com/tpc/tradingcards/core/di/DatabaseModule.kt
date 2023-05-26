@@ -6,14 +6,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object DatabaseModule {
 
     @Provides
-    @Singleton
     fun provideDatabase(app: Application): CardsDatabase =
         Room.databaseBuilder(
             app.applicationContext,

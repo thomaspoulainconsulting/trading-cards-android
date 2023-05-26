@@ -11,25 +11,21 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
 
     @Provides
-    @Singleton
     fun provideMoshi(): Moshi =
         Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
             .build()
 
     @Provides
-    @Singleton
     fun provideHeaderInterceptor(): HeaderInterceptor = HeaderInterceptor()
 
     @Provides
-    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply {
             level =
@@ -37,7 +33,6 @@ internal object NetworkModule {
         }
 
     @Provides
-    @Singleton
     fun provideOkHttpClient(
         headersInterceptor: HeaderInterceptor,
         loggingInterceptor: HttpLoggingInterceptor
@@ -48,7 +43,6 @@ internal object NetworkModule {
             .build()
 
     @Provides
-    @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
