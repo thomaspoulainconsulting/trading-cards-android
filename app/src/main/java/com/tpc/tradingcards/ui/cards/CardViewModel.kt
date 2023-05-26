@@ -1,11 +1,14 @@
 package com.tpc.tradingcards.ui.cards
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.core.extention.defaultStateIn
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
+import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.data.repository.pokemon.PokemonCardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,6 +35,9 @@ class CardViewModel @Inject constructor(
     private val _cardSetSelected = MutableStateFlow(CardSetEmpty)
     val cardSetSelected = _cardSetSelected.asStateFlow()
 
+    val cardTypes: SnapshotStateList<CardType> =
+        mutableStateListOf(*cardRepository.getCardTypes().toTypedArray())
+
     val cards: StateFlow<List<Card>> =
         cardSetSelected
             .flatMapLatest { cardRepository.getCards(it.id) }
@@ -51,7 +57,21 @@ class CardViewModel @Inject constructor(
             }
             .defaultStateIn(viewModelScope, emptyList())
 
+
     fun fetchCards(cardSet: CardSet) = viewModelScope.launch {
         _cardSetSelected.emit(cardSet)
+    }
+
+    fun toggleCardType(cardType: CardType) = viewModelScope.launch {
+        val oldData = cardTypes.toList().apply {
+            find { it.name == cardType.name }?.let {
+                it.isSelected = !it.isSelected
+            }
+        }
+
+        cardTypes.apply {
+            clear()
+            addAll(oldData)
+        }
     }
 }

@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.ui.cards.cardListRoute
 import com.tpc.tradingcards.ui.cards.cardsGraph
@@ -26,14 +26,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TradingCardsTheme {
-                val navController = rememberAnimatedNavController()
+                val navController = rememberNavController()
 
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
                         .navigationBarsPadding(),
                 ) { innerPadding ->
-                    AnimatedNavHost(
+                    NavHost(
                         navController,
                         startDestination = cardListRoute,
                         modifier = Modifier.consumeWindowInsets(innerPadding)

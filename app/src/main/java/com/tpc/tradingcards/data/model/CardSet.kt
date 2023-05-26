@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class CardSet(
     @PrimaryKey val id: String,
     val name: String,
-    val cardType: CardType,
+    val tradingCardGame: TradingCardGame,
     val symbol: String,
     val releaseDate: String,
 )
 
-val CardSetEmpty = CardSet("1", "Base", CardType.POKEMON, "", "")
+val CardSetEmpty = CardSet("1", "Base", TradingCardGame.POKEMON, "", "")

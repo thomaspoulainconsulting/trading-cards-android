@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "77e24e89a8630d2105c5536c666702e7",
+    "identityHash": "45341c41434a9102979e201db18af56d",
     "entities": [
       {
         "tableName": "Card",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `idSet` TEXT NOT NULL, `number` INTEGER NOT NULL, `name` TEXT NOT NULL, `urlSmall` TEXT NOT NULL, `urlLarge` TEXT NOT NULL, `supertype` TEXT NOT NULL, `cardType` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `idSet` TEXT NOT NULL, `number` INTEGER NOT NULL, `name` TEXT NOT NULL, `urlSmall` TEXT NOT NULL, `urlLarge` TEXT NOT NULL, `supertype` TEXT NOT NULL, `tradingCardGame` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -51,8 +51,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "cardType",
-            "columnName": "cardType",
+            "fieldPath": "tradingCardGame",
+            "columnName": "tradingCardGame",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "CardSet",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `cardType` TEXT NOT NULL, `symbol` TEXT NOT NULL, `releaseDate` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `tradingCardGame` TEXT NOT NULL, `symbol` TEXT NOT NULL, `releaseDate` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -83,8 +83,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "cardType",
-            "columnName": "cardType",
+            "fieldPath": "tradingCardGame",
+            "columnName": "tradingCardGame",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -114,7 +114,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '77e24e89a8630d2105c5536c666702e7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '45341c41434a9102979e201db18af56d')"
     ]
   }
 }

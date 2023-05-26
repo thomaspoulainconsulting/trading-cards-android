@@ -12,7 +12,7 @@ data class Card(
     val urlSmall: String,
     val urlLarge: String,
     val supertype: String,
-    val cardType: CardType,
+    val tradingCardGame: TradingCardGame,
 )
 
 val CardEmpty = Card(
@@ -23,5 +23,5 @@ val CardEmpty = Card(
     number = 0,
     idSet = "1",
     supertype = "",
-    cardType = CardType.POKEMON,
+    tradingCardGame = TradingCardGame.POKEMON,
 )

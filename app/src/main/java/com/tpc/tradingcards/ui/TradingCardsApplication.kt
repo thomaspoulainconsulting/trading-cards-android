@@ -1,7 +1,7 @@
 package com.tpc.tradingcards.ui
 
 import android.app.Application
-import com.mutualmobile.composesensors.BuildConfig
+import com.tpc.tradingcards.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
