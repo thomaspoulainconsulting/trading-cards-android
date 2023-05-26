@@ -8,6 +8,7 @@ import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 import com.tpc.tradingcards.data.model.CardSetEmpty
+import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.ui.cards.screen.CardDetailsScreen
 import org.junit.Rule
 import org.junit.Test
@@ -24,13 +25,18 @@ class CardDetailsScreenTest {
         val cardSetName = "test"
         val cardSet = CardSetEmpty.copy(name = cardSetName)
         val cards: List<Card> = listOf(CardEmpty)
+        val types: List<CardType> = emptyList()
 
         // When
         composeTestRule.setContent {
             numberOfCardText =
                 pluralStringResource(R.plurals.number_or_cards, count = cards.size, cards.size)
             TradingCardsTheme {
-                CardDetailsScreen(cardSet = cardSet, cards = cards) {}
+                CardDetailsScreen(
+                    cardSet = cardSet,
+                    cards = cards,
+                    types = types,
+                    onTypeChanged = {}) {}
             }
         }
 

@@ -1,6 +1,5 @@
 package com.tpc.tradingcards.ui.cards
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,7 +13,6 @@ import com.tpc.tradingcards.ui.cards.screen.CardSetsListScreen
 const val cardListRoute = "cards"
 private const val cardDetailsRoute = "cards-details"
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.cardsGraph(
     navController: NavController,
 ) {
@@ -39,13 +37,13 @@ fun NavGraphBuilder.cardsGraph(
 
         val cards by cardViewModel.cards.collectAsStateWithLifecycle()
         val set by cardViewModel.cardSetSelected.collectAsStateWithLifecycle()
-        val types = cardViewModel.cardTypes
+        val types by cardViewModel.types.collectAsStateWithLifecycle()
 
         CardDetailsScreen(
             set,
             cards,
             types,
-            onTypeChanged = cardViewModel::toggleCardType
+            onTypeChanged = cardViewModel::toggleCardTypeSelection
         ) {
             navController.popBackStack()
         }

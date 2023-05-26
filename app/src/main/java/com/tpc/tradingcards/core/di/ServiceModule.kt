@@ -1,6 +1,5 @@
 package com.tpc.tradingcards.core.di
 
-import com.tpc.tradingcards.data.repository.pokemon.PokemonCardTypeSource
 import com.tpc.tradingcards.data.service.PokemonTradingCardService
 import dagger.Module
 import dagger.Provides
@@ -15,7 +14,4 @@ internal object ServiceModule {
     @Provides
     fun providePokemonTradingCardService(retrofit: Retrofit): PokemonTradingCardService =
         retrofit.create(PokemonTradingCardService::class.java)
-
-    @Provides
-    fun providePokemonCardTypeSource(): PokemonCardTypeSource = PokemonCardTypeSource()
 }

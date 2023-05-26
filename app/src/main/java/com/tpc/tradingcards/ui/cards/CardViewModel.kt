@@ -1,7 +1,5 @@
 package com.tpc.tradingcards.ui.cards
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.core.extention.defaultStateIn
@@ -15,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -35,11 +34,18 @@ class CardViewModel @Inject constructor(
     private val _cardSetSelected = MutableStateFlow(CardSetEmpty)
     val cardSetSelected = _cardSetSelected.asStateFlow()
 
-    val cardTypes: SnapshotStateList<CardType> =
-        mutableStateListOf(*cardRepository.getCardTypes().toTypedArray())
+    val types: StateFlow<List<CardType>> =
+        cardRepository.getCardTypes()
+            .onEach { data -> if (data.isEmpty()) cardRepository.fetchCardTypes() }
+            .defaultStateIn(viewModelScope, emptyList())
+
+    val sets: StateFlow<List<CardSet>> =
+        cardRepository.getSets()
+            .onEach { data -> if (data.isEmpty()) cardRepository.fetchCardSets() }
+            .defaultStateIn(viewModelScope, emptyList())
 
     val cards: StateFlow<List<Card>> =
-        cardSetSelected
+        cardSetSelected.combine(types) { _, _ -> cardSetSelected.value } // Allows a database refetch
             .flatMapLatest { cardRepository.getCards(it.id) }
             .onEach { data ->
                 if (data.isEmpty()) {
@@ -50,28 +56,13 @@ class CardViewModel @Inject constructor(
             }
             .defaultStateIn(viewModelScope, emptyList())
 
-    val sets: StateFlow<List<CardSet>> =
-        cardRepository.getSets()
-            .onEach { data ->
-                if (data.isEmpty()) cardRepository.fetchCardSets()
-            }
-            .defaultStateIn(viewModelScope, emptyList())
-
-
     fun fetchCards(cardSet: CardSet) = viewModelScope.launch {
         _cardSetSelected.emit(cardSet)
     }
 
-    fun toggleCardType(cardType: CardType) = viewModelScope.launch {
-        val oldData = cardTypes.toList().apply {
-            find { it.name == cardType.name }?.let {
-                it.isSelected = !it.isSelected
-            }
-        }
-
-        cardTypes.apply {
-            clear()
-            addAll(oldData)
-        }
+    fun toggleCardTypeSelection(cardType: CardType) = viewModelScope.launch {
+        cardRepository.updateCardType(
+            cardType.copy(isSelected = !cardType.isSelected)
+        )
     }
 }

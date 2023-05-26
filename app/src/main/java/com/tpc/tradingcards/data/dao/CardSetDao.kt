@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 interface CardSetDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(sets: List<CardSet>)
+    suspend fun insert(sets: List<CardSet>)
 
     @Query("SELECT * FROM CardSet WHERE tradingCardGame=:tradingCardGame ORDER BY releaseDate")
-    fun getCardSetsWithType(tradingCardGame: TradingCardGame): Flow<List<CardSet>>
+    fun get(tradingCardGame: TradingCardGame): Flow<List<CardSet>>
 }

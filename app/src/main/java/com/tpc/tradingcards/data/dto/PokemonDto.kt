@@ -28,3 +28,6 @@ data class SetImages(
 )
 
 data class HoldingPokemonCardSetsData(val data: List<PokemonCardSetData>)
+
+
+data class HoldingPokemonCardTypesData(val data: List<String>)
