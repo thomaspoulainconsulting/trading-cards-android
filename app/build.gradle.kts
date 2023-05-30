@@ -101,7 +101,6 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.navigation.compose)
-    implementation(libs.glance)
 
     testImplementation(libs.junit)
 
