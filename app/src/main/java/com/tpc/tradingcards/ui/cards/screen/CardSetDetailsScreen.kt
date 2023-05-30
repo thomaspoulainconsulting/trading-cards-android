@@ -21,10 +21,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.twotone.CheckCircle
+import androidx.compose.material.icons.twotone.CheckCircleOutline
 import androidx.compose.material.icons.twotone.FilterAlt
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +57,9 @@ import com.tpc.tradingcards.core.ui.theme.Dark80
 import com.tpc.tradingcards.core.ui.theme.PurpleGrey40
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
+import com.tpc.tradingcards.core.ui.theme.largerSize
 import com.tpc.tradingcards.core.ui.theme.mediumSize
+import com.tpc.tradingcards.core.ui.theme.smallSize
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardEmpty
 import com.tpc.tradingcards.data.model.CardSet
@@ -63,6 +68,8 @@ import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.ui.cards.composables.TradingCardCompact
 import com.tpc.tradingcards.ui.cards.composables.TradingCardFull
 import com.tpc.tradingcards.ui.cards.testtag.CardDetailsTestTag
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class,
@@ -77,6 +84,8 @@ fun CardDetailsScreen(
 ) {
     var selectedCard: Card? by remember { mutableStateOf(null) }
     var isFilterByTypeVisible by remember { mutableStateOf(false) }
+    val state = rememberLazyGridState()
+    val coroutineScope = rememberCoroutineScope()
 
     BackHandler {
         if (selectedCard == null) onBack()
@@ -133,6 +142,7 @@ fun CardDetailsScreen(
                 )
             } else {
                 LazyVerticalGrid(
+                    state = state,
                     columns = GridCells.Adaptive(100.dp),
                     contentPadding = PaddingValues(top = largeSize, bottom = largeSize),
                     horizontalArrangement = Arrangement.spacedBy(largeSize),
@@ -198,9 +208,20 @@ fun CardDetailsScreen(
             }
         }
 
-        FilterContent(types, isFilterByTypeVisible, onTypeChanged) {
-            isFilterByTypeVisible = false
-        }
+        FilterContent(
+            types,
+            isFilterByTypeVisible,
+            onTypeChanged = {
+                onTypeChanged(it)
+                coroutineScope.launch {
+                    delay(100)
+                    state.scrollToItem(0)
+                }
+            },
+            onFilterVisibilityChanged = {
+                isFilterByTypeVisible = false
+            }
+        )
     }
 }
 
@@ -216,8 +237,10 @@ private fun FilterContent(
         ModalBottomSheet(
             onDismissRequest = onFilterVisibilityChanged,
         ) {
-            Column(Modifier.padding(largeSize)) {
+            Column(Modifier.padding(start = largeSize, end = largeSize)) {
+                Text(text = stringResource(R.string.filter_by_types))
                 LazyRow(
+                    contentPadding = PaddingValues(bottom = largerSize, top = smallSize),
                     horizontalArrangement = Arrangement.spacedBy(mediumSize)
                 ) {
                     items(types) { cardType ->
@@ -231,7 +254,7 @@ private fun FilterContent(
                             },
                             trailingIcon = {
                                 Icon(
-                                    imageVector = Icons.TwoTone.CheckCircle,
+                                    imageVector = if (cardType.isSelected) Icons.TwoTone.CheckCircle else Icons.TwoTone.CheckCircleOutline,
                                     contentDescription = null
                                 )
                             }
