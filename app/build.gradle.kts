@@ -62,7 +62,7 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
@@ -84,11 +84,6 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.material3.icons)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.moshi)
-    implementation(libs.moshi)
-    ksp(libs.moshi.codegen)
-    implementation(libs.okhttp.logging.interceptor)
     implementation(libs.coil)
     implementation(libs.dagger.hilt)
     implementation(libs.dagger.hilt.navigation.compose)
@@ -96,18 +91,18 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.accompanist.shimmer)
     implementation(libs.accompanist.animation)
-    implementation(libs.sensors)
     implementation(libs.room)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.navigation.compose)
 
-    testImplementation(libs.junit)
+    implementation(libs.bundles.network)
+    ksp(libs.moshi.codegen)
 
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
+    testImplementation(libs.junit)
+    
+    androidTestImplementation(libs.bundles.tests)
+
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 }
