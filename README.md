@@ -1,4 +1,4 @@
-# Trading Cards App ![example workflow](https://github.com/molpoo/trading-cards-android/actions/workflows/android.yml/badge.svg)
+# Trading Cards App
 
 This is an Android app that displays cards from the Pokemon trading card game.
 
