@@ -1,8 +1,8 @@
 package com.tpc.tradingcards.core.di
 
-import com.mutualmobile.composesensors.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.tpc.tradingcards.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

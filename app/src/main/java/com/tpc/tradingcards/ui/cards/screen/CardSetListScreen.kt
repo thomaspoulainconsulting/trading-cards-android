@@ -24,11 +24,15 @@ import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.TradingCardGame
 import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
-import com.tpc.tradingcards.ui.cards.testtag.CardListTestTag
+
+internal enum class CardListTestTag(val tag: String) {
+    Loading("cardListLoading"),
+    Data("cardListData"),
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardSetsListScreen(
+internal fun CardSetsListScreen(
     cardSets: List<CardSet>,
     onNavigateToCardSetDetails: (CardSet) -> Unit
 ) {
@@ -68,7 +72,7 @@ fun CardSetsListScreen(
 
 @Preview(showBackground = true, widthDp = 500, heightDp = 1000)
 @Composable
-fun CardListScreenPreview() {
+private fun CardListScreenPreview() {
     TradingCardsTheme {
         val sets = listOf(
             CardSet(

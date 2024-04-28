@@ -8,8 +8,8 @@ import androidx.compose.ui.test.performClick
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardSetEmpty
+import com.tpc.tradingcards.ui.cards.screen.CardListTestTag
 import com.tpc.tradingcards.ui.cards.screen.CardSetsListScreen
-import com.tpc.tradingcards.ui.cards.testtag.CardListTestTag
 import org.junit.Rule
 import org.junit.Test
 

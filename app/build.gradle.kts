@@ -1,25 +1,23 @@
 import java.io.FileInputStream
 import java.util.Properties
 
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    kotlin("kapt")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.tpc.tradingcards"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.tpc.tradingcards"
         minSdk = 23
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,14 +33,14 @@ android {
     buildTypes {
         all {
             val properties = Properties()
-            FileInputStream("keys.properties").use { fileInputStream ->
+            FileInputStream("local.properties").use { fileInputStream ->
                 properties.load(fileInputStream)
             }
 
             buildConfigField("String", "API_POKEMON", properties.getProperty("pokemon-api-key"))
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -62,7 +60,7 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.12"
     }
     packaging {
         resources {
@@ -87,7 +85,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.dagger.hilt)
     implementation(libs.dagger.hilt.navigation.compose)
-    kapt(libs.dagger.compiler)
+    ksp(libs.dagger.compiler)
     implementation(libs.timber)
     implementation(libs.accompanist.shimmer)
     implementation(libs.accompanist.animation)

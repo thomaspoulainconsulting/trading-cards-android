@@ -2,7 +2,6 @@ package com.tpc.tradingcards.ui.cards.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -23,7 +22,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.twotone.CheckCircle
 import androidx.compose.material.icons.twotone.FilterAlt
 import androidx.compose.material.ripple.rememberRipple
@@ -62,13 +61,13 @@ import com.tpc.tradingcards.data.model.CardSetEmpty
 import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.ui.cards.composables.TradingCardCompact
 import com.tpc.tradingcards.ui.cards.composables.TradingCardFull
-import com.tpc.tradingcards.ui.cards.testtag.CardDetailsTestTag
 
-@OptIn(
-    ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class,
-)
+enum class CardDetailsTestTag(val tag: String) {
+    Loading("cardDetailsLoading"),
+}
+
 @Composable
-fun CardDetailsScreen(
+internal fun CardDetailsScreen(
     cardSet: CardSet,
     cards: List<Card>,
     types: List<CardType>,
@@ -105,7 +104,7 @@ fun CardDetailsScreen(
                             indication = rememberRipple(bounded = false),
                             onClick = onBack
                         ),
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.back),
                 )
                 Column(Modifier.align(Alignment.CenterVertically)) {
@@ -245,7 +244,7 @@ private fun FilterContent(
 
 @Preview(showBackground = true)
 @Composable
-fun CardDetailsScreenWithoutDataPreview() {
+private fun CardDetailsScreenWithoutDataPreview() {
     TradingCardsTheme {
         CardDetailsScreen(CardSetEmpty, emptyList(), emptyList(), {}) {}
     }
@@ -253,7 +252,7 @@ fun CardDetailsScreenWithoutDataPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun CardDetailsScreenWithDataPreview() {
+private fun CardDetailsScreenWithDataPreview() {
     TradingCardsTheme {
         CardDetailsScreen(
             CardSetEmpty,
