@@ -25,7 +25,6 @@ class PokemonCardRepository(
 
     suspend fun getCardTypes() = localCardTypeSource.get(TradingCardGame.POKEMON)
 
-    suspend fun updateCardType(cardType: CardType) = localCardTypeSource.update(cardType)
     
     /**
      * REMOTE

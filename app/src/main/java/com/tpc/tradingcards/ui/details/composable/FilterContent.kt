@@ -36,7 +36,7 @@ fun FilterContent(
             ) {
                 items(types) { cardType ->
                     FilterChip(
-                        selected = cardType.isSelected,
+                        selected = true, // FIXME
                         onClick = {
                             onTypeChanged(cardType)
                         },

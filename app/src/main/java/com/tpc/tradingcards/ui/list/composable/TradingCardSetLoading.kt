@@ -22,7 +22,7 @@ fun TradingCardSetLoading(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp)
+            .height(56.dp)
             .placeholder(
                 visible = true,
                 highlight = PlaceholderHighlight.fade(highlightColor = PurpleGrey40)

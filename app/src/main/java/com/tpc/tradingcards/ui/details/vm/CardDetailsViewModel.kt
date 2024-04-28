@@ -7,7 +7,6 @@ import com.tpc.tradingcards.ui.details.state.CardDetailsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class CardDetailsViewModel(
     private val repository: PokemonCardRepository,
@@ -17,7 +16,6 @@ class CardDetailsViewModel(
     val state = _state.asStateFlow()
 
     fun getCards(idSet: String) = viewModelScope.launch {
-        Timber.e(idSet)
         try {
             _state.tryEmit(CardDetailsState.Loading)
 
@@ -37,7 +35,6 @@ class CardDetailsViewModel(
                 _state.tryEmit(CardDetailsState.Success(cards, cardTypes))
             }
         } catch (e: Throwable) {
-            Timber.e(e)
             _state.tryEmit(CardDetailsState.Error(e))
         }
     }
