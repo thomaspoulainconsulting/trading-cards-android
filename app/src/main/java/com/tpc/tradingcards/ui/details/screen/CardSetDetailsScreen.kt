@@ -160,7 +160,7 @@ fun CardDetailsScreen(
                         if (showFilterBottomSheet) {
                             FilterContent(
                                 types = state.types,
-                                onTypeChanged = onFilter,
+                                onFilterClicked = onFilter,
                                 onDismiss = {
                                     showFilterBottomSheet = false
                                 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CheckCircle
+import androidx.compose.material.icons.twotone.CheckCircleOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -24,7 +25,7 @@ import com.tpc.tradingcards.data.model.CardType
 @Composable
 fun FilterContent(
     types: List<CardType>,
-    onTypeChanged: (CardType) -> Unit,
+    onFilterClicked: (CardType) -> Unit,
     onDismiss: () -> Unit
 ) {
     ModalBottomSheet(
@@ -38,14 +39,14 @@ fun FilterContent(
                     FilterChip(
                         selected = true, // FIXME
                         onClick = {
-                            onTypeChanged(cardType)
+                            onFilterClicked(cardType)
                         },
                         label = {
                             Text(text = cardType.name)
                         },
                         trailingIcon = {
                             Icon(
-                                imageVector = Icons.TwoTone.CheckCircle,
+                                imageVector = if (true) Icons.TwoTone.CheckCircle else Icons.TwoTone.CheckCircleOutline, // FIXME
                                 contentDescription = null
                             )
                         }
@@ -63,7 +64,7 @@ private fun Preview() {
         val cardTypes = listOf(CardType.mock)
         FilterContent(
             types = cardTypes,
-            onTypeChanged = {},
+            onFilterClicked = {},
             onDismiss = {})
     }
 }
