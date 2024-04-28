@@ -10,6 +10,8 @@ data class CardSet(
     val tradingCardGame: TradingCardGame,
     val symbol: String,
     val releaseDate: String,
-)
-
-val CardSetEmpty = CardSet("1", "Base", TradingCardGame.POKEMON, "", "")
+) {
+    companion object {
+        val mock = CardSet("1", "Base", TradingCardGame.POKEMON, "", "")
+    }
+}

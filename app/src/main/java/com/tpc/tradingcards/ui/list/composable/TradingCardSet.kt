@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.cards.composables
+package com.tpc.tradingcards.ui.list.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,7 +32,6 @@ import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.largerSize
 import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.data.model.CardSet
-import com.tpc.tradingcards.data.model.CardSetEmpty
 
 @Composable
 fun TradingCardSet(
@@ -84,6 +83,6 @@ fun TradingCardSet(
 @Composable
 fun CardSetPreview() {
     TradingCardsTheme {
-        TradingCardSet(cardSet = CardSetEmpty) {}
+        TradingCardSet(cardSet = CardSet.mock) {}
     }
 }

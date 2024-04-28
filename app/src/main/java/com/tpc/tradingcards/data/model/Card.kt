@@ -13,15 +13,17 @@ data class Card(
     val urlLarge: String,
     val supertype: String,
     val tradingCardGame: TradingCardGame,
-)
-
-val CardEmpty = Card(
-    id = "1",
-    name = "",
-    urlSmall = "",
-    urlLarge = "",
-    number = 0,
-    idSet = "1",
-    supertype = "",
-    tradingCardGame = TradingCardGame.POKEMON,
-)
+) {
+    companion object {
+        val mock = Card(
+            id = "1",
+            name = "",
+            urlSmall = "",
+            urlLarge = "",
+            number = 0,
+            idSet = "1",
+            supertype = "",
+            tradingCardGame = TradingCardGame.POKEMON,
+        )
+    }
+}

@@ -4,7 +4,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
 
@@ -69,8 +68,13 @@ android {
     }
 }
 
-dependencies {
+kotlin {
+    sourceSets.all {
+        languageSettings.enableLanguageFeature("ExplicitBackingFields") // Must be explcitly enabled!
+    }
+}
 
+dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
@@ -83,9 +87,6 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.material3.icons)
     implementation(libs.coil)
-    implementation(libs.dagger.hilt)
-    implementation(libs.dagger.hilt.navigation.compose)
-    ksp(libs.dagger.compiler)
     implementation(libs.timber)
     implementation(libs.accompanist.shimmer)
     implementation(libs.accompanist.animation)
@@ -93,6 +94,8 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.navigation.compose)
+    implementation(libs.koin)
+    implementation(libs.koin.compose)
 
     implementation(libs.bundles.network)
     ksp(libs.moshi.codegen)

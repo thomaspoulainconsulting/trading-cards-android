@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.cards.composables
+package com.tpc.tradingcards.ui.details.composable
 
 import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
@@ -36,20 +36,20 @@ import com.tpc.tradingcards.core.ui.theme.ShaderChromaticAberration
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.data.model.Card
-import com.tpc.tradingcards.data.model.CardEmpty
 import kotlinx.coroutines.delay
 
 @Composable
 fun TradingCardFull(
-    modifier: Modifier = Modifier, data: Card
+    modifier: Modifier = Modifier,
+    card: Card,
 ) {
-    var urlToLoad by remember { mutableStateOf(data.urlSmall) }
+    var urlToLoad by remember { mutableStateOf(card.urlSmall) }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(urlToLoad).build(),
         placeholder = debugPlaceholder(debugPreview = R.drawable.debug_card_placeholder),
         onSuccess = {
-            if (urlToLoad == data.urlSmall) {
-                urlToLoad = data.urlLarge
+            if (urlToLoad == card.urlSmall) {
+                urlToLoad = card.urlLarge
             }
         })
 
@@ -110,7 +110,7 @@ fun PokemonCardPreview() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             TradingCardFull(
-                modifier = Modifier.align(Alignment.Center), data = CardEmpty
+                modifier = Modifier.align(Alignment.Center), card = Card.mock
             )
         }
     }

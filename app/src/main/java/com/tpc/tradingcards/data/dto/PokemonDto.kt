@@ -1,33 +1,33 @@
 package com.tpc.tradingcards.data.dto
 
-data class PokemonCardData(
+data class PokemonCardDataTO(
     val id: String,
     val name: String,
     val number: String,
     val supertype: String,
-    val images: CardSize,
+    val images: CardSizeTO,
 )
 
-data class CardSize(
+data class CardSizeTO(
     val small: String,
     val large: String
 )
 
-data class HoldingPokemonCardsData(val data: List<PokemonCardData>)
+data class HoldingPokemonCardsDataTO(val data: List<PokemonCardDataTO>)
 
-data class PokemonCardSetData(
+data class PokemonCardSetDataTO(
     val id: String,
     val name: String,
     val releaseDate: String,
-    val images: SetImages
+    val images: SetImagesTO
 )
 
-data class SetImages(
+data class SetImagesTO(
     val symbol: String,
     val logo: String
 )
 
-data class HoldingPokemonCardSetsData(val data: List<PokemonCardSetData>)
+data class HoldingPokemonCardSetsDataTO(val data: List<PokemonCardSetDataTO>)
 
 
-data class HoldingPokemonCardTypesData(val data: List<String>)
+data class HoldingPokemonCardTypesDataTO(val data: List<String>)

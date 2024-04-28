@@ -1,8 +1,8 @@
 package com.tpc.tradingcards.data.service
 
-import com.tpc.tradingcards.data.dto.HoldingPokemonCardSetsData
-import com.tpc.tradingcards.data.dto.HoldingPokemonCardTypesData
-import com.tpc.tradingcards.data.dto.HoldingPokemonCardsData
+import com.tpc.tradingcards.data.dto.HoldingPokemonCardSetsDataTO
+import com.tpc.tradingcards.data.dto.HoldingPokemonCardTypesDataTO
+import com.tpc.tradingcards.data.dto.HoldingPokemonCardsDataTO
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -13,11 +13,11 @@ interface PokemonTradingCardService {
         @Query("q") query: String,
         @Query("orderBy") orderBy: String,
         @Query("select") select: String
-    ): HoldingPokemonCardsData
+    ): HoldingPokemonCardsDataTO
 
     @GET("sets")
-    suspend fun getPokemonCardSets(): HoldingPokemonCardSetsData
+    suspend fun getPokemonCardSets(): HoldingPokemonCardSetsDataTO
 
     @GET("supertypes")
-    suspend fun getPokemonCardTypes(): HoldingPokemonCardTypesData
+    suspend fun getPokemonCardTypes(): HoldingPokemonCardTypesDataTO
 }

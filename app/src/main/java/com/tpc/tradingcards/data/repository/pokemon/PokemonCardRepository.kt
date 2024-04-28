@@ -8,9 +8,8 @@ import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.data.model.TradingCardGame
 import com.tpc.tradingcards.data.service.PokemonTradingCardService
-import javax.inject.Inject
 
-class PokemonCardRepository @Inject constructor(
+class PokemonCardRepository(
     private val localCardSource: CardDao,
     private val localCardSetSource: CardSetDao,
     private val localCardTypeSource: CardTypeDao,
@@ -20,11 +19,11 @@ class PokemonCardRepository @Inject constructor(
      * LOCAL
      */
 
-    fun getCards(idSet: String) = localCardSource.get(TradingCardGame.POKEMON, idSet)
+    suspend fun getCards(idSet: String) = localCardSource.get(TradingCardGame.POKEMON, idSet)
 
-    fun getSets() = localCardSetSource.get(TradingCardGame.POKEMON)
+    suspend fun getSets() = localCardSetSource.get(TradingCardGame.POKEMON)
 
-    fun getCardTypes() = localCardTypeSource.get(TradingCardGame.POKEMON)
+    suspend fun getCardTypes() = localCardTypeSource.get(TradingCardGame.POKEMON)
 
     suspend fun updateCardType(cardType: CardType) = localCardTypeSource.update(cardType)
     

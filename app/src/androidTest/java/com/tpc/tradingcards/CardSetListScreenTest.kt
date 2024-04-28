@@ -7,9 +7,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.CardSet
-import com.tpc.tradingcards.data.model.CardSetEmpty
-import com.tpc.tradingcards.ui.cards.screen.CardListTestTag
-import com.tpc.tradingcards.ui.cards.screen.CardSetsListScreen
+import com.tpc.tradingcards.ui.list.screen.CardListTestTag
+import com.tpc.tradingcards.ui.list.screen.CardSetsListScreen
+import com.tpc.tradingcards.ui.list.state.CardListState
 import org.junit.Rule
 import org.junit.Test
 
@@ -26,7 +26,10 @@ class CardSetListScreenTest {
         // When
         composeTestRule.setContent {
             TradingCardsTheme {
-                CardSetsListScreen(cardSets) {}
+                CardSetsListScreen(
+                    state = CardListState.Success(cardSets),
+                    navigateToDetails = {},
+                )
             }
         }
 
@@ -40,14 +43,17 @@ class CardSetListScreenTest {
         // Given
         lateinit var selectedCard: CardSet
         val cardName = "test"
-        val cardSets: List<CardSet> = listOf(CardSetEmpty.copy(name = cardName))
+        val cardSets: List<CardSet> = listOf(CardSet.mock.copy(name = cardName))
 
         // When
         composeTestRule.setContent {
             TradingCardsTheme {
-                CardSetsListScreen(cardSets) {
-                    selectedCard = it
-                }
+                CardSetsListScreen(
+                    state = CardListState.Success(cardSets),
+                    navigateToDetails = {
+                        selectedCard = it
+                    }
+                )
             }
         }
 
