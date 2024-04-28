@@ -2,6 +2,7 @@ package com.tpc.tradingcards.ui.details.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -15,10 +16,15 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
+import com.tpc.tradingcards.core.ui.theme.Typography
 import com.tpc.tradingcards.core.ui.theme.largeSize
+import com.tpc.tradingcards.core.ui.theme.largerSize
 import com.tpc.tradingcards.core.ui.theme.mediumSize
+import com.tpc.tradingcards.core.ui.theme.smallSize
 import com.tpc.tradingcards.data.model.CardType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,8 +37,11 @@ fun FilterContent(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
     ) {
-        Column(Modifier.padding(largeSize)) {
+        Column(Modifier.padding(horizontal = largeSize)) {
+            Text(text = stringResource(R.string.filter_by_types), style = Typography.titleMedium)
+
             LazyRow(
+                contentPadding = PaddingValues(bottom = largerSize, top = smallSize),
                 horizontalArrangement = Arrangement.spacedBy(mediumSize)
             ) {
                 items(types) { cardType ->
