@@ -1,5 +1,6 @@
 package com.tpc.tradingcards.ui.details.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -49,6 +50,7 @@ import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.mediumSize
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardType
+import com.tpc.tradingcards.ui.details.composable.FilterContent
 import com.tpc.tradingcards.ui.details.composable.SuccessState
 import com.tpc.tradingcards.ui.details.composable.TradingCardFull
 import com.tpc.tradingcards.ui.details.state.CardDetailsState
@@ -60,30 +62,34 @@ fun CardDetailsScreen(
     onBack: () -> Unit
 ) {
     var selectedCard: Card? by remember { mutableStateOf(null) }
+    var showFilterBottomSheet by remember { mutableStateOf(false) }
 
-    /*BackHandler {
+    BackHandler {
         if (selectedCard == null) onBack()
         else selectedCard = null
-    }*/
+    }
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .navigationBarsPadding(),
         floatingActionButton = {
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Pink80)
-                    .padding(mediumSize),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(mediumSize)
-            ) {
-                Icon(
-                    imageVector = Icons.TwoTone.FilterAlt,
-                    contentDescription = stringResource(R.string.filter_card_types_content_description)
-                )
-                Text(stringResource(R.string.filter))
+            if (state is CardDetailsState.Success) {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Pink80)
+                        .padding(mediumSize)
+                        .clickable { showFilterBottomSheet = true },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(mediumSize)
+                ) {
+                    Icon(
+                        imageVector = Icons.TwoTone.FilterAlt,
+                        contentDescription = stringResource(R.string.filter_card_types_content_description)
+                    )
+                    Text(stringResource(R.string.filter))
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.End,
@@ -150,15 +156,21 @@ fun CardDetailsScreen(
                                 selectedCard = it
                             }
                         )
-
-                        /*FilterContent(types, isFilterByTypeVisible, onFilter) {
-                        isFilterByTypeVisible = false
-                    }*/
                     }
                 }
             }
 
-            selectedCard?.let {
+            if (showFilterBottomSheet) {
+                FilterContent(
+                    types = emptyList(),
+                    onTypeChanged = onFilter,
+                    onDismiss = {
+                        showFilterBottomSheet = false
+                    }
+                )
+            }
+
+            selectedCard?.let { card ->
                 AnimatedVisibility(
                     visible = true,
                     enter = fadeIn(),
@@ -175,16 +187,14 @@ fun CardDetailsScreen(
 
                 AnimatedVisibility(
                     modifier = Modifier.align(Alignment.Center),
-                    visible = selectedCard != null,
+                    visible = true,
                     enter = fadeIn() + scaleIn(),
                     exit = fadeOut() + scaleOut()
                 ) {
-                    selectedCard?.let { card ->
-                        TradingCardFull(
-                            modifier = Modifier.align(Alignment.Center),
-                            card = card,
-                        )
-                    }
+                    TradingCardFull(
+                        modifier = Modifier.align(Alignment.Center),
+                        card = card,
+                    )
                 }
             }
         }

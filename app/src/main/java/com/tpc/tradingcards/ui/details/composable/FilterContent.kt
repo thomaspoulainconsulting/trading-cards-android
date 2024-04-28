@@ -1,6 +1,5 @@
 package com.tpc.tradingcards.ui.details.composable
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -25,35 +24,32 @@ import com.tpc.tradingcards.data.model.CardType
 @Composable
 fun FilterContent(
     types: List<CardType>,
-    isFilterByTypeVisible: Boolean,
     onTypeChanged: (CardType) -> Unit,
-    onFilterVisibilityChanged: () -> Unit
+    onDismiss: () -> Unit
 ) {
-    AnimatedVisibility(visible = isFilterByTypeVisible) {
-        ModalBottomSheet(
-            onDismissRequest = onFilterVisibilityChanged,
-        ) {
-            Column(Modifier.padding(largeSize)) {
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(mediumSize)
-                ) {
-                    items(types) { cardType ->
-                        FilterChip(
-                            selected = cardType.isSelected,
-                            onClick = {
-                                onTypeChanged(cardType)
-                            },
-                            label = {
-                                Text(text = cardType.name)
-                            },
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.TwoTone.CheckCircle,
-                                    contentDescription = null
-                                )
-                            }
-                        )
-                    }
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+    ) {
+        Column(Modifier.padding(largeSize)) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(mediumSize)
+            ) {
+                items(types) { cardType ->
+                    FilterChip(
+                        selected = cardType.isSelected,
+                        onClick = {
+                            onTypeChanged(cardType)
+                        },
+                        label = {
+                            Text(text = cardType.name)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.TwoTone.CheckCircle,
+                                contentDescription = null
+                            )
+                        }
+                    )
                 }
             }
         }
@@ -67,9 +63,7 @@ private fun Preview() {
         val cardTypes = listOf(CardType.mock)
         FilterContent(
             types = cardTypes,
-            isFilterByTypeVisible = true,
             onTypeChanged = {},
-            onFilterVisibilityChanged = {})
+            onDismiss = {})
     }
-
 }
