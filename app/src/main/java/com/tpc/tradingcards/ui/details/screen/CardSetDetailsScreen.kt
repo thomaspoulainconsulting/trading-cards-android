@@ -156,19 +156,21 @@ fun CardDetailsScreen(
                                 selectedCard = it
                             }
                         )
+
+                        if (showFilterBottomSheet) {
+                            FilterContent(
+                                types = state.types,
+                                onTypeChanged = onFilter,
+                                onDismiss = {
+                                    showFilterBottomSheet = false
+                                }
+                            )
+                        }
                     }
                 }
             }
 
-            if (showFilterBottomSheet) {
-                FilterContent(
-                    types = emptyList(),
-                    onTypeChanged = onFilter,
-                    onDismiss = {
-                        showFilterBottomSheet = false
-                    }
-                )
-            }
+
 
             selectedCard?.let { card ->
                 AnimatedVisibility(
@@ -218,7 +220,7 @@ private fun LoadingPreview() {
 private fun SuccessPreview() {
     TradingCardsTheme {
         CardDetailsScreen(
-            state = CardDetailsState.Success(listOf(Card.mock)),
+            state = CardDetailsState.Success(listOf(Card.mock), listOf(CardType.mock)),
             onFilter = {},
             onBack = {},
         )

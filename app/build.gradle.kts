@@ -68,12 +68,6 @@ android {
     }
 }
 
-kotlin {
-    sourceSets.all {
-        languageSettings.enableLanguageFeature("ExplicitBackingFields") // Must be explcitly enabled!
-    }
-}
-
 dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

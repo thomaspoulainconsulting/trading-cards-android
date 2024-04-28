@@ -9,7 +9,7 @@ import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
 
-@Database(entities = [Card::class, CardSet::class, CardType::class], version = 2)
+@Database(entities = [Card::class, CardSet::class, CardType::class], version = 1)
 abstract class CardsDatabase : RoomDatabase() {
     abstract fun provideCardDao(): CardDao
     abstract fun provideCardSetDao(): CardSetDao

@@ -21,7 +21,12 @@ class CardListViewModel(
 
     private fun fetchCardSets() = viewModelScope.launch {
         try {
-            val sets = cardRepository.getSets()
+            val sets = cardRepository.getSets().let {
+                it.ifEmpty {
+                    cardRepository.fetchCardSets()
+                    cardRepository.getSets()
+                }
+            }
             _state.tryEmit(CardListState.Success(sets))
         } catch (e: Throwable) {
             _state.tryEmit(CardListState.Error(e))
