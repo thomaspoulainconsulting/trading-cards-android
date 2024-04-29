@@ -7,6 +7,7 @@ import com.tpc.tradingcards.ui.list.state.CardListState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class CardListViewModel(
     private val cardRepository: PokemonCardRepository
@@ -16,6 +17,7 @@ class CardListViewModel(
     val state = _state.asStateFlow()
 
     init {
+        fetchCardTypes()
         fetchCardSets()
     }
 
@@ -28,8 +30,16 @@ class CardListViewModel(
                 }
             }
             _state.tryEmit(CardListState.Success(sets))
-        } catch (e: Throwable) {
+        } catch (e: Exception) {
             _state.tryEmit(CardListState.Error(e))
+        }
+    }
+
+    private fun fetchCardTypes()  = viewModelScope.launch {
+        try {
+            cardRepository.fetchCardTypes()
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 }

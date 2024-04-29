@@ -34,6 +34,7 @@ class CardDetailsScreenTest {
             TradingCardsTheme {
                 CardDetailsScreen(
                     state = CardDetailsState.Success(cards = cards),
+                    selectedTypes = emptyMap(),
                     onFilter = {}) {}
             }
         }

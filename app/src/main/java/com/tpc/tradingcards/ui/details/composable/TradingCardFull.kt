@@ -54,10 +54,10 @@ fun TradingCardFull(
         })
 
     // Shader and animation
-    val shader by remember {
+    val shader = remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            mutableStateOf(RuntimeShader(ShaderChromaticAberration))
-        } else mutableStateOf(null)
+            RuntimeShader(ShaderChromaticAberration)
+        } else null
     }
     var isAnimationPlayed by remember { mutableStateOf(false) }
     var isAnimationFinished by remember { mutableStateOf(false) }

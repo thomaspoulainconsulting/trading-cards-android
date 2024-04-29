@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CheckCircle
 import androidx.compose.material.icons.twotone.CheckCircleOutline
@@ -30,8 +29,8 @@ import com.tpc.tradingcards.data.model.CardType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterContent(
-    types: List<CardType>,
-    onFilterClicked: (CardType) -> Unit,
+    types: Map<String,Boolean>,
+    onFilterClicked: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
     ModalBottomSheet(
@@ -44,22 +43,24 @@ fun FilterContent(
                 contentPadding = PaddingValues(bottom = largerSize, top = smallSize),
                 horizontalArrangement = Arrangement.spacedBy(mediumSize)
             ) {
-                items(types) { cardType ->
-                    FilterChip(
-                        selected = true, // FIXME
-                        onClick = {
-                            onFilterClicked(cardType)
-                        },
-                        label = {
-                            Text(text = cardType.name)
-                        },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = if (true) Icons.TwoTone.CheckCircle else Icons.TwoTone.CheckCircleOutline, // FIXME
-                                contentDescription = null
-                            )
-                        }
-                    )
+                types.forEach { cardType, isSelected ->
+                    item {
+                        FilterChip(
+                            selected = isSelected,
+                            onClick = {
+                                onFilterClicked(cardType)
+                            },
+                            label = {
+                                Text(text = cardType)
+                            },
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = if (false) Icons.TwoTone.CheckCircle else Icons.TwoTone.CheckCircleOutline, // FIXME
+                                    contentDescription = null
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -72,7 +73,7 @@ private fun Preview() {
     TradingCardsTheme {
         val cardTypes = listOf(CardType.mock)
         FilterContent(
-            types = cardTypes,
+            types = mapOf("Energy" to true),
             onFilterClicked = {},
             onDismiss = {})
     }

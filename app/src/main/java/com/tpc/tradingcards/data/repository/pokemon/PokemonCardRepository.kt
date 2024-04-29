@@ -19,7 +19,7 @@ class PokemonCardRepository(
      * LOCAL
      */
 
-    suspend fun getCards(idSet: String) = localCardSource.get(TradingCardGame.POKEMON, idSet)
+    suspend fun getCards(idSet: String, superTypes: List<String>) = localCardSource.get(TradingCardGame.POKEMON, idSet, superTypes)
 
     suspend fun getSets() = localCardSetSource.get(TradingCardGame.POKEMON)
 

@@ -49,7 +49,6 @@ import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.mediumSize
 import com.tpc.tradingcards.data.model.Card
-import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.ui.details.composable.FilterContent
 import com.tpc.tradingcards.ui.details.composable.SuccessState
 import com.tpc.tradingcards.ui.details.composable.TradingCardFull
@@ -58,7 +57,8 @@ import com.tpc.tradingcards.ui.details.state.CardDetailsState
 @Composable
 fun CardDetailsScreen(
     state: CardDetailsState,
-    onFilter: (CardType) -> Unit,
+    selectedTypes: Map<String, Boolean>,
+    onFilter: (String) -> Unit,
     onBack: () -> Unit
 ) {
     var selectedCard: Card? by remember { mutableStateOf(null) }
@@ -79,8 +79,8 @@ fun CardDetailsScreen(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .background(Pink80)
-                        .padding(mediumSize)
-                        .clickable { showFilterBottomSheet = true },
+                        .clickable { showFilterBottomSheet = true }
+                        .padding(mediumSize),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(mediumSize)
                 ) {
@@ -156,21 +156,19 @@ fun CardDetailsScreen(
                                 selectedCard = it
                             }
                         )
-
-                        if (showFilterBottomSheet) {
-                            FilterContent(
-                                types = state.types,
-                                onFilterClicked = onFilter,
-                                onDismiss = {
-                                    showFilterBottomSheet = false
-                                }
-                            )
-                        }
                     }
                 }
             }
 
-
+            if (showFilterBottomSheet) {
+                FilterContent(
+                    types = selectedTypes,
+                    onFilterClicked = onFilter,
+                    onDismiss = {
+                        showFilterBottomSheet = false
+                    }
+                )
+            }
 
             selectedCard?.let { card ->
                 AnimatedVisibility(
@@ -184,19 +182,19 @@ fun CardDetailsScreen(
                             .clickable {
                                 selectedCard = null
                             }
-                            .background(Dark80.copy(alpha = 0.8f))) {}
-                }
-
-                AnimatedVisibility(
-                    modifier = Modifier.align(Alignment.Center),
-                    visible = true,
-                    enter = fadeIn() + scaleIn(),
-                    exit = fadeOut() + scaleOut()
-                ) {
-                    TradingCardFull(
-                        modifier = Modifier.align(Alignment.Center),
-                        card = card,
-                    )
+                            .background(Dark80.copy(alpha = 0.8f))) {
+                        AnimatedVisibility(
+                            modifier = Modifier.align(Alignment.Center),
+                            visible = true,
+                            enter = fadeIn() + scaleIn(),
+                            exit = fadeOut() + scaleOut()
+                        ) {
+                            TradingCardFull(
+                                modifier = Modifier.align(Alignment.Center),
+                                card = card,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -209,6 +207,7 @@ private fun LoadingPreview() {
     TradingCardsTheme {
         CardDetailsScreen(
             state = CardDetailsState.Loading,
+            selectedTypes = mapOf("Energy" to true),
             onFilter = {},
             onBack = {},
         )
@@ -220,7 +219,8 @@ private fun LoadingPreview() {
 private fun SuccessPreview() {
     TradingCardsTheme {
         CardDetailsScreen(
-            state = CardDetailsState.Success(listOf(Card.mock), listOf(CardType.mock)),
+            state = CardDetailsState.Success(listOf(Card.mock)),
+            selectedTypes = mapOf("Energy" to true),
             onFilter = {},
             onBack = {},
         )

@@ -43,14 +43,17 @@ fun NavGraphBuilder.cardsGraph(
         ) {
             val vm: CardDetailsViewModel = koinViewModel()
             val state by vm.state.collectAsStateWithLifecycle()
+            val selectedTypes by vm.selectedTypes.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
-                vm.getCards(it.arguments?.getString(CardArguments.IdSet.name).orEmpty())
+                vm.setIdSet(it.arguments?.getString(CardArguments.IdSet.name).orEmpty())
+                vm.getCards()
             }
 
             CardDetailsScreen(
                 state = state,
-                onFilter = {},
+                selectedTypes = selectedTypes,
+                onFilter = vm::updateSelectedType,
                 onBack = onBack,
             )
         }
