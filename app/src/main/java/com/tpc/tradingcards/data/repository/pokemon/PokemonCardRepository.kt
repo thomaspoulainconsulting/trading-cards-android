@@ -8,72 +8,72 @@ import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
 import com.tpc.tradingcards.data.model.TradingCardGame
 import com.tpc.tradingcards.data.service.PokemonTradingCardService
-import javax.inject.Inject
 
-class PokemonCardRepository @Inject constructor(
-    private val localCardSource: CardDao,
-    private val localCardSetSource: CardSetDao,
-    private val localCardTypeSource: CardTypeDao,
-    private val remoteSource: PokemonTradingCardService,
+class PokemonCardRepository(
+        private val localCardSource: CardDao,
+        private val localCardSetSource: CardSetDao,
+        private val localCardTypeSource: CardTypeDao,
+        private val remoteSource: PokemonTradingCardService,
 ) {
-    /**
-     * LOCAL
-     */
 
-    fun getCards(idSet: String) = localCardSource.get(TradingCardGame.POKEMON, idSet)
-
-    fun getSets() = localCardSetSource.get(TradingCardGame.POKEMON)
-
-    fun getCardTypes() = localCardTypeSource.get(TradingCardGame.POKEMON)
-
-    suspend fun updateCardType(cardType: CardType) = localCardTypeSource.update(cardType)
-    
-    /**
-     * REMOTE
-     */
-
-    suspend fun fetchCards(idSet: String) {
-        val cards = remoteSource.getPokemonCards(
-            query = "!set.id:$idSet",
-            orderBy = "nationalPokedexNumbers",
-            select = "id,images,name,number,nationalPokedexNumbers,supertype"
-        ).data.map {
-            Card(
-                id = it.id,
-                name = it.name,
-                urlSmall = it.images.small,
-                urlLarge = it.images.large,
-                number = it.number.toIntOrNull() ?: -1,
-                idSet = idSet,
-                supertype = it.supertype,
-                tradingCardGame = TradingCardGame.POKEMON
-            )
+    suspend fun getCards(idSet: String, superTypes: List<String>): List<Card> {
+        return localCardSource.get(TradingCardGame.POKEMON, idSet, superTypes).let {
+            it.ifEmpty {
+                remoteSource.getPokemonCards(
+                        query = "!set.id:$idSet",
+                        orderBy = "nationalPokedexNumbers",
+                        select = "id,images,name,number,nationalPokedexNumbers,supertype"
+                ).data.map { card ->
+                    Card(
+                            id = card.id,
+                            name = card.name,
+                            urlSmall = card.images.small,
+                            urlLarge = card.images.large,
+                            number = card.number.toIntOrNull() ?: -1,
+                            idSet = idSet,
+                            supertype = card.supertype,
+                            tradingCardGame = TradingCardGame.POKEMON
+                    )
+                }.let { cards ->
+                    localCardSource.insert(cards)
+                    cards
+                }
+            }
         }
-        localCardSource.insert(cards)
     }
 
-    suspend fun fetchCardSets() {
-        val sets = remoteSource.getPokemonCardSets().data.map {
-            CardSet(
-                id = it.id,
-                name = it.name,
-                tradingCardGame = TradingCardGame.POKEMON,
-                symbol = it.images.symbol,
-                releaseDate = it.releaseDate
-            )
+    suspend fun getSets(): List<CardSet> {
+        return localCardSetSource.get(TradingCardGame.POKEMON).let {
+            it.ifEmpty {
+                remoteSource.getPokemonCardSets().data.map {
+                    CardSet(
+                            id = it.id,
+                            name = it.name,
+                            tradingCardGame = TradingCardGame.POKEMON,
+                            symbol = it.images.symbol,
+                            releaseDate = it.releaseDate
+                    )
+                }.let { sets ->
+                    localCardSetSource.insert(sets)
+                    sets
+                }
+            }
         }
-        localCardSetSource.insert(sets)
     }
 
-    suspend fun fetchCardTypes() {
-        val types = remoteSource.getPokemonCardTypes().data.map { supertype ->
-            CardType(
-                name = supertype,
-                tradingCardGame = TradingCardGame.POKEMON
-            )
+    suspend fun getCardTypes(): List<CardType> {
+        return localCardTypeSource.get(TradingCardGame.POKEMON).let {
+            it.ifEmpty {
+                remoteSource.getPokemonCardTypes().data.map { supertype ->
+                    CardType(
+                            name = supertype,
+                            tradingCardGame = TradingCardGame.POKEMON
+                    )
+                }.let { types ->
+                    localCardTypeSource.insert(types)
+                    types
+                }
+            }
         }
-        localCardTypeSource.insert(types)
     }
-
-
 }

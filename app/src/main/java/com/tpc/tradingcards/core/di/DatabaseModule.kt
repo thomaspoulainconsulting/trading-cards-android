@@ -2,19 +2,26 @@ package com.tpc.tradingcards.core.di
 
 import android.app.Application
 import androidx.room.Room
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.tpc.tradingcards.data.dao.CardDao
+import com.tpc.tradingcards.data.dao.CardSetDao
+import com.tpc.tradingcards.data.dao.CardTypeDao
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object DatabaseModule {
+private fun provideDatabase(app: Application): CardsDatabase =
+    Room.databaseBuilder(
+        app.applicationContext,
+        CardsDatabase::class.java, "trading-cards"
+    )
+        .fallbackToDestructiveMigration()
+        .build()
 
-    @Provides
-    fun provideDatabase(app: Application): CardsDatabase =
-        Room.databaseBuilder(
-            app.applicationContext,
-            CardsDatabase::class.java, "cards-database"
-        ).build()
+private fun provideCardDao(database: CardsDatabase): CardDao = database.provideCardDao()
+private fun provideCardSetDao(database: CardsDatabase): CardSetDao = database.provideCardSetDao()
+private fun provideCardTypeDao(database: CardsDatabase): CardTypeDao = database.provideCardTypeDao()
+
+val databaseModule = module {
+    single { provideDatabase(get()) }
+    single { provideCardDao(get()) }
+    single { provideCardSetDao(get()) }
+    single { provideCardTypeDao(get()) }
 }

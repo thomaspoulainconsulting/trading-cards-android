@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.cards.screen
+package com.tpc.tradingcards.ui.list.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -18,14 +18,15 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpc.tradingcards.R
-import com.tpc.tradingcards.core.ui.composable.Loading
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.TradingCardGame
-import com.tpc.tradingcards.ui.cards.composables.TradingCardSet
+import com.tpc.tradingcards.ui.list.composable.TradingCardSet
+import com.tpc.tradingcards.ui.list.composable.TradingCardSetLoading
+import com.tpc.tradingcards.ui.list.state.CardListState
 
-internal enum class CardListTestTag(val tag: String) {
+enum class CardListTestTag(val tag: String) {
     Loading("cardListLoading"),
     Data("cardListData"),
 }
@@ -33,8 +34,8 @@ internal enum class CardListTestTag(val tag: String) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CardSetsListScreen(
-    cardSets: List<CardSet>,
-    onNavigateToCardSetDetails: (CardSet) -> Unit
+    state: CardListState,
+    navigateToDetails: (CardSet) -> Unit
 ) {
     Column {
         Text(
@@ -50,19 +51,29 @@ internal fun CardSetsListScreen(
             contentPadding = PaddingValues(largeSize),
             verticalArrangement = Arrangement.spacedBy(largeSize),
             content = {
-                if (cardSets.isEmpty()) {
-                    item {
-                        Loading(Modifier.testTag(CardListTestTag.Loading.tag))
+                when (state) {
+                    is CardListState.Loading -> {
+                        items(count = 10) {
+                            TradingCardSetLoading()
+                        }
                     }
-                } else {
-                    items(cardSets, key = { it.id }) {
-                        TradingCardSet(
-                            modifier = Modifier
-                                .animateItemPlacement()
-                                .testTag(CardListTestTag.Data.tag),
-                            cardSet = it,
-                            onClick = onNavigateToCardSetDetails
-                        )
+
+                    is CardListState.Error -> {
+                        item {
+                            Text(state.throwable.message.orEmpty())
+                        }
+                    }
+
+                    is CardListState.Success -> {
+                        items(state.sets, key = { it.id }) {
+                            TradingCardSet(
+                                modifier = Modifier
+                                    .animateItemPlacement()
+                                    .testTag(CardListTestTag.Data.tag),
+                                cardSet = it,
+                                onClick = navigateToDetails
+                            )
+                        }
                     }
                 }
             }
@@ -72,7 +83,29 @@ internal fun CardSetsListScreen(
 
 @Preview(showBackground = true, widthDp = 500, heightDp = 1000)
 @Composable
-private fun CardListScreenPreview() {
+private fun LoadingPreview() {
+    TradingCardsTheme {
+        CardSetsListScreen(
+            state = CardListState.Loading,
+            navigateToDetails = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 500, heightDp = 1000)
+@Composable
+private fun ErrorPreview() {
+    TradingCardsTheme {
+        CardSetsListScreen(
+            state = CardListState.Error(IllegalStateException("error")),
+            navigateToDetails = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 500, heightDp = 1000)
+@Composable
+private fun SuccessPreview() {
     TradingCardsTheme {
         val sets = listOf(
             CardSet(
@@ -90,6 +123,9 @@ private fun CardListScreenPreview() {
                 ""
             ),
         )
-        CardSetsListScreen(cardSets = sets) {}
+        CardSetsListScreen(
+            state = CardListState.Success(sets),
+            navigateToDetails = {}
+        )
     }
 }

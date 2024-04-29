@@ -6,10 +6,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.Card
-import com.tpc.tradingcards.data.model.CardEmpty
-import com.tpc.tradingcards.data.model.CardSetEmpty
+import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
-import com.tpc.tradingcards.ui.cards.screen.CardDetailsScreen
+import com.tpc.tradingcards.ui.details.screen.CardDetailsScreen
+import com.tpc.tradingcards.ui.details.state.CardDetailsState
 import org.junit.Rule
 import org.junit.Test
 
@@ -23,8 +23,8 @@ class CardDetailsScreenTest {
         // Given
         var numberOfCardText = ""
         val cardSetName = "test"
-        val cardSet = CardSetEmpty.copy(name = cardSetName)
-        val cards: List<Card> = listOf(CardEmpty)
+        val cardSet = CardSet.mock.copy(name = cardSetName)
+        val cards: List<Card> = listOf(Card.mock)
         val types: List<CardType> = emptyList()
 
         // When
@@ -33,10 +33,9 @@ class CardDetailsScreenTest {
                 pluralStringResource(R.plurals.number_or_cards, count = cards.size, cards.size)
             TradingCardsTheme {
                 CardDetailsScreen(
-                    cardSet = cardSet,
-                    cards = cards,
-                    types = types,
-                    onTypeChanged = {}) {}
+                    state = CardDetailsState.Success(cards = cards),
+                    selectedTypes = emptyMap(),
+                    onFilter = {}) {}
             }
         }
 

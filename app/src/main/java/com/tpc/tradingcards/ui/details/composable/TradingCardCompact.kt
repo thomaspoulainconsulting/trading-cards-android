@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.cards.composables
+package com.tpc.tradingcards.ui.details.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.wrapContentSize
@@ -21,28 +21,27 @@ import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.mediumElevation
 import com.tpc.tradingcards.core.ui.theme.ultraExtraSmallSize
 import com.tpc.tradingcards.data.model.Card
-import com.tpc.tradingcards.data.model.CardEmpty
 
 @Composable
 fun TradingCardCompact(
     modifier: Modifier = Modifier,
-    data: Card,
-    onClick: () -> Unit
+    card: Card,
+    onClick: (card: Card) -> Unit
 ) {
-    val semanticLabel = stringResource(R.string.card_name, data.name)
+    val semanticLabel = stringResource(R.string.card_name, card.name)
     Card(
         modifier = modifier
             .wrapContentSize()
             .semantics(true) {
                 text = AnnotatedString(text = semanticLabel)
             }
-            .clickable(onClick = onClick),
+            .clickable(onClick = { onClick(card) }),
         shape = RoundedCornerShape(ultraExtraSmallSize),
         elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation),
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(data.urlSmall)
+                .data(card.urlSmall)
                 .crossfade(500).build(),
             placeholder = debugPlaceholder(R.drawable.debug_card_placeholder),
             contentDescription = null,
@@ -55,11 +54,12 @@ fun TradingCardCompact(
 fun PokemonCardCompactPreview() {
     TradingCardsTheme {
         TradingCardCompact(
-            data = CardEmpty.copy(
+            card = Card.mock.copy(
                 urlSmall = "https://images.pokemontcg.io/swsh12pt5/160_hires.png",
                 number = 1,
                 name = "Pikachu"
-            )
-        ) {}
+            ),
+            onClick = {}
+        )
     }
 }
