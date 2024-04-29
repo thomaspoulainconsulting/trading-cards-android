@@ -7,6 +7,7 @@ import com.tpc.tradingcards.ui.details.state.CardDetailsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class CardDetailsViewModel(
     private val repository: PokemonCardRepository,
@@ -29,13 +30,12 @@ class CardDetailsViewModel(
     }
 
     private fun getCardTypes() = viewModelScope.launch {
-        val cardTypes = repository.getCardTypes().let {
-            it.ifEmpty {
-                repository.fetchCardTypes()
-                repository.getCardTypes()
-            }
+        try {
+            val cardTypes = repository.getCardTypes()
+            _selectedTypes.tryEmit(cardTypes.map { it.name }.associateWith { true })
+        } catch (e: Exception) {
+            Timber.e(e)
         }
-        _selectedTypes.tryEmit(cardTypes.map { it.name }.associateWith { true })
     }
 
     fun getCards() = viewModelScope.launch {
@@ -43,15 +43,8 @@ class CardDetailsViewModel(
             _state.tryEmit(CardDetailsState.Loading)
 
             val cardTypes = selectedTypes.value.filter { it.value }.map { it.key }
-
-            repository.getCards(idSet, cardTypes).let {
-                it.ifEmpty {
-                    repository.fetchCards(idSet)
-                    repository.getCards(idSet, cardTypes)
-                }
-            }.let { cards ->
-                _state.tryEmit(CardDetailsState.Success(cards))
-            }
+            val cards = repository.getCards(idSet, cardTypes)
+            _state.tryEmit(CardDetailsState.Success(cards))
         } catch (e: Throwable) {
             _state.tryEmit(CardDetailsState.Error(e))
         }
