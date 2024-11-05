@@ -1,7 +1,6 @@
 package com.tpc.tradingcards.ui.list.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,18 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
 import com.tpc.tradingcards.R
-import com.tpc.tradingcards.core.extention.debugPlaceholder
-import com.tpc.tradingcards.core.ui.theme.Dark60
-import com.tpc.tradingcards.core.ui.theme.Purple40
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.largerSize
@@ -44,10 +39,12 @@ fun TradingCardSet(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = { onClick(cardSet) })
             .clearAndSetSemantics {
                 text = AnnotatedString(text = semanticLabel)
             },
+        onClick = {
+            onClick(cardSet)
+        },
         elevation = CardDefaults.cardElevation(defaultElevation = mediumElevation),
     ) {
         Row(
@@ -55,12 +52,9 @@ fun TradingCardSet(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(Dark60, Purple40),
-                        start = Offset(100f, 0f),
-                        end = Offset(
-                            Float.POSITIVE_INFINITY,
-                            Float.POSITIVE_INFINITY
-                        )
+                        colors = listOf(Color(0xFFFFE0B2), Color(0xFF81D4FA)),
+                        start = Offset(0f, 0f),
+                        end = Offset(800f, 800f)
                     )
                 )
                 .padding(largeSize),
@@ -70,9 +64,7 @@ fun TradingCardSet(
             Text(text = cardSet.name)
             AsyncImage(
                 modifier = Modifier.size(largerSize),
-                model = ImageRequest.Builder(LocalContext.current).data(cardSet.symbol)
-                    .crossfade(true).build(),
-                placeholder = debugPlaceholder(debugPreview = R.drawable.debug_set_placehold),
+                model = cardSet.symbol,
                 contentDescription = null,
             )
         }

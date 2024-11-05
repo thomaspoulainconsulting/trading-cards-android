@@ -1,6 +1,7 @@
 package com.tpc.tradingcards.ui.list.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -37,7 +39,9 @@ internal fun CardSetsListScreen(
     state: CardListState,
     navigateToDetails: (CardSet) -> Unit
 ) {
-    Column {
+    Column(
+        modifier = Modifier.background(Color.White),
+    ) {
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineSmall,
@@ -68,7 +72,7 @@ internal fun CardSetsListScreen(
                         items(state.sets, key = { it.id }) {
                             TradingCardSet(
                                 modifier = Modifier
-                                    .animateItemPlacement()
+                                    .animateItem()
                                     .testTag(CardListTestTag.Data.tag),
                                 cardSet = it,
                                 onClick = navigateToDetails

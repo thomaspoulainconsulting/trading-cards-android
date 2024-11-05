@@ -5,6 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.request.crossfade
 import com.tpc.tradingcards.core.extention.navigateWithArguments
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.ui.navigation.CardArguments
@@ -17,6 +20,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            setSingletonImageLoaderFactory { context ->
+                ImageLoader.Builder(context)
+                    .crossfade(true)
+                    .build()
+            }
+
             TradingCardsTheme {
                 val navController = rememberNavController()
 
@@ -33,9 +42,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             )
                         },
-                        onBack = {
-                            navController.popBackStack()
-                        }
+                        onBack = navController::popBackStack
                     )
                 }
             }

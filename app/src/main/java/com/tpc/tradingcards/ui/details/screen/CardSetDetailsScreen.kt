@@ -1,11 +1,6 @@
 package com.tpc.tradingcards.ui.details.screen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,11 +16,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.twotone.FilterAlt
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +39,6 @@ import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.tpc.tradingcards.R
 import com.tpc.tradingcards.core.ui.theme.Dark80
-import com.tpc.tradingcards.core.ui.theme.Pink80
 import com.tpc.tradingcards.core.ui.theme.PurpleGrey40
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
@@ -78,7 +73,7 @@ fun CardDetailsScreen(
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Pink80)
+                        .background(Color.White)
                         .clickable { showFilterBottomSheet = true }
                         .padding(mediumSize),
                     verticalAlignment = Alignment.CenterVertically,
@@ -97,6 +92,7 @@ fun CardDetailsScreen(
         Box(
             Modifier
                 .consumeWindowInsets(innerPadding)
+                .background(Color.White)
                 .fillMaxSize()
         ) {
             Column(
@@ -118,7 +114,7 @@ fun CardDetailsScreen(
                             .align(Alignment.CenterVertically)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = rememberRipple(bounded = false),
+                                indication = ripple(bounded = false),
                                 onClick = onBack
                             ),
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -171,30 +167,14 @@ fun CardDetailsScreen(
             }
 
             selectedCard?.let { card ->
-                AnimatedVisibility(
-                    visible = true,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Box(
-                        Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                selectedCard = null
-                            }
-                            .background(Dark80.copy(alpha = 0.8f))) {
-                        AnimatedVisibility(
-                            modifier = Modifier.align(Alignment.Center),
-                            visible = true,
-                            enter = fadeIn() + scaleIn(),
-                            exit = fadeOut() + scaleOut()
-                        ) {
-                            TradingCardFull(
-                                modifier = Modifier.align(Alignment.Center),
-                                card = card,
-                            )
-                        }
-                    }
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(Dark80.copy(alpha = 0.8f))) {
+                    TradingCardFull(
+                        modifier = Modifier.align(Alignment.Center),
+                        card = card,
+                    )
                 }
             }
         }
