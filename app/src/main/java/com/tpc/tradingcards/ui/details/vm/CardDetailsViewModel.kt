@@ -17,7 +17,7 @@ class CardDetailsViewModel(
         field: MutableStateFlow<CardDetailsState> = MutableStateFlow(CardDetailsState.Loading)
 
     val selectedTypes: StateFlow<Map<String, Boolean>>
-        field = MutableStateFlow(emptyMap())
+        field: MutableStateFlow<Map<String, Boolean>> = MutableStateFlow(emptyMap())
 
     private lateinit var idSet: String
 
@@ -30,10 +30,10 @@ class CardDetailsViewModel(
     }
 
     private fun getCardTypes() = viewModelScope.launch {
-        try {
+        runCatching {
             val cardTypes = repository.getCardTypes()
             selectedTypes.value = cardTypes.map { it.name }.associateWith { true }
-        } catch (e: Exception) {
+        }.onFailure { e ->
             Timber.e(e)
         }
     }
@@ -56,7 +56,7 @@ class CardDetailsViewModel(
             this[cardType] = !this[cardType]!!
         }
 
-        getCards() // reload
+        getCards()
     }
 
 }
