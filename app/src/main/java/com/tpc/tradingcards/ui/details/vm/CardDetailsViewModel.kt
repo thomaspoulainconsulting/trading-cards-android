@@ -42,8 +42,7 @@ class CardDetailsViewModel(
         runCatching {
             state.value = CardDetailsState.Loading
 
-            val cardTypes = selectedTypes.value.filter { it.value }.map { it.key }
-            val cards = repository.getCards(idSet, cardTypes)
+            val cards = repository.getCards(idSet)
 
             state.value = CardDetailsState.Success(cards)
         }.onFailure { e ->

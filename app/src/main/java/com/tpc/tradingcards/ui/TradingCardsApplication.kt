@@ -2,7 +2,6 @@ package com.tpc.tradingcards.ui
 
 import android.app.Application
 import com.tpc.tradingcards.BuildConfig
-import com.tpc.tradingcards.core.di.databaseModule
 import com.tpc.tradingcards.core.di.networkModule
 import com.tpc.tradingcards.core.di.repositoryModule
 import com.tpc.tradingcards.core.di.viewmodelModule
@@ -21,7 +20,6 @@ class TradingCardsApplication : Application() {
         startKoin {
             androidContext(this@TradingCardsApplication)
             modules(
-                databaseModule,
                 networkModule,
                 repositoryModule,
                 viewmodelModule,

@@ -61,7 +61,7 @@ fun TradingCardSet(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = cardSet.name)
+            Text(text = cardSet.name, color = Color.Black)
             AsyncImage(
                 modifier = Modifier.size(largerSize),
                 model = cardSet.symbol,

@@ -12,5 +12,6 @@
     <string name="card_name">Card of %s</string>
     <string name="filter_card_types_content_description">Filter by card types</string>
     <string name="filter">Filter</string>
-    <string name="filter_by_types">"Filter by types"</string>
+    <string name="filter_by_types">Filter by types</string>
+    <string name="set">Set</string>
 </resources>

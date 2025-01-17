@@ -98,7 +98,6 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.koin)
     implementation(libs.koin.compose)
-
     implementation(libs.bundles.network)
     ksp(libs.moshi.codegen)
 

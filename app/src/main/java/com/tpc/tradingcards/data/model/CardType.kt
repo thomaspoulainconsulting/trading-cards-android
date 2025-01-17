@@ -7,8 +7,4 @@ import androidx.room.PrimaryKey
 data class CardType(
     @PrimaryKey val name: String,
     val tradingCardGame: TradingCardGame,
-) {
-    companion object {
-        val mock = CardType("Base", TradingCardGame.POKEMON)
-    }
-}
+)

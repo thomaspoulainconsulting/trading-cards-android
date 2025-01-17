@@ -38,7 +38,6 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.tpc.tradingcards.R
-import com.tpc.tradingcards.core.ui.theme.Dark80
 import com.tpc.tradingcards.core.ui.theme.PurpleGrey40
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
@@ -81,9 +80,13 @@ fun CardDetailsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.TwoTone.FilterAlt,
+                        tint = Color.Black,
                         contentDescription = stringResource(R.string.filter_card_types_content_description)
                     )
-                    Text(stringResource(R.string.filter))
+                    Text(
+                        text = stringResource(R.string.filter),
+                        color = Color.Black,
+                    )
                 }
             }
         },
@@ -118,10 +121,14 @@ fun CardDetailsScreen(
                                 onClick = onBack
                             ),
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        tint = Color.Black,
                         contentDescription = stringResource(R.string.back),
                     )
                     Column(Modifier.align(Alignment.CenterVertically)) {
-                        Text("Set")
+                        Text(
+                            text = stringResource(R.string.set),
+                            color = Color.Black,
+                        )
                         Text(
                             modifier = Modifier.placeholder(
                                 visible = state is CardDetailsState.Loading,
@@ -131,7 +138,8 @@ fun CardDetailsScreen(
                                 R.plurals.number_or_cards,
                                 count = if (state is CardDetailsState.Success) state.cards.size else 0,
                                 if (state is CardDetailsState.Success) state.cards.size else 0
-                            )
+                            ),
+                            color = Color.Black,
                         )
                     }
                 }
@@ -167,15 +175,9 @@ fun CardDetailsScreen(
             }
 
             selectedCard?.let { card ->
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(Dark80.copy(alpha = 0.8f))) {
-                    TradingCardFull(
-                        modifier = Modifier.align(Alignment.Center),
-                        card = card,
-                    )
-                }
+                TradingCardFull(
+                    card = card,
+                )
             }
         }
     }
