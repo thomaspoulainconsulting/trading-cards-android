@@ -5,5 +5,7 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.compose.compiler) apply false
     kotlin("plugin.serialization") version "2.1.0"
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.android.kotlin.multiplatform.library) apply false
 }
 true // Needed to make the Suppress annotation work for the plugins block

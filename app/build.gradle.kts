@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
-    kotlin("plugin.serialization") version "2.1.0"
 }
 
 android {
@@ -23,11 +22,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-            arg("room.incremental", "true")
-            arg("room.expandProjection", "true")
         }
     }
 
@@ -68,6 +62,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
@@ -82,15 +77,11 @@ dependencies {
     implementation(libs.coil3)
     implementation(libs.coil3.network)
     implementation(libs.timber)
-    implementation(libs.room)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
     implementation(libs.navigation.compose)
     implementation(libs.koin)
     implementation(libs.koin.compose)
     implementation(libs.compose.ui.util)
     implementation(libs.ui.animation)
-
     implementation(libs.bundles.network)
 
     testImplementation(libs.junit)

@@ -5,11 +5,11 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
-import com.tpc.tradingcards.data.model.Card
-import com.tpc.tradingcards.data.model.CardSet
-import com.tpc.tradingcards.data.model.CardType
-import com.tpc.tradingcards.ui.details.ui.CardDetailsScreen
-import com.tpc.tradingcards.ui.details.state.CardDetailsState
+import com.tpc.tradingcards.shared.data.model.Card
+import com.tpc.tradingcards.shared.data.model.CardSet
+import com.tpc.tradingcards.shared.data.model.CardType
+import com.tpc.tradingcards.shared.ui.details.ui.CardDetailsScreen
+import com.tpc.tradingcards.shared.ui.details.state.CardDetailsState
 import org.junit.Rule
 import org.junit.Test
 

@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".ui.TradingCardsApplication"
+        android:name=".shared.ui.TradingCardsApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,7 +16,7 @@
         android:theme="@style/Theme.TradingCards"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".shared.ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.TradingCards">
             <intent-filter>
