@@ -5,28 +5,20 @@ import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.data.repository.pokemon.PokemonCardRepository
 import com.tpc.tradingcards.ui.list.state.CardListState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class CardListViewModel(
     private val cardRepository: PokemonCardRepository
 ) : ViewModel() {
 
-    val state: StateFlow<CardListState>
-        field: MutableStateFlow<CardListState> = MutableStateFlow(CardListState.Loading)
+    private val _state: MutableStateFlow<CardListState> = MutableStateFlow(CardListState.Loading)
+    val state = _state.asStateFlow()
 
-    init {
-        fetchCardSets()
-    }
-
-    private fun fetchCardSets() = viewModelScope.launch {
-        runCatching {
-            state.value = CardListState.Loading
-
-            val sets = cardRepository.getSets()
-            state.value = CardListState.Success(sets)
-        }.onFailure { e ->
-            state.value = CardListState.Error(e)
-        }
+    fun fetchCardSets() = viewModelScope.launch {
+        _state.value = CardListState.Loading
+        runCatching { cardRepository.getSets() }
+            .onSuccess { _state.value = CardListState.Success(it) }
+            .onFailure { _state.value = CardListState.Error(it) }
     }
 }

@@ -8,7 +8,7 @@ import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.Card
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.CardType
-import com.tpc.tradingcards.ui.details.screen.CardDetailsScreen
+import com.tpc.tradingcards.ui.details.ui.CardDetailsScreen
 import com.tpc.tradingcards.ui.details.state.CardDetailsState
 import org.junit.Rule
 import org.junit.Test

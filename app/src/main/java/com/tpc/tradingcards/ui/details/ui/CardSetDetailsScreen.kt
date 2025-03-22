@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.details.screen
+package com.tpc.tradingcards.ui.details.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -34,19 +34,15 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.fade
-import com.google.accompanist.placeholder.material.placeholder
 import com.tpc.tradingcards.R
-import com.tpc.tradingcards.core.ui.theme.PurpleGrey40
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.core.ui.theme.mediumSize
 import com.tpc.tradingcards.data.model.Card
-import com.tpc.tradingcards.ui.details.composable.FilterContent
-import com.tpc.tradingcards.ui.details.composable.SuccessState
-import com.tpc.tradingcards.ui.details.composable.TradingCardFull
 import com.tpc.tradingcards.ui.details.state.CardDetailsState
+import com.tpc.tradingcards.ui.details.ui.composable.FilterContent
+import com.tpc.tradingcards.ui.details.ui.composable.SuccessState
+import com.tpc.tradingcards.ui.details.ui.composable.TradingCardFull
 
 @Composable
 fun CardDetailsScreen(
@@ -130,10 +126,6 @@ fun CardDetailsScreen(
                             color = Color.Black,
                         )
                         Text(
-                            modifier = Modifier.placeholder(
-                                visible = state is CardDetailsState.Loading,
-                                highlight = PlaceholderHighlight.fade(highlightColor = PurpleGrey40)
-                            ),
                             text = pluralStringResource(
                                 R.plurals.number_or_cards,
                                 count = if (state is CardDetailsState.Success) state.cards.size else 0,

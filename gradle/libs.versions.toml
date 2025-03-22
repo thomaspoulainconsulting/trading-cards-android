@@ -1,35 +1,37 @@
 [versions]
-agp = "8.7.2"
-kotlin = "2.0.21"
+agp = "8.9.0"
+kotlin = "2.1.20"
 core-ktx = "1.15.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
-androidx-test-rules = "1.5.0"
+androidx-test-rules = "1.6.1"
 espresso-core = "3.6.1"
+kotlinx-serialization-json = "1.8.0"
 lifecycle = "2.8.7"
-activity-compose = "1.9.3"
-compose-bom = "2024.10.01"
-ui-test-junit4 = "1.7.5"
+activity-compose = "1.10.1"
+compose-bom = "2025.03.00"
+ui-test-junit4 = "1.7.6"
 retrofit = "2.11.0"
-coil = "3.0.0"
-moshi = "1.15.1"
+coil = "3.1.0"
 okhttp = "4.12.0"
 timber = "5.0.1"
-accompanist = "0.34.0"
+accompanist = "0.37.2"
 room = "2.6.1"
 material = "1.3.1"
-material-icons-extented = "1.7.5"
-navigation-compose = "2.8.3"
-ksp = "2.0.21-1.0.26"
-koin = "4.0.0"
+material-icons-extented = "1.7.8"
+navigation-compose = "2.8.9"
+ksp = "2.1.20-1.0.31"
+koin = "4.0.2"
 
 [libraries]
+compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-ext-junit" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidx-test-rules" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -38,6 +40,7 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-animation = { group = "androidx.compose.animation", name = "animation" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
@@ -45,15 +48,11 @@ ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", versi
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material" }
 material3-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extented" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
-moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
-moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+retrofit2-kotlinx-serialization-converter = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 coil3 = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil3-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-accompanist-shimmer = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version.ref = "accompanist" }
-accompanist-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -76,7 +75,7 @@ tests = [
 ]
 network = [
     "retrofit",
-    "retrofit-converter-moshi",
-    "moshi",
-    "okhttp-logging-interceptor"
+    "okhttp-logging-interceptor",
+    "retrofit2-kotlinx-serialization-converter",
+    "kotlinx-serialization-json"
 ]

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.tpc.tradingcards.data.repository.pokemon.PokemonCardRepository
 import com.tpc.tradingcards.ui.details.state.CardDetailsState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -13,11 +13,11 @@ class CardDetailsViewModel(
     private val repository: PokemonCardRepository,
 ) : ViewModel() {
 
-    val state: StateFlow<CardDetailsState>
-        field: MutableStateFlow<CardDetailsState> = MutableStateFlow(CardDetailsState.Loading)
+    private val _state = MutableStateFlow<CardDetailsState>(CardDetailsState.Loading)
+    val state = _state.asStateFlow()
 
-    val selectedTypes: StateFlow<Map<String, Boolean>>
-        field: MutableStateFlow<Map<String, Boolean>> = MutableStateFlow(emptyMap())
+    private val _selectedTypes = MutableStateFlow<Map<String, Boolean>>(emptyMap())
+    val selectedTypes = _selectedTypes.asStateFlow()
 
     private lateinit var idSet: String
 
@@ -30,30 +30,24 @@ class CardDetailsViewModel(
     }
 
     private fun getCardTypes() = viewModelScope.launch {
-        runCatching {
-            val cardTypes = repository.getCardTypes()
-            selectedTypes.value = cardTypes.map { it.name }.associateWith { true }
-        }.onFailure { e ->
-            Timber.e(e)
-        }
+        runCatching { repository.getCardTypes() }
+            .onSuccess { cardTypes ->
+                _selectedTypes.emit(cardTypes.map { it.name }.associateWith { true })
+            }
+            .onFailure { Timber.e(it) }
     }
 
     fun getCards() = viewModelScope.launch {
-        runCatching {
-            state.value = CardDetailsState.Loading
-
-            val cards = repository.getCards(idSet)
-
-            state.value = CardDetailsState.Success(cards)
-        }.onFailure { e ->
-            state.value = CardDetailsState.Error(e)
-        }
+        _state.value = CardDetailsState.Loading
+        runCatching { repository.getCards(idSet) }
+            .onSuccess { _state.emit(CardDetailsState.Success(it)) }
+            .onFailure { _state.emit(CardDetailsState.Error(it)) }
     }
 
     fun updateSelectedType(cardType: String) {
-        selectedTypes.value = selectedTypes.value.toMutableMap().apply {
+        _selectedTypes.tryEmit(_selectedTypes.value.toMutableMap().apply {
             this[cardType] = !this[cardType]!!
-        }
+        })
 
         getCards()
     }

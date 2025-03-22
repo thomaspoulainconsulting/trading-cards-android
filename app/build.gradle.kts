@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
+    kotlin("plugin.serialization") version "2.1.0"
 }
 
 android {
@@ -59,19 +60,10 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
-    }
-}
-
-kotlin {
-    sourceSets.all {
-        languageSettings.enableLanguageFeature("ExplicitBackingFields")
     }
 }
 
@@ -90,16 +82,16 @@ dependencies {
     implementation(libs.coil3)
     implementation(libs.coil3.network)
     implementation(libs.timber)
-    implementation(libs.accompanist.shimmer)
-    implementation(libs.accompanist.animation)
     implementation(libs.room)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.navigation.compose)
     implementation(libs.koin)
     implementation(libs.koin.compose)
+    implementation(libs.compose.ui.util)
+    implementation(libs.ui.animation)
+
     implementation(libs.bundles.network)
-    ksp(libs.moshi.codegen)
 
     testImplementation(libs.junit)
     

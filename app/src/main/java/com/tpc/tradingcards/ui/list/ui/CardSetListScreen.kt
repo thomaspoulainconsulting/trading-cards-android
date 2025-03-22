@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.list.screen
+package com.tpc.tradingcards.ui.list.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -24,9 +24,9 @@ import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.core.ui.theme.largeSize
 import com.tpc.tradingcards.data.model.CardSet
 import com.tpc.tradingcards.data.model.TradingCardGame
-import com.tpc.tradingcards.ui.list.composable.TradingCardSet
-import com.tpc.tradingcards.ui.list.composable.TradingCardSetLoading
 import com.tpc.tradingcards.ui.list.state.CardListState
+import com.tpc.tradingcards.ui.list.ui.composable.TradingCardSet
+import com.tpc.tradingcards.ui.list.ui.composable.TradingCardSetLoading
 
 enum class CardListTestTag(val tag: String) {
     Loading("cardListLoading"),

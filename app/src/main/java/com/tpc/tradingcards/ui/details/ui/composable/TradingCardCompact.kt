@@ -1,4 +1,4 @@
-package com.tpc.tradingcards.ui.details.composable
+package com.tpc.tradingcards.ui.details.ui.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.wrapContentSize

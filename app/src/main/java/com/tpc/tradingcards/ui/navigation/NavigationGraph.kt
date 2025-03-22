@@ -8,9 +8,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.tpc.tradingcards.ui.details.screen.CardDetailsScreen
+import com.tpc.tradingcards.ui.details.ui.CardDetailsScreen
 import com.tpc.tradingcards.ui.details.vm.CardDetailsViewModel
-import com.tpc.tradingcards.ui.list.screen.CardSetsListScreen
+import com.tpc.tradingcards.ui.list.ui.CardSetsListScreen
 import com.tpc.tradingcards.ui.list.vm.CardListViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -28,6 +28,10 @@ fun NavGraphBuilder.cardsGraph(
         ) {
             val vm: CardListViewModel = koinViewModel()
             val state by vm.state.collectAsStateWithLifecycle()
+
+            LaunchedEffect(Unit) {
+                vm.fetchCardSets()
+            }
 
             CardSetsListScreen(
                 state = state,

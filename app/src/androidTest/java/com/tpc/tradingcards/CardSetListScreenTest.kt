@@ -7,8 +7,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.tpc.tradingcards.core.ui.theme.TradingCardsTheme
 import com.tpc.tradingcards.data.model.CardSet
-import com.tpc.tradingcards.ui.list.screen.CardListTestTag
-import com.tpc.tradingcards.ui.list.screen.CardSetsListScreen
+import com.tpc.tradingcards.ui.list.ui.CardListTestTag
+import com.tpc.tradingcards.ui.list.ui.CardSetsListScreen
 import com.tpc.tradingcards.ui.list.state.CardListState
 import org.junit.Rule
 import org.junit.Test
